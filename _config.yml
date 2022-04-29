@@ -4,12 +4,13 @@
 
 # Site
 title: Limitless Ping
-subtitle: ''
-description: ''
+subtitle: "Peter Chen's Blog"
+description: 'This is a blog focused on software development.'
 keywords:
+  - 'software development'
 author: Peter Chen
 language: zh-TW
-timezone: ''
+timezone: 'ROC'
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
