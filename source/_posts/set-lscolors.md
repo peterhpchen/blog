@@ -98,6 +98,14 @@ LS_COLORS='di=01;04;44;31:ln=00;33:'; export LS_COLORS
 LS_COLORS=$LS_COLORS:'di=0;35:' ; export LS_COLORS
 ```
 
+## 在每次啟動 Shell 時設置 `LS_COLORS` 環境變數
+
+現在我們已經會設定 `ls` 的顏色了，但是每次重新啟動 Shell 時， `LS_COLORS` 的值都會恢復預設，導致之前的設定消失，為解決這個問題，我們可以在 `~/.zshrc` （使用 Bash 時是 `~/.bashrc` ）中配置這項設定，讓 Shell 啟動時可以直接覆寫 `LS_COLORS` 變數：
+
+```shell
+echo "LS_COLORS='di=01;04;44;31:ln=00;33:'; export LS_COLORS" >> ~/.zshrc
+```
+
 ## 總結
 
 `ls` 指令在加入 `--color=auto` 後，可以對其輸出的結果產生顏色，方便使用者辨識。
