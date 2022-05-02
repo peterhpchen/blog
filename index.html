@@ -78,6 +78,62 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-get-directories-in-lua" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/blog/2022/05/02/get-directories-in-lua/" class="article-date">
+  <time class="dt-published" datetime="2022-05-02T11:10:49.000Z" itemprop="datePublished">2022-05-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/blog/2022/05/02/get-directories-in-lua/">使用 Lua 取得目錄中的檔案</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>前陣子在對 Neovim 做配置時，有個需求是想要動態地讀取目錄中的檔案，並且使用 <code>require</code> 引用其內容做相關的設定，本文記錄如何使用 Lua 實踐此功能。</p>
+<h2 id="使用-io-popen-執行指令"><a href="#使用-io-popen-執行指令" class="headerlink" title="使用 io.popen 執行指令"></a>使用 <code>io.popen</code> 執行指令</h2><p>Lua 提供了 <code>io.popen</code> 可以讓使用者叫用 Shell 的指令，因此我們可以使用這個函式叫用 <code>ls</code> 來列出目錄下的檔案：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> parsers = <span class="built_in">io</span>.<span class="built_in">popen</span>(<span class="string">&#x27;ls ~/.config/nvim/lua/treesitter/parsers&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> file <span class="keyword">in</span> parsers:<span class="built_in">lines</span>() <span class="keyword">do</span></span><br><span class="line">  <span class="built_in">print</span>(file)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="comment">--[[</span></span><br><span class="line"><span class="comment">c.lua</span></span><br><span class="line"><span class="comment">js.lua</span></span><br><span class="line"><span class="comment">lua.lua</span></span><br><span class="line"><span class="comment">shell.lua</span></span><br><span class="line"><span class="comment">vim.lua</span></span><br><span class="line"><span class="comment">vue.lua</span></span><br><span class="line"><span class="comment">web.lua</span></span><br><span class="line"><span class="comment">--]]</span></span><br></pre></td></tr></table></figure>
+
+<p>程式碼下面的註解為執行結果，其中指令執行的位置會是 Lua 執行的位置，因此在不知道使用者會在那個位置執行 Lua 的情況下，指令中的路徑盡量使用<strong>絕對路徑</strong>。</p>
+<p><code>io.popen</code> 得到的結果為 <code>file</code> 物件， <code>file:lines</code> 會將指令結果以斷行符區隔，並在每次巡覽時吐出當前的輸出，由此取得目錄下的檔案。</p>
+<h2 id="執行-Lua-檔案"><a href="#執行-Lua-檔案" class="headerlink" title="執行 Lua 檔案"></a>執行 Lua 檔案</h2><p>接著可以使用取得的檔案清單組出 Lua 請求的路徑：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> ensure_installed = &#123;&#125;</span><br><span class="line"><span class="keyword">local</span> parsers = <span class="built_in">io</span>.<span class="built_in">popen</span>(<span class="string">&#x27;ls ~/.config/nvim/lua/treesitter/parsers&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> file <span class="keyword">in</span> parsers:<span class="built_in">lines</span>() <span class="keyword">do</span></span><br><span class="line">  <span class="keyword">local</span> present, parser = <span class="built_in">pcall</span>(<span class="built_in">require</span>, <span class="string">&#x27;treesitter.parsers.&#x27;</span> .. file:<span class="built_in">gsub</span>(<span class="string">&#x27;%.lua&#x27;</span>, <span class="string">&#x27;&#x27;</span>))</span><br><span class="line">  <span class="keyword">if</span> present <span class="keyword">then</span></span><br><span class="line">    <span class="comment">-- 檔案內容已存在 parser 中</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p>這裡要注意 Neovim 中， Lua 的引用路徑是從 <code>~/.config/nvim/lua/</code> 開始，因此 <code>/lua/</code> 之前的上層目錄不需要包含在引用的路徑中，並且也不會有 <code>.lua</code> 的副檔名。</p>
+<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><p>要使用 Lua 讀取目錄下的所有檔案，可以使用 <code>io.popen</code> 函式執行 <code>ls</code> 指令，藉此取得檔案列表，將其轉成 Lua 的引用路徑後，就可以由 <code>require</code> 引入。</p>
+<h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://vi.stackexchange.com/a/36648">StackExchange Neovim Lua script to dynamically load .lua config files</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/a/11130774/9265131">stackoverflow How to get list of directories in Lua</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.lua.org/manual/5.1/manual.html#5.7">Lua Manual 5.7 Input and Output Facilities</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://peterhpchen.github.io/blog/2022/05/02/get-directories-in-lua/" data-id="cl2ouoi7c0000alod4x5p69na" data-title="使用 Lua 取得目錄中的檔案" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/lua/" rel="tag">lua</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-use-dircolors" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/blog/2022/04/30/use-dircolors/" class="article-date">
@@ -136,7 +192,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://peterhpchen.github.io/blog/2022/04/30/use-dircolors/" data-id="cl2m61lpa0003a3oo7pn05pvm" data-title="使用 dircolors 設定 LS_COLORS" class="article-share-link">Share</a>
+      <a data-url="http://peterhpchen.github.io/blog/2022/04/30/use-dircolors/" data-id="cl2ouoi7m0004alodb0g03uls" data-title="使用 dircolors 設定 LS_COLORS" class="article-share-link">Share</a>
       
       
       
@@ -346,7 +402,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://peterhpchen.github.io/blog/2022/04/30/set-lscolors/" data-id="cl2m61lp00000a3oo9mqs4lam" data-title="設定 ls 指令輸出的顏色" class="article-share-link">Share</a>
+      <a data-url="http://peterhpchen.github.io/blog/2022/04/30/set-lscolors/" data-id="cl2ouoi7h0001alod2eov2oc1" data-title="設定 ls 指令輸出的顏色" class="article-share-link">Share</a>
       
       
       
@@ -402,7 +458,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://peterhpchen.github.io/blog/2022/04/29/shell-sort-by-specific-fields/" data-id="cl2m61lp50001a3ooayf51t7f" data-title="在 Shell 中將指令結果依照特定欄位排序" class="article-share-link">Share</a>
+      <a data-url="http://peterhpchen.github.io/blog/2022/04/29/shell-sort-by-specific-fields/" data-id="cl2ouoi7l0003alodglo778jk" data-title="在 Shell 中將指令結果依照特定欄位排序" class="article-share-link">Share</a>
       
       
       
@@ -429,7 +485,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">標籤</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/shell/" rel="tag">shell</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/lua/" rel="tag">lua</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/shell/" rel="tag">shell</a></li></ul>
     </div>
   </div>
 
@@ -439,7 +495,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">標籤雲</h3>
     <div class="widget tagcloud">
-      <a href="/blog/tags/shell/" style="font-size: 10px;">shell</a>
+      <a href="/blog/tags/lua/" style="font-size: 10px;">lua</a> <a href="/blog/tags/shell/" style="font-size: 20px;">shell</a>
     </div>
   </div>
 
@@ -459,6 +515,10 @@
     <h3 class="widget-title">最新文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog/2022/05/02/get-directories-in-lua/">使用 Lua 取得目錄中的檔案</a>
+          </li>
         
           <li>
             <a href="/blog/2022/04/30/use-dircolors/">使用 dircolors 設定 LS_COLORS</a>
