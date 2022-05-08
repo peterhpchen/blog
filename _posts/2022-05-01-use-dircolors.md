@@ -1,9 +1,11 @@
 ---
 title: 使用 dircolors 設定 LS_COLORS
-date: 2022-05-01 00:46:34
+date: 2022-05-01
 tags: shell
 ---
 `LS_COLORS` 可以設定 `ls` 執行結果的各種檔案類型的顏色與樣式，但是對於各式不同的檔案類型，要在一個環境變數上以一個字串下去設定是十分難以維護的，因此 GNU 的 Coreutils 提供了 `dircolors` 指令來幫忙管理與設定 `LS_COLORS` 。
+
+<!-- more -->
 
 ## 安裝 `dircolors`
 

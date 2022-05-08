@@ -1,9 +1,11 @@
 ---
 title: 設定 ls 指令輸出的顏色
-date: 2022-04-30 09:24:14
+date: 2022-04-30
 tags: shell
 ---
 我們知道使用 `ls` 指令可以列出目錄下的各式檔案及目錄，但是所有類型的檔案都會以相同的顏色輸出，難以在第一時間就了解檔案的種類，我們還得加上 `-l` 參數列出詳細的資訊才能知道，這時如果可以依照顏色輸出不同類型的檔案的話，會使檔案列表更加地一目瞭然。
+
+<!-- more -->
 
 ## 為 `ls` 結果上色
 
@@ -13,7 +15,7 @@ tags: shell
 ls --color=auto
 ```
 
-![ls --color=auto](ls-color-auto.png)
+![ls --color=auto](./2022-04-30-set-lscolors/ls-color-auto.png)
 
 ## 設定 `LS_COLORS` 修改 `ls` 輸出顏色
 
@@ -80,7 +82,7 @@ ln|SYMLINK, LINK, LNK| Symbolic link
 LS_COLORS='di=01;04;44;31:'; export LS_COLORS
 ```
 
-![設定 LS_COLORS 後](set-lscolors.png)
+![設定 LS_COLORS 後](./2022-04-30-set-lscolors/set-lscolors.png)
 
 完整的編碼表可以參考這篇文章： [Configuring LS_COLORS](http://www.bigsoft.co.uk/blog/2008/04/11/configuring-ls_colors) 。
 

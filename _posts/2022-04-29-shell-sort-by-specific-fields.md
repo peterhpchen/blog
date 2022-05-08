@@ -1,15 +1,17 @@
 ---
 title: 在 Shell 中將指令結果依照特定欄位排序
-date: 2022-04-29 20:08:38
+date: 2022-04-29
 tags: shell
 ---
 在執行指令後，有時我們會想要以特定的方式排序指令所輸出的結果，這時可以使用 `sort` 來做排序，本文記錄如何使用 sort 將特定字元作為分隔符，並對分隔後的特定欄位做排序。
+
+<!-- more -->
 
 ## 情境
 
 假設現在使用了 `find` 找出一些檔案，並用 `sort` 排序：
 
-{% codeblock lang:shell mark:11-12,16-17 %}
+```shell{11-12,16-17}
 % find $DOTFILES_ROOT/*/scripts -name install.sh | sort
 /Users/PeterChen/.dotfiles/bat/scripts/install.sh
 /Users/PeterChen/.dotfiles/cheat.sh/scripts/install.sh
@@ -33,7 +35,7 @@ tags: shell
 /Users/PeterChen/.dotfiles/zsh.fzf-tab/scripts/install.sh
 /Users/PeterChen/.dotfiles/zsh.zplug/scripts/install.sh
 /Users/PeterChen/.dotfiles/zsh/scripts/install.sh
-{% endcodeblock %}
+```
 
 我們想要對 `.dotfiles` 的下層資料夾做排序，可以看到因為沒有設定分隔符的關係， `sort` 將整個字串視為排序的對象，因此會將路徑層的 `/` 也作為排序的依據，所以像是  **`nvim.packer.nvim` 與 `nvim`** 和 **`rust.cargo` 與 `rust`** 會是排序相反的狀況。
 
@@ -41,7 +43,7 @@ tags: shell
 
 `sort` 可以使用 `-t` 或是 `--field-separator` 來指定分隔符，並且使用 `-k` 或是 `--key` 指定要排序的欄位。
 
-{% codeblock lang:shell mark:11-12,16-17 %}
+```shell{11-12,16-17}
 % find $DOTFILES_ROOT/*/scripts -name install.sh | sort -t '/' -k 5,5
 /Users/PeterChen/.dotfiles/bat/scripts/install.sh
 /Users/PeterChen/.dotfiles/cheat.sh/scripts/install.sh
@@ -65,7 +67,7 @@ tags: shell
 /Users/PeterChen/.dotfiles/zsh/scripts/install.sh
 /Users/PeterChen/.dotfiles/zsh.fzf-tab/scripts/install.sh
 /Users/PeterChen/.dotfiles/zsh.zplug/scripts/install.sh
-{% endcodeblock %}
+```
 
 `-k` 設置的是分隔後欄位的編號，第一個數字為起始欄位的編號，第二個是結束欄位的編號，中間以逗號 `,` 區隔。
 
