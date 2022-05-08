@@ -21,6 +21,8 @@ module.exports = {
         },
       ],
     },
-    canonical_base:'https://peterhpchen.github.io',
+    feed: {
+      canonical_base:'https://peterhpchen.github.io',
+    }
   }
 }
