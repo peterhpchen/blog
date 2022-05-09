@@ -4,7 +4,7 @@
         <title>Limitless Ping</title>
         <link>https://peterhpchen.github.io</link>
         <description></description>
-        <lastBuildDate>Sun, 08 May 2022 15:14:23 GMT</lastBuildDate>
+        <lastBuildDate>Mon, 09 May 2022 15:41:55 GMT</lastBuildDate>
         <docs>http://blogs.law.harvard.edu/tech/rss</docs>
         <generator>https://github.com/webmasterish/vuepress-plugin-feed</generator>
         <item>
@@ -57,6 +57,20 @@ dircolors 指令是 GNU 的 Co ...]]></description>
 
 Lua 提供了 io.popen 可以讓使用者叫用 Shell 的指令，因此我們可以使用這個函式叫用 ls 來列出目錄下的檔案：
  ...]]></description>
+        </item>
+        <item>
+            <title><![CDATA[使用 VuePress 建立個人 blog]]></title>
+            <link>https://peterhpchen.github.io/2022/05/09/vuepress-blog/</link>
+            <guid>https://peterhpchen.github.io/2022/05/09/vuepress-blog/</guid>
+            <pubDate>Mon, 09 May 2022 00:00:00 GMT</pubDate>
+            <description><![CDATA[VuePress 預設是作為技術文件的靜態網頁生成器，但有許多的 theme 可以將它轉為 blog 使用，本文介紹如何使用 VuePress 作為個人 blog 使用，以及分享自己使用時的配置方式。
+
+安裝
+
+mkdir blog && cd blog
+npm iniy -y && npm install vuepress @vuepress ...]]></description>
+            <enclosure url="https://peterhpchen.github.io/./2022-05-09-vuepress-blog/image.png">
+            </enclosure>
         </item>
     </channel>
 </rss>
