@@ -1,134 +1,306 @@
 <!DOCTYPE html>
-<html lang="en-US">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>使用 VuePress 建立個人 blog | Limitless Ping</title>
-    <meta name="generator" content="VuePress 1.9.7">
-    <link rel="alternate" type="application/rss+xml" href="https://peterhpchen.github.io/rss.xml" title="Limitless Ping RSS Feed">
-    <meta name="description" content="VuePress 預設是作為技術文件的靜態網頁生成器，但有許多的 theme 可以將它轉為 blog 使用，本文介紹如何使用 VuePress 作為個人 blog 使用，以及分享自己使用時的配置方式。
-
-安裝
-
-mkdir blog &amp;&amp; cd blog
-npm iniy -y &amp;&amp; npm install vuepress @vuepress ...">
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>使用 VuePress 建立個人 blog | LimitlessPing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="VuePress 預設是作為技術文件的靜態網頁生成器，但有許多的 theme 可以將它轉為 blog 使用，本文介紹如何使用 VuePress 作為個人 blog 使用，以及分享自己使用時的配置方式。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 VuePress 建立個人 blog">
+<meta property="og:url" content="http://peterhpchen.github.io/blog/2022/05/09/vuepress-blog/index.html">
+<meta property="og:site_name" content="LimitlessPing">
+<meta property="og:description" content="VuePress 預設是作為技術文件的靜態網頁生成器，但有許多的 theme 可以將它轉為 blog 使用，本文介紹如何使用 VuePress 作為個人 blog 使用，以及分享自己使用時的配置方式。">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2022-05-09T00:00:00.000Z">
+<meta property="article:modified_time" content="2023-01-17T16:06:20.659Z">
+<meta property="article:author" content="Peter Chen">
+<meta property="article:tag" content="vuepress">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="LimitlessPing" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/blog/favicon/favicon.ico">
+  
+  
     
-    <link rel="preload" href="/blog/assets/css/0.styles.ae7fb01b.css" as="style"><link rel="preload" href="/blog/assets/js/app.b8db9494.js" as="script"><link rel="preload" href="/blog/assets/js/6.3e2c8e2e.js" as="script"><link rel="preload" href="/blog/assets/js/3.ec5b2acc.js" as="script"><link rel="preload" href="/blog/assets/js/16.a106fc64.js" as="script"><link rel="prefetch" href="/blog/assets/js/10.65eefe93.js"><link rel="prefetch" href="/blog/assets/js/11.c985d4ad.js"><link rel="prefetch" href="/blog/assets/js/12.9dcadc0e.js"><link rel="prefetch" href="/blog/assets/js/13.d60d37ad.js"><link rel="prefetch" href="/blog/assets/js/14.254f8308.js"><link rel="prefetch" href="/blog/assets/js/15.552d7b63.js"><link rel="prefetch" href="/blog/assets/js/4.6de26933.js"><link rel="prefetch" href="/blog/assets/js/5.62882979.js"><link rel="prefetch" href="/blog/assets/js/7.a4047d44.js"><link rel="prefetch" href="/blog/assets/js/8.3c918491.js"><link rel="prefetch" href="/blog/assets/js/9.5d736116.js"><link rel="prefetch" href="/blog/assets/js/vuejs-paginate.a22c3811.js">
-    <link rel="stylesheet" href="/blog/assets/css/0.styles.ae7fb01b.css">
-  </head>
-  <body>
-    <div id="app" data-server-rendered="true"><div id="vuepress-theme-blog__global-layout"><section id="header-wrapper"><header id="header"><div class="header-wrapper"><div class="title"><a href="/blog/" class="nav-link home-link">Limitless Ping </a></div> <div class="header-right-wrap"><ul class="nav"><li class="nav-item"><a href="/blog/" class="nav-link">Blog</a></li><li class="nav-item"><a href="/blog/tag/" class="nav-link">Tags</a></li></ul> <div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <a href="/blog/rss.xml" class="feed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a></div></div></header></section> <div id="mobile-header"><div class="mobile-header-bar"><div class="mobile-header-title"><a href="/blog/" class="nav-link mobile-home-link">Limitless Ping </a> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div> <div class="mobile-menu-wrapper"><hr class="menu-divider"> <ul class="mobile-nav"><li class="mobile-nav-item"><a href="/blog/" class="nav-link">Blog</a></li><li class="mobile-nav-item"><a href="/blog/tag/" class="nav-link">Tags</a></li> <li class="mobile-nav-item"><a href="/blog/rss.xml" class="feed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a></li></ul></div></div></div> <div class="content-wrapper"><div id="vuepress-theme-blog__post-layout"><article itemscope="itemscope" itemtype="https://schema.org/BlogPosting" class="vuepress-blog-theme-content"><header><h1 itemprop="name headline" class="post-title">
-        使用 VuePress 建立個人 blog
-      </h1> <div class="post-meta"><!----> <div class="post-meta-date"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> <time pubdate itemprop="datePublished" datetime="2022-05-09T00:00:00.000Z">
-      2022-05-09
-    </time></div> <ul itemprop="keywords" class="post-meta-tags"><li class="post-tag" data-v-42ccfcd5><a href="/blog/tag/vuepress" data-v-42ccfcd5><span data-v-42ccfcd5>vuepress</span></a></li></ul></div></header> <div itemprop="articleBody" class="content__default"><p>VuePress 預設是作為技術文件的靜態網頁生成器，但有許多的 theme 可以將它轉為 blog 使用，本文介紹如何使用 VuePress 作為個人 blog 使用，以及分享自己使用時的配置方式。</p> <h2 id="安裝"><a href="#安裝" class="header-anchor">#</a> 安裝</h2> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token function">mkdir</span> blog <span class="token operator">&amp;&amp;</span> <span class="token builtin class-name">cd</span> blog
-<span class="token function">npm</span> iniy -y <span class="token operator">&amp;&amp;</span> <span class="token function">npm</span> <span class="token function">install</span> vuepress @vuepress/theme-blog -D
-</code></pre></div><p>這裡使用官方的 blog theme <code>@vuepress/theme-blog</code> ，因此除了 <code>vuepress</code> 外，記得要安裝這個 theme 。</p> <h2 id="目錄結構"><a href="#目錄結構" class="header-anchor">#</a> 目錄結構</h2> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token operator">|</span>- blog
-<span class="token operator">|</span>  <span class="token operator">|</span>- _posts
-<span class="token operator">|</span>  <span class="token operator">|</span>  <span class="token operator">|</span>- <span class="token number">2022</span>-04-30-set-lscolors
-<span class="token operator">|</span>  <span class="token operator">|</span>  <span class="token operator">|</span>  <span class="token operator">|</span>- ls-color-auto.png
-<span class="token operator">|</span>  <span class="token operator">|</span>  <span class="token operator">|</span>  <span class="token operator">|</span>- set-lscolors.png
-<span class="token operator">|</span>  <span class="token operator">|</span>  <span class="token operator">|</span>- <span class="token number">2022</span>-04-29-shell-sort-by-specific-fields.md
-<span class="token operator">|</span>  <span class="token operator">|</span>  <span class="token operator">|</span>- <span class="token number">2022</span>-04-30-set-lscolors.md
-<span class="token operator">|</span>  <span class="token operator">|</span>  <span class="token operator">|</span>- <span class="token number">2022</span>-05-01-use-dircolors.md
-<span class="token operator">|</span>  <span class="token operator">|</span>  <span class="token operator">|</span>- <span class="token number">2022</span>-05-02-get-directories-in-lua.md
-<span class="token operator">|</span>  <span class="token operator">|</span>- .vuepress
-<span class="token operator">|</span>     <span class="token operator">|</span>- config.js
-<span class="token operator">|</span>- package.json
-</code></pre></div><ul><li><code>blog/_posts</code> ：存放文章的目錄。</li> <li><code>blog/_posts/*/*.png</code> ：存放特定文章的圖片。</li> <li><code>.vuepress/config.js</code> ： VuePress 的配置檔。</li></ul> <h2 id="配置"><a href="#配置" class="header-anchor">#</a> 配置</h2> <p>VuePress 的配置都存放於 <code>.vuepress/config.js</code> 中，而 theme <code>@vuepress/theme-blog</code> 的設定可以在 <code>themeConfig</code> 中配置：</p> <div class="language-js extra-class"><pre class="language-js"><code>module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">{</span>
-  <span class="token literal-property property">title</span><span class="token operator">:</span> <span class="token string">'Limitless Ping'</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">theme</span><span class="token operator">:</span> <span class="token string">'@vuepress/theme-blog'</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">themeConfig</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token comment">// 配置 @vuepress/theme-blog</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-</code></pre></div><p>除了 <code>theme</code> 要設定為 <code>@vuepress/theme-blog</code> 以及 <code>themeConfig</code> 為 blog 的設定外，其他都是 VuePress 的設定，可以參考<a href="https://v1.vuepress.vuejs.org/config/" target="_blank" rel="noopener noreferrer">官方文件<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a>，至於 <code>themeConfig</code> 等下會在講解各功能時進行配置。</p> <p>設定完 <code>.vuepress/config.js</code> 後，可以去設定 <code>package.json</code> 的執行指令：</p> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
-  ...
-  <span class="token property">&quot;scripts&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    ...
-    <span class="token property">&quot;dev&quot;</span><span class="token operator">:</span> <span class="token string">&quot;vuepress dev&quot;</span><span class="token punctuation">,</span>
-    <span class="token property">&quot;build&quot;</span><span class="token operator">:</span> <span class="token string">&quot;vuepress build&quot;</span>
-  <span class="token punctuation">}</span>
-  ...
-<span class="token punctuation">}</span>
-</code></pre></div><h2 id="建立文章"><a href="#建立文章" class="header-anchor">#</a> 建立文章</h2> <p>在 <code>_posts</code> 目錄中建立文章檔，名稱可以隨喜好取名，但可以在前面加上日期（例如： <code>2022-05-09-vuepress-blog.md</code> ）以便 permalink 的使用，同時也方便管理。</p> <p>建立檔案後，你可以使用 Markdown 撰寫文章，並且可以在文章的最前面加上 Front Matter 補充文章的說明</p> <div class="language-md extra-class"><pre class="language-md"><code><span class="token front-matter-block"><span class="token punctuation">---</span>
-<span class="token front-matter yaml language-yaml">title: 使用 VuePress 建立個人 blog
-date: 2022-05-09
-tags: vuepress</span>
-<span class="token punctuation">---</span></span>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
 
-嗨嘍，我的文章！
-</code></pre></div><p>這裡 Front Matter 的 <code>tags</code> 是單個，如果想要設定多個 <code>tags</code> 時，可以使用陣列：</p> <div class="language-md extra-class"><pre class="language-md"><code><span class="token front-matter-block"><span class="token punctuation">---</span>
-<span class="token front-matter yaml language-yaml">tags:
-  - vue
-  - vuepress</span>
-<span class="token punctuation">---</span></span>
-</code></pre></div><h3 id="設定簡介內容"><a href="#設定簡介內容" class="header-anchor">#</a> 設定簡介內容</h3> <p>blog 的總覽頁中可以顯示文章的節錄，如果想要指定文章的節錄位置，可以使用 <code>&lt;!-- more --&gt;</code> 作為節錄的結束位置，這樣 VuePress 就只會節錄到此為止。</p> <h3 id="載入圖片"><a href="#載入圖片" class="header-anchor">#</a> 載入圖片</h3> <p>如果文章中有圖片的話，可以存在與文章同名的目錄中，例如： <code>2022-05-09-vuepress-blog.md</code> 這篇，圖片就可以存到 <code>2022-05-09-vuepress-blog/image.png</code> 中，這樣一來，在文章中使用 <code>![image](./2022-05-09-vuepress-blog/image.png)</code> 來引入。</p> <h2 id="設定日期格式"><a href="#設定日期格式" class="header-anchor">#</a> 設定日期格式</h2> <p>每篇文章的日期格式預設為 <code>ddd MMM DD YYYY</code> ，如果想要更改的話，可以修改 <code>themeConfig.dateFormat</code> ：</p> <div class="language-js extra-class"><pre class="language-js"><code>module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">{</span>
-  <span class="token literal-property property">themeConfig</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token literal-property property">dateFormat</span><span class="token operator">:</span> <span class="token string">'YYYY-MM-DD'</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-</code></pre></div><p>上面的配置會將日期的顯示方式改為 <code>YYYY-MM-DD</code> 。</p> <h2 id="設定-footer"><a href="#設定-footer" class="header-anchor">#</a> 設定 Footer</h2> <p><code>@vuepress/theme-blog</code> 的 Footer 用來顯示各式的連結與版權宣告：</p> <div class="language-js extra-class"><pre class="language-js"><code>module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">{</span>
-  <span class="token literal-property property">themeConfig</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token literal-property property">footer</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token literal-property property">contact</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-        <span class="token punctuation">{</span>
-          <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'github'</span><span class="token punctuation">,</span>
-          <span class="token literal-property property">link</span><span class="token operator">:</span> <span class="token string">'https://github.com/peterhpchen'</span>
-        <span class="token punctuation">}</span><span class="token punctuation">,</span>
-        <span class="token punctuation">{</span>
-          <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'linkedin'</span><span class="token punctuation">,</span>
-          <span class="token literal-property property">link</span><span class="token operator">:</span> <span class="token string">'https://www.linkedin.com/in/peter-hsin-ping-chen/'</span>
-        <span class="token punctuation">}</span>
-      <span class="token punctuation">]</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">copyright</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-        <span class="token punctuation">{</span>
-          <span class="token literal-property property">text</span><span class="token operator">:</span> <span class="token string">'Copyright © 2014-present Peter Chen'</span><span class="token punctuation">,</span>
-        <span class="token punctuation">}</span><span class="token punctuation">,</span>
-      <span class="token punctuation">]</span><span class="token punctuation">,</span>
-    <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-</code></pre></div><p><code>contact</code> 可以在 Footer 的左邊建立各式的連結圖標，種類如下：</p> <ul><li>codepen</li> <li>codesandbox</li> <li>facebook</li> <li>github</li> <li>gitlab</li> <li>instagram</li> <li>linkedin</li> <li>mail</li> <li>messenger</li> <li>music</li> <li>phone</li> <li>twitter</li> <li>video</li> <li>web</li> <li>youtube</li></ul> <p><code>copyright</code> 則是一個陣列，每個陣列中都可以寫一段文字，它會將文字呈現在 Footer 的右邊，如果想要加上連結則多個 <code>link</code> 屬性即可。</p> <h2 id="設定-rss"><a href="#設定-rss" class="header-anchor">#</a> 設定 RSS</h2> <p>使用 <code>themeConfig.feed</code> 可以設定 Feed ，只要將網站名稱加入 <code>themeConfig.feed.canonical_base</code> 中即可開啟 RSS ：</p> <div class="language-js extra-class"><pre class="language-js"><code>module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">{</span>
-    <span class="token literal-property property">feed</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token literal-property property">canonical_base</span><span class="token operator">:</span><span class="token string">'https://peterhpchen.github.io'</span><span class="token punctuation">,</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-</code></pre></div><h2 id="使用-github-actions-部署"><a href="#使用-github-actions-部署" class="header-anchor">#</a> 使用 GitHub Actions 部署</h2> <p>我們可以使用 GitHub Actions 來自動建置及部署 blog ，請將下面的設定加到 <code>.github/workflows/pages.yml</code> ：</p> <div class="language-yml extra-class"><pre class="language-yml"><code><span class="token key atrule">name</span><span class="token punctuation">:</span> Pages
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
 
-<span class="token key atrule">on</span><span class="token punctuation">:</span>
-  <span class="token key atrule">push</span><span class="token punctuation">:</span>
-    <span class="token key atrule">branches</span><span class="token punctuation">:</span>
-      <span class="token punctuation">-</span> main <span class="token comment"># default branch</span>
+  
+    
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.min.css">
 
-<span class="token key atrule">jobs</span><span class="token punctuation">:</span>
-  <span class="token key atrule">pages</span><span class="token punctuation">:</span>
-    <span class="token key atrule">runs-on</span><span class="token punctuation">:</span> ubuntu<span class="token punctuation">-</span>latest
-    <span class="token key atrule">steps</span><span class="token punctuation">:</span>
-      <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Checkout
-        <span class="token key atrule">uses</span><span class="token punctuation">:</span> actions/checkout@v3
-      <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Cache NPM dependencies
-        <span class="token key atrule">uses</span><span class="token punctuation">:</span> actions/cache@v2
-        <span class="token key atrule">with</span><span class="token punctuation">:</span>
-          <span class="token key atrule">path</span><span class="token punctuation">:</span> node_modules
-          <span class="token key atrule">key</span><span class="token punctuation">:</span> $<span class="token punctuation">{</span><span class="token punctuation">{</span> runner.OS <span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token punctuation">-</span>npm<span class="token punctuation">-</span>cache
-          <span class="token key atrule">restore-keys</span><span class="token punctuation">:</span> <span class="token punctuation">|</span><span class="token scalar string">
-            ${{ runner.OS }}-npm-cache</span>
-      <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Install Dependencies
-        <span class="token key atrule">run</span><span class="token punctuation">:</span> npm install
-      <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Build
-        <span class="token key atrule">run</span><span class="token punctuation">:</span> npm run build
-      <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Deploy
-        <span class="token key atrule">uses</span><span class="token punctuation">:</span> peaceiris/actions<span class="token punctuation">-</span>gh<span class="token punctuation">-</span>pages@v3
-        <span class="token key atrule">with</span><span class="token punctuation">:</span>
-          <span class="token key atrule">github_token</span><span class="token punctuation">:</span> $<span class="token punctuation">{</span><span class="token punctuation">{</span> secrets.GITHUB_TOKEN <span class="token punctuation">}</span><span class="token punctuation">}</span>
-          <span class="token key atrule">publish_dir</span><span class="token punctuation">:</span> ./.vuepress/dist
-</code></pre></div><p>這裡使用 <a href="https://github.com/peaceiris/actions-gh-pages" target="_blank" rel="noopener noreferrer">peaceiris/actions-gh-pages<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> 作為部署的 Action 。</p> <p>接著將 GitHub Repository 的 Settings &gt; Pages &gt; Source 改為 <code>gh-pages</code> 。</p> <h3 id="確認-base-屬性是否對應-github-page"><a href="#確認-base-屬性是否對應-github-page" class="header-anchor">#</a> 確認 <code>base</code> 屬性是否對應 GitHub Page</h3> <p>如果使用 <code>{username}.github.io</code> 作為 Repository 的話，那 <code>.vuepress/config.js</code> 中的 <code>base</code> 設定為 <code>/</code> 即可，如果使用特定名稱作為 Repository 名稱的話，例如： <code>blog</code> ，那 <code>base</code> 需要設定為 <code>/blog/</code> 。</p> <h2 id="總結"><a href="#總結" class="header-anchor">#</a> 總結</h2> <p>像我這樣平時使用 Vue 做開發， VuePres 作為文件系統的工程師來說，使用 VuePress 作為部落格的載體，不但可以節省學習其他部落格軟體的用法，還可以使所有的文件格式保持一致，是個非常方便的選擇。</p> <h2 id="參考資料"><a href="#參考資料" class="header-anchor">#</a> 參考資料</h2> <ul><li><a href="https://vuepress-theme-blog.billyyyyy3320.com/" target="_blank" rel="noopener noreferrer">@vuepress/theme-blog<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li> <li><a href="https://v1.vuepress.vuejs.org/" target="_blank" rel="noopener noreferrer">VuePress<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li></ul></div> <footer><!----> <hr> <!----></footer></article> <div class="sticker vuepress-toc"><div class="vuepress-toc-item vuepress-toc-h2 active"><a href="#安裝" title="安裝">安裝</a></div><div class="vuepress-toc-item vuepress-toc-h2"><a href="#目錄結構" title="目錄結構">目錄結構</a></div><div class="vuepress-toc-item vuepress-toc-h2"><a href="#配置" title="配置">配置</a></div><div class="vuepress-toc-item vuepress-toc-h2"><a href="#建立文章" title="建立文章">建立文章</a></div><div class="vuepress-toc-item vuepress-toc-h3"><a href="#設定簡介內容" title="設定簡介內容">設定簡介內容</a></div><div class="vuepress-toc-item vuepress-toc-h3"><a href="#載入圖片" title="載入圖片">載入圖片</a></div><div class="vuepress-toc-item vuepress-toc-h2"><a href="#設定日期格式" title="設定日期格式">設定日期格式</a></div><div class="vuepress-toc-item vuepress-toc-h2"><a href="#設定-footer" title="設定 Footer">設定 Footer</a></div><div class="vuepress-toc-item vuepress-toc-h2"><a href="#設定-rss" title="設定 RSS">設定 RSS</a></div><div class="vuepress-toc-item vuepress-toc-h2"><a href="#使用-github-actions-部署" title="使用 GitHub Actions 部署">使用 GitHub Actions 部署</a></div><div class="vuepress-toc-item vuepress-toc-h3"><a href="#確認-base-屬性是否對應-github-page" title="確認 base 屬性是否對應 GitHub Page">確認 base 屬性是否對應 GitHub Page</a></div><div class="vuepress-toc-item vuepress-toc-h2"><a href="#總結" title="總結">總結</a></div><div class="vuepress-toc-item vuepress-toc-h2"><a href="#參考資料" title="參考資料">參考資料</a></div></div></div></div> <footer class="footer" data-v-3d9deeb8><div class="footer-left-wrap" data-v-3d9deeb8><ul class="contact" data-v-3d9deeb8><li class="contact-item" data-v-3d9deeb8><a href="https://github.com/peterhpchen" target="_blank" rel="noopener noreferrer" class="nav-link external" data-v-3d9deeb8><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github" data-v-3d9deeb8><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" data-v-3d9deeb8></path></svg>
-          
-        </a></li><li class="contact-item" data-v-3d9deeb8><a href="https://www.linkedin.com/in/peter-hsin-ping-chen/" target="_blank" rel="noopener noreferrer" class="nav-link external" data-v-3d9deeb8><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-linkedin" data-v-3d9deeb8><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" data-v-3d9deeb8></path><rect x="2" y="9" width="4" height="12" data-v-3d9deeb8></rect><circle cx="4" cy="4" r="2" data-v-3d9deeb8></circle></svg>
-          
-        </a></li></ul></div> <div class="footer-right-wrap" data-v-3d9deeb8><ul class="copyright" data-v-3d9deeb8><li class="copyright-item" data-v-3d9deeb8>Copyright © 2014-present Peter Chen</li></ul></div></footer></div><div class="global-ui"></div></div>
-    <script src="/blog/assets/js/app.b8db9494.js" defer></script><script src="/blog/assets/js/6.3e2c8e2e.js" defer></script><script src="/blog/assets/js/3.ec5b2acc.js" defer></script><script src="/blog/assets/js/16.a106fc64.js" defer></script>
-  </body>
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">LimitlessPing</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜尋"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜尋"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://peterhpchen.github.io/blog"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-vuepress-blog" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/blog/2022/05/09/vuepress-blog/" class="article-date">
+  <time class="dt-published" datetime="2022-05-09T00:00:00.000Z" itemprop="datePublished">2022-05-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      使用 VuePress 建立個人 blog
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>VuePress 預設是作為技術文件的靜態網頁生成器，但有許多的 theme 可以將它轉為 blog 使用，本文介紹如何使用 VuePress 作為個人 blog 使用，以及分享自己使用時的配置方式。</p>
+<span id="more"></span>
+
+<h2 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir blog &amp;&amp; cd blog</span><br><span class="line">npm iniy -y &amp;&amp; npm install vuepress @vuepress/theme-blog -D</span><br></pre></td></tr></table></figure>
+
+<p>這裡使用官方的 blog theme <code>@vuepress/theme-blog</code> ，因此除了 <code>vuepress</code> 外，記得要安裝這個 theme 。</p>
+<h2 id="目錄結構"><a href="#目錄結構" class="headerlink" title="目錄結構"></a>目錄結構</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">|- blog</span><br><span class="line">|  |- _posts</span><br><span class="line">|  |  |- 2022-04-30-set-lscolors</span><br><span class="line">|  |  |  |- ls-color-auto.png</span><br><span class="line">|  |  |  |- set-lscolors.png</span><br><span class="line">|  |  |- 2022-04-29-shell-sort-by-specific-fields.md</span><br><span class="line">|  |  |- 2022-04-30-set-lscolors.md</span><br><span class="line">|  |  |- 2022-05-01-use-dircolors.md</span><br><span class="line">|  |  |- 2022-05-02-get-directories-in-lua.md</span><br><span class="line">|  |- .vuepress</span><br><span class="line">|     |- config.js</span><br><span class="line">|- package.json</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>blog/_posts</code> ：存放文章的目錄。</li>
+<li><code>blog/_posts/*/*.png</code> ：存放特定文章的圖片。</li>
+<li><code>.vuepress/config.js</code> ： VuePress 的配置檔。</li>
+</ul>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>VuePress 的配置都存放於 <code>.vuepress/config.js</code> 中，而 theme <code>@vuepress/theme-blog</code> 的設定可以在 <code>themeConfig</code> 中配置：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="attr">title</span>: <span class="string">&#x27;Limitless Ping&#x27;</span>,</span><br><span class="line">  <span class="attr">theme</span>: <span class="string">&#x27;@vuepress/theme-blog&#x27;</span>,</span><br><span class="line">  <span class="attr">themeConfig</span>: &#123;</span><br><span class="line">    <span class="comment">// 配置 @vuepress/theme-blog</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>除了 <code>theme</code> 要設定為 <code>@vuepress/theme-blog</code> 以及 <code>themeConfig</code> 為 blog 的設定外，其他都是 VuePress 的設定，可以參考<a target="_blank" rel="noopener" href="https://v1.vuepress.vuejs.org/config/">官方文件</a>，至於 <code>themeConfig</code> 等下會在講解各功能時進行配置。</p>
+<p>設定完 <code>.vuepress/config.js</code> 後，可以去設定 <code>package.json</code> 的執行指令：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  ...</span><br><span class="line">  <span class="attr">&quot;scripts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="attr">&quot;dev&quot;</span><span class="punctuation">:</span> <span class="string">&quot;vuepress dev&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;build&quot;</span><span class="punctuation">:</span> <span class="string">&quot;vuepress build&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line">  ...</span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="建立文章"><a href="#建立文章" class="headerlink" title="建立文章"></a>建立文章</h2><p>在 <code>_posts</code> 目錄中建立文章檔，名稱可以隨喜好取名，但可以在前面加上日期（例如： <code>2022-05-09-vuepress-blog.md</code> ）以便 permalink 的使用，同時也方便管理。</p>
+<p>建立檔案後，你可以使用 Markdown 撰寫文章，並且可以在文章的最前面加上 Front Matter 補充文章的說明</p>
+<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: 使用 VuePress 建立個人 blog</span><br><span class="line">date: 2022-05-09</span><br><span class="line"><span class="section">tags: vuepress</span></span><br><span class="line"><span class="section">---</span></span><br><span class="line"></span><br><span class="line">嗨嘍，我的文章！</span><br></pre></td></tr></table></figure>
+
+<p>這裡 Front Matter 的 <code>tags</code> 是單個，如果想要設定多個 <code>tags</code> 時，可以使用陣列：</p>
+<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">tags:</span><br><span class="line"><span class="bullet">  -</span> vue</span><br><span class="line"><span class="section">  - vuepress</span></span><br><span class="line"><span class="section">---</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="設定簡介內容"><a href="#設定簡介內容" class="headerlink" title="設定簡介內容"></a>設定簡介內容</h3><p>blog 的總覽頁中可以顯示文章的節錄，如果想要指定文章的節錄位置，可以使用 <code>&lt;!-- more --&gt;</code> 作為節錄的結束位置，這樣 VuePress 就只會節錄到此為止。</p>
+<h3 id="載入圖片"><a href="#載入圖片" class="headerlink" title="載入圖片"></a>載入圖片</h3><p>如果文章中有圖片的話，可以存在與文章同名的目錄中，例如： <code>2022-05-09-vuepress-blog.md</code> 這篇，圖片就可以存到 <code>2022-05-09-vuepress-blog/image.png</code> 中，這樣一來，在文章中使用 <code>![image](./2022-05-09-vuepress-blog/image.png)</code> 來引入。</p>
+<h2 id="設定日期格式"><a href="#設定日期格式" class="headerlink" title="設定日期格式"></a>設定日期格式</h2><p>每篇文章的日期格式預設為 <code>ddd MMM DD YYYY</code> ，如果想要更改的話，可以修改 <code>themeConfig.dateFormat</code> ：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="attr">themeConfig</span>: &#123;</span><br><span class="line">    <span class="attr">dateFormat</span>: <span class="string">&#x27;YYYY-MM-DD&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的配置會將日期的顯示方式改為 <code>YYYY-MM-DD</code> 。</p>
+<h2 id="設定-Footer"><a href="#設定-Footer" class="headerlink" title="設定 Footer"></a>設定 Footer</h2><p><code>@vuepress/theme-blog</code> 的 Footer 用來顯示各式的連結與版權宣告：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="attr">themeConfig</span>: &#123;</span><br><span class="line">    <span class="attr">footer</span>: &#123;</span><br><span class="line">      <span class="attr">contact</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">type</span>: <span class="string">&#x27;github&#x27;</span>,</span><br><span class="line">          <span class="attr">link</span>: <span class="string">&#x27;https://github.com/peterhpchen&#x27;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">type</span>: <span class="string">&#x27;linkedin&#x27;</span>,</span><br><span class="line">          <span class="attr">link</span>: <span class="string">&#x27;https://www.linkedin.com/in/peter-hsin-ping-chen/&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">      ],</span><br><span class="line">      <span class="attr">copyright</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">text</span>: <span class="string">&#x27;Copyright © 2014-present Peter Chen&#x27;</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">      ],</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>contact</code> 可以在 Footer 的左邊建立各式的連結圖標，種類如下：</p>
+<ul>
+<li>codepen</li>
+<li>codesandbox</li>
+<li>facebook</li>
+<li>github</li>
+<li>gitlab</li>
+<li>instagram</li>
+<li>linkedin</li>
+<li>mail</li>
+<li>messenger</li>
+<li>music</li>
+<li>phone</li>
+<li>twitter</li>
+<li>video</li>
+<li>web</li>
+<li>youtube</li>
+</ul>
+<p><code>copyright</code> 則是一個陣列，每個陣列中都可以寫一段文字，它會將文字呈現在 Footer 的右邊，如果想要加上連結則多個 <code>link</code> 屬性即可。</p>
+<h2 id="設定-RSS"><a href="#設定-RSS" class="headerlink" title="設定 RSS"></a>設定 RSS</h2><p>使用 <code>themeConfig.feed</code> 可以設定 Feed ，只要將網站名稱加入 <code>themeConfig.feed.canonical_base</code> 中即可開啟 RSS ：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">    <span class="attr">feed</span>: &#123;</span><br><span class="line">      <span class="attr">canonical_base</span>:<span class="string">&#x27;https://peterhpchen.github.io&#x27;</span>,</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用-GitHub-Actions-部署"><a href="#使用-GitHub-Actions-部署" class="headerlink" title="使用 GitHub Actions 部署"></a>使用 GitHub Actions 部署</h2><p>我們可以使用 GitHub Actions 來自動建置及部署 blog ，請將下面的設定加到 <code>.github/workflows/pages.yml</code> ：</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">Pages</span></span><br><span class="line"></span><br><span class="line"><span class="attr">on:</span></span><br><span class="line">  <span class="attr">push:</span></span><br><span class="line">    <span class="attr">branches:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">main</span> <span class="comment"># default branch</span></span><br><span class="line"></span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">pages:</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Checkout</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">actions/checkout@v3</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Cache</span> <span class="string">NPM</span> <span class="string">dependencies</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">actions/cache@v2</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">path:</span> <span class="string">node_modules</span></span><br><span class="line">          <span class="attr">key:</span> <span class="string">$&#123;&#123;</span> <span class="string">runner.OS</span> <span class="string">&#125;&#125;-npm-cache</span></span><br><span class="line">          <span class="attr">restore-keys:</span> <span class="string">|</span></span><br><span class="line"><span class="string">            $&#123;&#123; runner.OS &#125;&#125;-npm-cache</span></span><br><span class="line"><span class="string"></span>      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Install</span> <span class="string">Dependencies</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">npm</span> <span class="string">install</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Build</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">npm</span> <span class="string">run</span> <span class="string">build</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Deploy</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">peaceiris/actions-gh-pages@v3</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">github_token:</span> <span class="string">$&#123;&#123;</span> <span class="string">secrets.GITHUB_TOKEN</span> <span class="string">&#125;&#125;</span></span><br><span class="line">          <span class="attr">publish_dir:</span> <span class="string">./.vuepress/dist</span></span><br></pre></td></tr></table></figure>
+
+<p>這裡使用 <a target="_blank" rel="noopener" href="https://github.com/peaceiris/actions-gh-pages">peaceiris&#x2F;actions-gh-pages</a> 作為部署的 Action 。</p>
+<p>接著將 GitHub Repository 的 Settings &gt; Pages &gt; Source 改為 <code>gh-pages</code> 。</p>
+<h3 id="確認-base-屬性是否對應-GitHub-Page"><a href="#確認-base-屬性是否對應-GitHub-Page" class="headerlink" title="確認 base 屬性是否對應 GitHub Page"></a>確認 <code>base</code> 屬性是否對應 GitHub Page</h3><p>如果使用 <code>&#123;username&#125;.github.io</code> 作為 Repository 的話，那 <code>.vuepress/config.js</code> 中的 <code>base</code> 設定為 <code>/</code> 即可，如果使用特定名稱作為 Repository 名稱的話，例如： <code>blog</code> ，那 <code>base</code> 需要設定為 <code>/blog/</code> 。</p>
+<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><p>像我這樣平時使用 Vue 做開發， VuePres 作為文件系統的工程師來說，使用 VuePress 作為部落格的載體，不但可以節省學習其他部落格軟體的用法，還可以使所有的文件格式保持一致，是個非常方便的選擇。</p>
+<h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://vuepress-theme-blog.billyyyyy3320.com/">@vuepress&#x2F;theme-blog</a></li>
+<li><a target="_blank" rel="noopener" href="https://v1.vuepress.vuejs.org/">VuePress</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://peterhpchen.github.io/blog/2022/05/09/vuepress-blog/" data-id="cld0fgp020054hjos6gsibeg6" data-title="使用 VuePress 建立個人 blog" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/vuepress/" rel="tag">vuepress</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/blog/2022/05/02/get-directories-in-lua/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">使用 Lua 取得目錄中的檔案</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ES2015/" rel="tag">ES2015</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/activex/" rel="tag">activex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/adobe-xd/" rel="tag">adobe-xd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/asp/" rel="tag">asp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/bash/" rel="tag">bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/basicauth/" rel="tag">basicauth</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/blogger/" rel="tag">blogger</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/bootstrap/" rel="tag">bootstrap</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/chrome-dev-tool/" rel="tag">chrome-dev-tool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/csharp/" rel="tag">csharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/cypress/" rel="tag">cypress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/debug/" rel="tag">debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/dotnet/" rel="tag">dotnet</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/font/" rel="tag">font</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github/" rel="tag">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github-page/" rel="tag">github-page</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/homebrew/" rel="tag">homebrew</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/icon/" rel="tag">icon</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/iframe/" rel="tag">iframe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/javascript-babel/" rel="tag">javascript babel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jekyll-theme/" rel="tag">jekyll-theme</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jquery/" rel="tag">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/lua/" rel="tag">lua</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/mdb/" rel="tag">mdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/memory-leak/" rel="tag">memory-leak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/message-channel/" rel="tag">message-channel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/odbc/" rel="tag">odbc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/open-source/" rel="tag">open-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/oracle/" rel="tag">oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/postman/" rel="tag">postman</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/postmessage/" rel="tag">postmessage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/regular-expression/" rel="tag">regular-expression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/shell/" rel="tag">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/svg/" rel="tag">svg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/tarvis-ci/" rel="tag">tarvis-ci</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/test/" rel="tag">test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vue/" rel="tag">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vue-cli/" rel="tag">vue-cli</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vuejs/" rel="tag">vuejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vuepress/" rel="tag">vuepress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/webpack/" rel="tag">webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/windows/" rel="tag">windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/xml/" rel="tag">xml</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤雲</h3>
+    <div class="widget tagcloud">
+      <a href="/blog/tags/ES2015/" style="font-size: 10px;">ES2015</a> <a href="/blog/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/blog/tags/activex/" style="font-size: 10px;">activex</a> <a href="/blog/tags/adobe-xd/" style="font-size: 10px;">adobe-xd</a> <a href="/blog/tags/asp/" style="font-size: 10px;">asp</a> <a href="/blog/tags/bash/" style="font-size: 13.33px;">bash</a> <a href="/blog/tags/basicauth/" style="font-size: 10px;">basicauth</a> <a href="/blog/tags/blogger/" style="font-size: 10px;">blogger</a> <a href="/blog/tags/bootstrap/" style="font-size: 10px;">bootstrap</a> <a href="/blog/tags/chrome-dev-tool/" style="font-size: 10px;">chrome-dev-tool</a> <a href="/blog/tags/csharp/" style="font-size: 10px;">csharp</a> <a href="/blog/tags/cypress/" style="font-size: 13.33px;">cypress</a> <a href="/blog/tags/debug/" style="font-size: 10px;">debug</a> <a href="/blog/tags/dotnet/" style="font-size: 10px;">dotnet</a> <a href="/blog/tags/font/" style="font-size: 10px;">font</a> <a href="/blog/tags/git/" style="font-size: 10px;">git</a> <a href="/blog/tags/github/" style="font-size: 13.33px;">github</a> <a href="/blog/tags/github-page/" style="font-size: 13.33px;">github-page</a> <a href="/blog/tags/golang/" style="font-size: 10px;">golang</a> <a href="/blog/tags/homebrew/" style="font-size: 10px;">homebrew</a> <a href="/blog/tags/icon/" style="font-size: 10px;">icon</a> <a href="/blog/tags/iframe/" style="font-size: 13.33px;">iframe</a> <a href="/blog/tags/javascript/" style="font-size: 20px;">javascript</a> <a href="/blog/tags/javascript-babel/" style="font-size: 10px;">javascript babel</a> <a href="/blog/tags/jekyll/" style="font-size: 13.33px;">jekyll</a> <a href="/blog/tags/jekyll-theme/" style="font-size: 10px;">jekyll-theme</a> <a href="/blog/tags/jquery/" style="font-size: 10px;">jquery</a> <a href="/blog/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/blog/tags/lua/" style="font-size: 10px;">lua</a> <a href="/blog/tags/mdb/" style="font-size: 10px;">mdb</a> <a href="/blog/tags/memory-leak/" style="font-size: 10px;">memory-leak</a> <a href="/blog/tags/message-channel/" style="font-size: 10px;">message-channel</a> <a href="/blog/tags/odbc/" style="font-size: 13.33px;">odbc</a> <a href="/blog/tags/open-source/" style="font-size: 10px;">open-source</a> <a href="/blog/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/blog/tags/postman/" style="font-size: 13.33px;">postman</a> <a href="/blog/tags/postmessage/" style="font-size: 10px;">postmessage</a> <a href="/blog/tags/regular-expression/" style="font-size: 10px;">regular-expression</a> <a href="/blog/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/blog/tags/shell/" style="font-size: 16.67px;">shell</a> <a href="/blog/tags/svg/" style="font-size: 13.33px;">svg</a> <a href="/blog/tags/tarvis-ci/" style="font-size: 10px;">tarvis-ci</a> <a href="/blog/tags/test/" style="font-size: 13.33px;">test</a> <a href="/blog/tags/vue/" style="font-size: 13.33px;">vue</a> <a href="/blog/tags/vue-cli/" style="font-size: 10px;">vue-cli</a> <a href="/blog/tags/vuejs/" style="font-size: 10px;">vuejs</a> <a href="/blog/tags/vuepress/" style="font-size: 13.33px;">vuepress</a> <a href="/blog/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/blog/tags/windows/" style="font-size: 13.33px;">windows</a> <a href="/blog/tags/xml/" style="font-size: 10px;">xml</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">彙整</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">五月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">四月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/05/">五月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/04/">四月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">三月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/05/">五月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/01/">一月 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2022/05/09/vuepress-blog/">使用 VuePress 建立個人 blog</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/05/02/get-directories-in-lua/">使用 Lua 取得目錄中的檔案</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/05/01/use-dircolors/">使用 dircolors 設定 LS_COLORS</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/04/30/set-lscolors/">設定 ls 指令輸出的顏色</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/04/29/shell-sort-by-specific-fields/">在 Shell 中將指令結果依照特定欄位排序</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 Peter Chen<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/blog/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/blog/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
 </html>

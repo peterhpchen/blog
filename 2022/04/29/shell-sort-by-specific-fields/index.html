@@ -1,78 +1,264 @@
 <!DOCTYPE html>
-<html lang="en-US">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>在 Shell 中將指令結果依照特定欄位排序 | Limitless Ping</title>
-    <meta name="generator" content="VuePress 1.9.7">
-    <link rel="alternate" type="application/rss+xml" href="https://peterhpchen.github.io/rss.xml" title="Limitless Ping RSS Feed">
-    <meta name="description" content="在執行指令後，有時我們會想要以特定的方式排序指令所輸出的結果，這時可以使用 sort 來做排序，本文記錄如何使用 sort 將特定字元作為分隔符，並對分隔後的特定欄位做排序。
-
-情境
-
-假設現在使用了 find 找出一些檔案，並用 sort 排序：
-
-% find $DOTFILES_ROOT/*/scri ...">
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>在 Shell 中將指令結果依照特定欄位排序 | LimitlessPing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="在執行指令後，有時我們會想要以特定的方式排序指令所輸出的結果，這時可以使用 sort 來做排序，本文記錄如何使用 sort 將特定字元作為分隔符，並對分隔後的特定欄位做排序。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在 Shell 中將指令結果依照特定欄位排序">
+<meta property="og:url" content="http://peterhpchen.github.io/blog/2022/04/29/shell-sort-by-specific-fields/index.html">
+<meta property="og:site_name" content="LimitlessPing">
+<meta property="og:description" content="在執行指令後，有時我們會想要以特定的方式排序指令所輸出的結果，這時可以使用 sort 來做排序，本文記錄如何使用 sort 將特定字元作為分隔符，並對分隔後的特定欄位做排序。">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2022-04-29T00:00:00.000Z">
+<meta property="article:modified_time" content="2023-01-17T16:06:20.659Z">
+<meta property="article:author" content="Peter Chen">
+<meta property="article:tag" content="shell">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="LimitlessPing" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/blog/favicon/favicon.ico">
+  
+  
     
-    <link rel="preload" href="/blog/assets/css/0.styles.ae7fb01b.css" as="style"><link rel="preload" href="/blog/assets/js/app.b8db9494.js" as="script"><link rel="preload" href="/blog/assets/js/6.3e2c8e2e.js" as="script"><link rel="preload" href="/blog/assets/js/3.ec5b2acc.js" as="script"><link rel="preload" href="/blog/assets/js/13.d60d37ad.js" as="script"><link rel="prefetch" href="/blog/assets/js/10.65eefe93.js"><link rel="prefetch" href="/blog/assets/js/11.c985d4ad.js"><link rel="prefetch" href="/blog/assets/js/12.9dcadc0e.js"><link rel="prefetch" href="/blog/assets/js/14.254f8308.js"><link rel="prefetch" href="/blog/assets/js/15.552d7b63.js"><link rel="prefetch" href="/blog/assets/js/16.a106fc64.js"><link rel="prefetch" href="/blog/assets/js/4.6de26933.js"><link rel="prefetch" href="/blog/assets/js/5.62882979.js"><link rel="prefetch" href="/blog/assets/js/7.a4047d44.js"><link rel="prefetch" href="/blog/assets/js/8.3c918491.js"><link rel="prefetch" href="/blog/assets/js/9.5d736116.js"><link rel="prefetch" href="/blog/assets/js/vuejs-paginate.a22c3811.js">
-    <link rel="stylesheet" href="/blog/assets/css/0.styles.ae7fb01b.css">
-  </head>
-  <body>
-    <div id="app" data-server-rendered="true"><div id="vuepress-theme-blog__global-layout"><section id="header-wrapper"><header id="header"><div class="header-wrapper"><div class="title"><a href="/blog/" class="nav-link home-link">Limitless Ping </a></div> <div class="header-right-wrap"><ul class="nav"><li class="nav-item"><a href="/blog/" class="nav-link">Blog</a></li><li class="nav-item"><a href="/blog/tag/" class="nav-link">Tags</a></li></ul> <div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <a href="/blog/rss.xml" class="feed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a></div></div></header></section> <div id="mobile-header"><div class="mobile-header-bar"><div class="mobile-header-title"><a href="/blog/" class="nav-link mobile-home-link">Limitless Ping </a> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div> <div class="mobile-menu-wrapper"><hr class="menu-divider"> <ul class="mobile-nav"><li class="mobile-nav-item"><a href="/blog/" class="nav-link">Blog</a></li><li class="mobile-nav-item"><a href="/blog/tag/" class="nav-link">Tags</a></li> <li class="mobile-nav-item"><a href="/blog/rss.xml" class="feed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a></li></ul></div></div></div> <div class="content-wrapper"><div id="vuepress-theme-blog__post-layout"><article itemscope="itemscope" itemtype="https://schema.org/BlogPosting" class="vuepress-blog-theme-content"><header><h1 itemprop="name headline" class="post-title">
-        在 Shell 中將指令結果依照特定欄位排序
-      </h1> <div class="post-meta"><!----> <div class="post-meta-date"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> <time pubdate itemprop="datePublished" datetime="2022-04-29T00:00:00.000Z">
-      2022-04-29
-    </time></div> <ul itemprop="keywords" class="post-meta-tags"><li class="post-tag" data-v-42ccfcd5><a href="/blog/tag/shell" data-v-42ccfcd5><span data-v-42ccfcd5>shell</span></a></li></ul></div></header> <div itemprop="articleBody" class="content__default"><p>在執行指令後，有時我們會想要以特定的方式排序指令所輸出的結果，這時可以使用 <code>sort</code> 來做排序，本文記錄如何使用 sort 將特定字元作為分隔符，並對分隔後的特定欄位做排序。</p> <h2 id="情境"><a href="#情境" class="header-anchor">#</a> 情境</h2> <p>假設現在使用了 <code>find</code> 找出一些檔案，並用 <code>sort</code> 排序：</p> <div class="language-shell extra-class"><div class="highlight-lines"><br><br><br><br><br><br><br><br><br><br><div class="highlighted"> </div><div class="highlighted"> </div><br><br><br><div class="highlighted"> </div><div class="highlighted"> </div><br><br><br><br><br><br><br></div><pre class="language-shell"><code>% <span class="token function">find</span> <span class="token variable">$DOTFILES_ROOT</span>/*/scripts -name install.sh <span class="token operator">|</span> <span class="token function">sort</span>
-/Users/PeterChen/.dotfiles/bat/scripts/install.sh
-/Users/PeterChen/.dotfiles/cheat.sh/scripts/install.sh
-/Users/PeterChen/.dotfiles/exa/scripts/install.sh
-/Users/PeterChen/.dotfiles/fd/scripts/install.sh
-/Users/PeterChen/.dotfiles/fzf/scripts/install.sh
-/Users/PeterChen/.dotfiles/gcc/scripts/install.sh
-/Users/PeterChen/.dotfiles/git/scripts/install.sh
-/Users/PeterChen/.dotfiles/neofetch/scripts/install.sh
-/Users/PeterChen/.dotfiles/node.nvm/scripts/install.sh
-/Users/PeterChen/.dotfiles/nvim.packer.nvim/scripts/install.sh
-/Users/PeterChen/.dotfiles/nvim/scripts/install.sh
-/Users/PeterChen/.dotfiles/pip/scripts/install.sh
-/Users/PeterChen/.dotfiles/pyenv/scripts/install.sh
-/Users/PeterChen/.dotfiles/ripgrep/scripts/install.sh
-/Users/PeterChen/.dotfiles/rust.cargo/scripts/install.sh
-/Users/PeterChen/.dotfiles/rust/scripts/install.sh
-/Users/PeterChen/.dotfiles/sdkman/scripts/install.sh
-/Users/PeterChen/.dotfiles/tmux/scripts/install.sh
-/Users/PeterChen/.dotfiles/vim/scripts/install.sh
-/Users/PeterChen/.dotfiles/zsh.fzf-tab/scripts/install.sh
-/Users/PeterChen/.dotfiles/zsh.zplug/scripts/install.sh
-/Users/PeterChen/.dotfiles/zsh/scripts/install.sh
-</code></pre></div><p>我們想要對 <code>.dotfiles</code> 的下層資料夾做排序，可以看到因為沒有設定分隔符的關係， <code>sort</code> 將整個字串視為排序的對象，因此會將路徑層的 <code>/</code> 也作為排序的依據，所以像是  <strong><code>nvim.packer.nvim</code> 與 <code>nvim</code></strong> 和 <strong><code>rust.cargo</code> 與 <code>rust</code></strong> 會是排序相反的狀況。</p> <h2 id="設定分隔符與排序欄位"><a href="#設定分隔符與排序欄位" class="header-anchor">#</a> 設定分隔符與排序欄位</h2> <p><code>sort</code> 可以使用 <code>-t</code> 或是 <code>--field-separator</code> 來指定分隔符，並且使用 <code>-k</code> 或是 <code>--key</code> 指定要排序的欄位。</p> <div class="language-shell extra-class"><div class="highlight-lines"><br><br><br><br><br><br><br><br><br><br><div class="highlighted"> </div><div class="highlighted"> </div><br><br><br><div class="highlighted"> </div><div class="highlighted"> </div><br><br><br><br><br><br><br></div><pre class="language-shell"><code>% <span class="token function">find</span> <span class="token variable">$DOTFILES_ROOT</span>/*/scripts -name install.sh <span class="token operator">|</span> <span class="token function">sort</span> -t <span class="token string">'/'</span> -k <span class="token number">5,5</span>
-/Users/PeterChen/.dotfiles/bat/scripts/install.sh
-/Users/PeterChen/.dotfiles/cheat.sh/scripts/install.sh
-/Users/PeterChen/.dotfiles/exa/scripts/install.sh
-/Users/PeterChen/.dotfiles/fd/scripts/install.sh
-/Users/PeterChen/.dotfiles/fzf/scripts/install.sh
-/Users/PeterChen/.dotfiles/gcc/scripts/install.sh
-/Users/PeterChen/.dotfiles/git/scripts/install.sh
-/Users/PeterChen/.dotfiles/neofetch/scripts/install.sh
-/Users/PeterChen/.dotfiles/node.nvm/scripts/install.sh
-/Users/PeterChen/.dotfiles/nvim/scripts/install.sh
-/Users/PeterChen/.dotfiles/nvim.packer.nvim/scripts/install.sh
-/Users/PeterChen/.dotfiles/pip/scripts/install.sh
-/Users/PeterChen/.dotfiles/pyenv/scripts/install.sh
-/Users/PeterChen/.dotfiles/ripgrep/scripts/install.sh
-/Users/PeterChen/.dotfiles/rust/scripts/install.sh
-/Users/PeterChen/.dotfiles/rust.cargo/scripts/install.sh
-/Users/PeterChen/.dotfiles/sdkman/scripts/install.sh
-/Users/PeterChen/.dotfiles/tmux/scripts/install.sh
-/Users/PeterChen/.dotfiles/vim/scripts/install.sh
-/Users/PeterChen/.dotfiles/zsh/scripts/install.sh
-/Users/PeterChen/.dotfiles/zsh.fzf-tab/scripts/install.sh
-/Users/PeterChen/.dotfiles/zsh.zplug/scripts/install.sh
-</code></pre></div><p><code>-k</code> 設置的是分隔後欄位的編號，第一個數字為起始欄位的編號，第二個是結束欄位的編號，中間以逗號 <code>,</code> 區隔。</p> <p>我們的目標是排序 <code>.dotfiles</code> 的下層，因此是第五層（由於一開始就是 <code>/</code> ，因此第一個欄位的空字串也要列入計算），而由於我們只想對此層資料夾進行排序，因此起始與結束都設定 <code>5</code> 即可。</p> <p>最後可以看到指令執行的結果完美地以 <code>.dotfiles</code> 下層資料夾由小到大排序好了。</p> <h2 id="總結"><a href="#總結" class="header-anchor">#</a> 總結</h2> <p><code>sort</code> 會將整個字串作為搜尋結果，因此碰到像是目錄的斜線 <code>/</code> 時，也會將其包含在排序的目標中，這會使得排序的結果不如預期。</p> <p>為了解決這個問題，我們可以使用 <code>-t</code> 參數設定分隔符，並使用 <code>-k</code> 選定要排序的依據欄位，藉此排除此問題。</p> <h2 id="參考資料"><a href="#參考資料" class="header-anchor">#</a> 參考資料</h2> <ul><li><a href="https://blog.gtwang.org/linux/linux-sort-command-tutorial-and-examples/" target="_blank" rel="noopener noreferrer">Linux 的 sort 排序指令教學與常用範例整理<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li></ul></div> <footer><!----> <hr> <!----></footer></article> <div class="sticker vuepress-toc"><div class="vuepress-toc-item vuepress-toc-h2 active"><a href="#情境" title="情境">情境</a></div><div class="vuepress-toc-item vuepress-toc-h2"><a href="#設定分隔符與排序欄位" title="設定分隔符與排序欄位">設定分隔符與排序欄位</a></div><div class="vuepress-toc-item vuepress-toc-h2"><a href="#總結" title="總結">總結</a></div><div class="vuepress-toc-item vuepress-toc-h2"><a href="#參考資料" title="參考資料">參考資料</a></div></div></div></div> <footer class="footer" data-v-3d9deeb8><div class="footer-left-wrap" data-v-3d9deeb8><ul class="contact" data-v-3d9deeb8><li class="contact-item" data-v-3d9deeb8><a href="https://github.com/peterhpchen" target="_blank" rel="noopener noreferrer" class="nav-link external" data-v-3d9deeb8><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github" data-v-3d9deeb8><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" data-v-3d9deeb8></path></svg>
-          
-        </a></li><li class="contact-item" data-v-3d9deeb8><a href="https://www.linkedin.com/in/peter-hsin-ping-chen/" target="_blank" rel="noopener noreferrer" class="nav-link external" data-v-3d9deeb8><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-linkedin" data-v-3d9deeb8><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" data-v-3d9deeb8></path><rect x="2" y="9" width="4" height="12" data-v-3d9deeb8></rect><circle cx="4" cy="4" r="2" data-v-3d9deeb8></circle></svg>
-          
-        </a></li></ul></div> <div class="footer-right-wrap" data-v-3d9deeb8><ul class="copyright" data-v-3d9deeb8><li class="copyright-item" data-v-3d9deeb8>Copyright © 2014-present Peter Chen</li></ul></div></footer></div><div class="global-ui"></div></div>
-    <script src="/blog/assets/js/app.b8db9494.js" defer></script><script src="/blog/assets/js/6.3e2c8e2e.js" defer></script><script src="/blog/assets/js/3.ec5b2acc.js" defer></script><script src="/blog/assets/js/13.d60d37ad.js" defer></script>
-  </body>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">LimitlessPing</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜尋"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜尋"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://peterhpchen.github.io/blog"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-shell-sort-by-specific-fields" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/blog/2022/04/29/shell-sort-by-specific-fields/" class="article-date">
+  <time class="dt-published" datetime="2022-04-29T00:00:00.000Z" itemprop="datePublished">2022-04-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      在 Shell 中將指令結果依照特定欄位排序
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>在執行指令後，有時我們會想要以特定的方式排序指令所輸出的結果，這時可以使用 <code>sort</code> 來做排序，本文記錄如何使用 sort 將特定字元作為分隔符，並對分隔後的特定欄位做排序。</p>
+<span id="more"></span>
+
+<h2 id="情境"><a href="#情境" class="headerlink" title="情境"></a>情境</h2><p>假設現在使用了 <code>find</code> 找出一些檔案，並用 <code>sort</code> 排序：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">% find $DOTFILES_ROOT/*/scripts -name install.sh | sort</span><br><span class="line">/Users/PeterChen/.dotfiles/bat/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/cheat.sh/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/exa/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/fd/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/fzf/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/gcc/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/git/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/neofetch/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/node.nvm/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/nvim.packer.nvim/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/nvim/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/pip/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/pyenv/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/ripgrep/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/rust.cargo/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/rust/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/sdkman/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/tmux/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/vim/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/zsh.fzf-tab/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/zsh.zplug/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/zsh/scripts/install.sh</span><br></pre></td></tr></table></figure>
+
+<p>我們想要對 <code>.dotfiles</code> 的下層資料夾做排序，可以看到因為沒有設定分隔符的關係， <code>sort</code> 將整個字串視為排序的對象，因此會將路徑層的 <code>/</code> 也作為排序的依據，所以像是  <strong><code>nvim.packer.nvim</code> 與 <code>nvim</code></strong> 和 <strong><code>rust.cargo</code> 與 <code>rust</code></strong> 會是排序相反的狀況。</p>
+<h2 id="設定分隔符與排序欄位"><a href="#設定分隔符與排序欄位" class="headerlink" title="設定分隔符與排序欄位"></a>設定分隔符與排序欄位</h2><p><code>sort</code> 可以使用 <code>-t</code> 或是 <code>--field-separator</code> 來指定分隔符，並且使用 <code>-k</code> 或是 <code>--key</code> 指定要排序的欄位。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">% find $DOTFILES_ROOT/*/scripts -name install.sh | sort -t &#x27;/&#x27; -k 5,5</span><br><span class="line">/Users/PeterChen/.dotfiles/bat/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/cheat.sh/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/exa/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/fd/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/fzf/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/gcc/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/git/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/neofetch/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/node.nvm/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/nvim/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/nvim.packer.nvim/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/pip/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/pyenv/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/ripgrep/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/rust/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/rust.cargo/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/sdkman/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/tmux/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/vim/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/zsh/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/zsh.fzf-tab/scripts/install.sh</span><br><span class="line">/Users/PeterChen/.dotfiles/zsh.zplug/scripts/install.sh</span><br></pre></td></tr></table></figure>
+
+<p><code>-k</code> 設置的是分隔後欄位的編號，第一個數字為起始欄位的編號，第二個是結束欄位的編號，中間以逗號 <code>,</code> 區隔。</p>
+<p>我們的目標是排序 <code>.dotfiles</code> 的下層，因此是第五層（由於一開始就是 <code>/</code> ，因此第一個欄位的空字串也要列入計算），而由於我們只想對此層資料夾進行排序，因此起始與結束都設定 <code>5</code> 即可。</p>
+<p>最後可以看到指令執行的結果完美地以 <code>.dotfiles</code> 下層資料夾由小到大排序好了。</p>
+<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><p><code>sort</code> 會將整個字串作為搜尋結果，因此碰到像是目錄的斜線 <code>/</code> 時，也會將其包含在排序的目標中，這會使得排序的結果不如預期。</p>
+<p>為了解決這個問題，我們可以使用 <code>-t</code> 參數設定分隔符，並使用 <code>-k</code> 選定要排序的依據欄位，藉此排除此問題。</p>
+<h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.gtwang.org/linux/linux-sort-command-tutorial-and-examples/">Linux 的 sort 排序指令教學與常用範例整理</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://peterhpchen.github.io/blog/2022/04/29/shell-sort-by-specific-fields/" data-id="cld0fgozf0020hjosakwtf2hg" data-title="在 Shell 中將指令結果依照特定欄位排序" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/shell/" rel="tag">shell</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2022/04/30/set-lscolors/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          設定 ls 指令輸出的顏色
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2020/05/30/homebrew/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">使用 Homebrew 管理 Mac 套件</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ES2015/" rel="tag">ES2015</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/activex/" rel="tag">activex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/adobe-xd/" rel="tag">adobe-xd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/asp/" rel="tag">asp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/bash/" rel="tag">bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/basicauth/" rel="tag">basicauth</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/blogger/" rel="tag">blogger</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/bootstrap/" rel="tag">bootstrap</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/chrome-dev-tool/" rel="tag">chrome-dev-tool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/csharp/" rel="tag">csharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/cypress/" rel="tag">cypress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/debug/" rel="tag">debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/dotnet/" rel="tag">dotnet</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/font/" rel="tag">font</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github/" rel="tag">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github-page/" rel="tag">github-page</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/homebrew/" rel="tag">homebrew</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/icon/" rel="tag">icon</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/iframe/" rel="tag">iframe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/javascript-babel/" rel="tag">javascript babel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jekyll-theme/" rel="tag">jekyll-theme</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jquery/" rel="tag">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/lua/" rel="tag">lua</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/mdb/" rel="tag">mdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/memory-leak/" rel="tag">memory-leak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/message-channel/" rel="tag">message-channel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/odbc/" rel="tag">odbc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/open-source/" rel="tag">open-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/oracle/" rel="tag">oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/postman/" rel="tag">postman</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/postmessage/" rel="tag">postmessage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/regular-expression/" rel="tag">regular-expression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/shell/" rel="tag">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/svg/" rel="tag">svg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/tarvis-ci/" rel="tag">tarvis-ci</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/test/" rel="tag">test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vue/" rel="tag">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vue-cli/" rel="tag">vue-cli</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vuejs/" rel="tag">vuejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vuepress/" rel="tag">vuepress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/webpack/" rel="tag">webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/windows/" rel="tag">windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/xml/" rel="tag">xml</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤雲</h3>
+    <div class="widget tagcloud">
+      <a href="/blog/tags/ES2015/" style="font-size: 10px;">ES2015</a> <a href="/blog/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/blog/tags/activex/" style="font-size: 10px;">activex</a> <a href="/blog/tags/adobe-xd/" style="font-size: 10px;">adobe-xd</a> <a href="/blog/tags/asp/" style="font-size: 10px;">asp</a> <a href="/blog/tags/bash/" style="font-size: 13.33px;">bash</a> <a href="/blog/tags/basicauth/" style="font-size: 10px;">basicauth</a> <a href="/blog/tags/blogger/" style="font-size: 10px;">blogger</a> <a href="/blog/tags/bootstrap/" style="font-size: 10px;">bootstrap</a> <a href="/blog/tags/chrome-dev-tool/" style="font-size: 10px;">chrome-dev-tool</a> <a href="/blog/tags/csharp/" style="font-size: 10px;">csharp</a> <a href="/blog/tags/cypress/" style="font-size: 13.33px;">cypress</a> <a href="/blog/tags/debug/" style="font-size: 10px;">debug</a> <a href="/blog/tags/dotnet/" style="font-size: 10px;">dotnet</a> <a href="/blog/tags/font/" style="font-size: 10px;">font</a> <a href="/blog/tags/git/" style="font-size: 10px;">git</a> <a href="/blog/tags/github/" style="font-size: 13.33px;">github</a> <a href="/blog/tags/github-page/" style="font-size: 13.33px;">github-page</a> <a href="/blog/tags/golang/" style="font-size: 10px;">golang</a> <a href="/blog/tags/homebrew/" style="font-size: 10px;">homebrew</a> <a href="/blog/tags/icon/" style="font-size: 10px;">icon</a> <a href="/blog/tags/iframe/" style="font-size: 13.33px;">iframe</a> <a href="/blog/tags/javascript/" style="font-size: 20px;">javascript</a> <a href="/blog/tags/javascript-babel/" style="font-size: 10px;">javascript babel</a> <a href="/blog/tags/jekyll/" style="font-size: 13.33px;">jekyll</a> <a href="/blog/tags/jekyll-theme/" style="font-size: 10px;">jekyll-theme</a> <a href="/blog/tags/jquery/" style="font-size: 10px;">jquery</a> <a href="/blog/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/blog/tags/lua/" style="font-size: 10px;">lua</a> <a href="/blog/tags/mdb/" style="font-size: 10px;">mdb</a> <a href="/blog/tags/memory-leak/" style="font-size: 10px;">memory-leak</a> <a href="/blog/tags/message-channel/" style="font-size: 10px;">message-channel</a> <a href="/blog/tags/odbc/" style="font-size: 13.33px;">odbc</a> <a href="/blog/tags/open-source/" style="font-size: 10px;">open-source</a> <a href="/blog/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/blog/tags/postman/" style="font-size: 13.33px;">postman</a> <a href="/blog/tags/postmessage/" style="font-size: 10px;">postmessage</a> <a href="/blog/tags/regular-expression/" style="font-size: 10px;">regular-expression</a> <a href="/blog/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/blog/tags/shell/" style="font-size: 16.67px;">shell</a> <a href="/blog/tags/svg/" style="font-size: 13.33px;">svg</a> <a href="/blog/tags/tarvis-ci/" style="font-size: 10px;">tarvis-ci</a> <a href="/blog/tags/test/" style="font-size: 13.33px;">test</a> <a href="/blog/tags/vue/" style="font-size: 13.33px;">vue</a> <a href="/blog/tags/vue-cli/" style="font-size: 10px;">vue-cli</a> <a href="/blog/tags/vuejs/" style="font-size: 10px;">vuejs</a> <a href="/blog/tags/vuepress/" style="font-size: 13.33px;">vuepress</a> <a href="/blog/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/blog/tags/windows/" style="font-size: 13.33px;">windows</a> <a href="/blog/tags/xml/" style="font-size: 10px;">xml</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">彙整</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">五月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">四月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/05/">五月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/04/">四月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">三月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/05/">五月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/01/">一月 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2022/05/09/vuepress-blog/">使用 VuePress 建立個人 blog</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/05/02/get-directories-in-lua/">使用 Lua 取得目錄中的檔案</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/05/01/use-dircolors/">使用 dircolors 設定 LS_COLORS</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/04/30/set-lscolors/">設定 ls 指令輸出的顏色</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/04/29/shell-sort-by-specific-fields/">在 Shell 中將指令結果依照特定欄位排序</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 Peter Chen<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/blog/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/blog/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
 </html>

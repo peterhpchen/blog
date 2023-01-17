@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>在WSL下編寫程式 | LimitlessPing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Ruby是一個很棒的程式語言，它的函式庫RubyGems上更是有很多很棒的套件可以使用，包括Jekyll這個GitHub Page的引擎，但Ruby對想要在Windows平台上做開發的人來說並不友善，我們必須要先安裝RubyInstaller才能進行編程，對於Linux只要一個指令就可以開始開發來說實在是有夠麻煩，WSL的出現是否會改變這個情況呢? 這篇就來介紹如何在WSL下編寫程式。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在WSL下編寫程式">
+<meta property="og:url" content="http://peterhpchen.github.io/blog/2018/01/26/code-on-wsl/index.html">
+<meta property="og:site_name" content="LimitlessPing">
+<meta property="og:description" content="Ruby是一個很棒的程式語言，它的函式庫RubyGems上更是有很多很棒的套件可以使用，包括Jekyll這個GitHub Page的引擎，但Ruby對想要在Windows平台上做開發的人來說並不友善，我們必須要先安裝RubyInstaller才能進行編程，對於Linux只要一個指令就可以開始開發來說實在是有夠麻煩，WSL的出現是否會改變這個情況呢? 這篇就來介紹如何在WSL下編寫程式。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2018/01/26/code-on-wsl/directory.PNG">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2018/01/26/code-on-wsl/install-ruby.PNG">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2018/01/26/code-on-wsl/run-ruby.PNG">
+<meta property="article:published_time" content="2018-01-26T03:00:00.000Z">
+<meta property="article:modified_time" content="2023-01-17T16:06:20.571Z">
+<meta property="article:author" content="Peter Chen">
+<meta property="article:tag" content="windows">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="bash">
+<meta property="article:tag" content="ruby">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://peterhpchen.github.io/blog/2018/01/26/code-on-wsl/directory.PNG">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="LimitlessPing" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/blog/favicon/favicon.ico">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">LimitlessPing</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜尋"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜尋"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://peterhpchen.github.io/blog"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-code-on-wsl" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/blog/2018/01/26/code-on-wsl/" class="article-date">
+  <time class="dt-published" datetime="2018-01-26T03:00:00.000Z" itemprop="datePublished">2018-01-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      在WSL下編寫程式
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>Ruby是一個很棒的程式語言，它的函式庫RubyGems上更是有很多很棒的套件可以使用，包括Jekyll這個GitHub Page的引擎，但Ruby對想要在Windows平台上做開發的人來說並不友善，我們必須要先安裝RubyInstaller才能進行編程，對於Linux只要一個指令就可以開始開發來說實在是有夠麻煩，WSL的出現是否會改變這個情況呢? 這篇就來介紹如何在WSL下編寫程式。</p>
+<span id="more"></span>
+
+<h2 id="編成前"><a href="#編成前" class="headerlink" title="編成前"></a>編成前</h2><ol>
+<li>開啟ubuntu應用</li>
+<li>將目前位置移至<code>/mnt</code></li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /mnt</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>查看目錄下的資料夾</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/blog/2018/01/26/code-on-wsl/directory.PNG" alt="directory"></p>
+<p>在這裡我們會看到windows檔案系統的分割槽，我們將在這上面做開發。</p>
+<ul>
+<li>如果想要使用Windows做編程的話請不要在Linux的檔案系統下做開發，詳情請看這篇官方部落格的<a target="_blank" rel="noopener" href="https://blogs.msdn.microsoft.com/commandline/2016/11/17/do-not-change-linux-files-using-windows-apps-and-tools/">文章</a></li>
+</ul>
+<h2 id="安裝Ruby"><a href="#安裝Ruby" class="headerlink" title="安裝Ruby"></a>安裝Ruby</h2><ol>
+<li>使用Linux套件系統取得Ruby</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install ruby</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>確定安裝成功</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ruby --version</span><br></pre></td></tr></table></figure>
+
+<p><img src="/blog/2018/01/26/code-on-wsl/install-ruby.PNG" alt="install ruby"></p>
+<h2 id="寫些東西"><a href="#寫些東西" class="headerlink" title="寫些東西"></a>寫些東西</h2><ol>
+<li>在工作目錄下開啟<strong>Visual Studio Code</strong></li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">code .</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>在工作目錄下創建<code>ILoveRuby.rb</code>後存檔</li>
+</ol>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Output &quot;I love Ruby&quot;</span></span><br><span class="line">say = <span class="string">&quot;I love Ruby&quot;</span></span><br><span class="line">puts say</span><br><span class="line"></span><br><span class="line"><span class="comment"># Output &quot;I *LOVE* RUBY&quot;</span></span><br><span class="line">say[<span class="string">&#x27;love&#x27;</span>] = <span class="string">&quot;*love*&quot;</span></span><br><span class="line">puts say.upcase</span><br><span class="line"></span><br><span class="line"><span class="comment"># Output &quot;I *love* Ruby&quot;</span></span><br><span class="line"><span class="comment"># five times</span></span><br><span class="line"><span class="number">5</span>.times &#123; puts say &#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>執行<code>ILoveRuby.rb</code></li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ruby ILoveRuby.rb</span><br></pre></td></tr></table></figure>
+
+<p><img src="/blog/2018/01/26/code-on-wsl/run-ruby.PNG" alt="run ruby"></p>
+<h2 id="上傳至GitHub"><a href="#上傳至GitHub" class="headerlink" title="上傳至GitHub"></a>上傳至GitHub</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br><span class="line">git status</span><br><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">&#x27;Initial Project&#x27;</span></span><br><span class="line">git remote add origin https://github.com/peterhpchen/rubyDemo.git</span><br><span class="line">git push origin master</span><br></pre></td></tr></table></figure>
+
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>在說明中整個流程相當的流暢輕快，也不用再安裝RubyInstaller就可以建置Ruby，但其實我在嘗試的時候將檔案建立在Linux的檔案系統下，在做編寫的時候就出現了編碼的問題(斷行字元)，所以如果要開發的話請在Windows下的檔案系統做開發，這樣以來使用WSL就會是事半功倍的了。</p>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.ruby-lang.org/zh_tw/">Ruby</a></li>
+<li><a target="_blank" rel="noopener" href="https://blogs.msdn.microsoft.com/commandline/2016/11/17/do-not-change-linux-files-using-windows-apps-and-tools/">msdn blog-Do not change Linux files using Windows apps and tools</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://peterhpchen.github.io/blog/2018/01/26/code-on-wsl/" data-id="cld0fgoyh0006hjos0l036f24" data-title="在WSL下編寫程式" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/bash/" rel="tag">bash</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/linux/" rel="tag">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/ruby/" rel="tag">ruby</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/windows/" rel="tag">windows</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2018/01/27/why-does-javascript-have-first-class-function/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          為什麼JavaScript的Function是First-class Function?
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2018/01/19/Install-linux-on-windows-10/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">在Windows10中使用Bash</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ES2015/" rel="tag">ES2015</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/activex/" rel="tag">activex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/adobe-xd/" rel="tag">adobe-xd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/asp/" rel="tag">asp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/bash/" rel="tag">bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/basicauth/" rel="tag">basicauth</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/blogger/" rel="tag">blogger</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/bootstrap/" rel="tag">bootstrap</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/chrome-dev-tool/" rel="tag">chrome-dev-tool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/csharp/" rel="tag">csharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/cypress/" rel="tag">cypress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/debug/" rel="tag">debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/dotnet/" rel="tag">dotnet</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/font/" rel="tag">font</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github/" rel="tag">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github-page/" rel="tag">github-page</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/homebrew/" rel="tag">homebrew</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/icon/" rel="tag">icon</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/iframe/" rel="tag">iframe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/javascript-babel/" rel="tag">javascript babel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jekyll-theme/" rel="tag">jekyll-theme</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jquery/" rel="tag">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/lua/" rel="tag">lua</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/mdb/" rel="tag">mdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/memory-leak/" rel="tag">memory-leak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/message-channel/" rel="tag">message-channel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/odbc/" rel="tag">odbc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/open-source/" rel="tag">open-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/oracle/" rel="tag">oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/postman/" rel="tag">postman</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/postmessage/" rel="tag">postmessage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/regular-expression/" rel="tag">regular-expression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/shell/" rel="tag">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/svg/" rel="tag">svg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/tarvis-ci/" rel="tag">tarvis-ci</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/test/" rel="tag">test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vue/" rel="tag">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vue-cli/" rel="tag">vue-cli</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vuejs/" rel="tag">vuejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vuepress/" rel="tag">vuepress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/webpack/" rel="tag">webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/windows/" rel="tag">windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/xml/" rel="tag">xml</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤雲</h3>
+    <div class="widget tagcloud">
+      <a href="/blog/tags/ES2015/" style="font-size: 10px;">ES2015</a> <a href="/blog/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/blog/tags/activex/" style="font-size: 10px;">activex</a> <a href="/blog/tags/adobe-xd/" style="font-size: 10px;">adobe-xd</a> <a href="/blog/tags/asp/" style="font-size: 10px;">asp</a> <a href="/blog/tags/bash/" style="font-size: 13.33px;">bash</a> <a href="/blog/tags/basicauth/" style="font-size: 10px;">basicauth</a> <a href="/blog/tags/blogger/" style="font-size: 10px;">blogger</a> <a href="/blog/tags/bootstrap/" style="font-size: 10px;">bootstrap</a> <a href="/blog/tags/chrome-dev-tool/" style="font-size: 10px;">chrome-dev-tool</a> <a href="/blog/tags/csharp/" style="font-size: 10px;">csharp</a> <a href="/blog/tags/cypress/" style="font-size: 13.33px;">cypress</a> <a href="/blog/tags/debug/" style="font-size: 10px;">debug</a> <a href="/blog/tags/dotnet/" style="font-size: 10px;">dotnet</a> <a href="/blog/tags/font/" style="font-size: 10px;">font</a> <a href="/blog/tags/git/" style="font-size: 10px;">git</a> <a href="/blog/tags/github/" style="font-size: 13.33px;">github</a> <a href="/blog/tags/github-page/" style="font-size: 13.33px;">github-page</a> <a href="/blog/tags/golang/" style="font-size: 10px;">golang</a> <a href="/blog/tags/homebrew/" style="font-size: 10px;">homebrew</a> <a href="/blog/tags/icon/" style="font-size: 10px;">icon</a> <a href="/blog/tags/iframe/" style="font-size: 13.33px;">iframe</a> <a href="/blog/tags/javascript/" style="font-size: 20px;">javascript</a> <a href="/blog/tags/javascript-babel/" style="font-size: 10px;">javascript babel</a> <a href="/blog/tags/jekyll/" style="font-size: 13.33px;">jekyll</a> <a href="/blog/tags/jekyll-theme/" style="font-size: 10px;">jekyll-theme</a> <a href="/blog/tags/jquery/" style="font-size: 10px;">jquery</a> <a href="/blog/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/blog/tags/lua/" style="font-size: 10px;">lua</a> <a href="/blog/tags/mdb/" style="font-size: 10px;">mdb</a> <a href="/blog/tags/memory-leak/" style="font-size: 10px;">memory-leak</a> <a href="/blog/tags/message-channel/" style="font-size: 10px;">message-channel</a> <a href="/blog/tags/odbc/" style="font-size: 13.33px;">odbc</a> <a href="/blog/tags/open-source/" style="font-size: 10px;">open-source</a> <a href="/blog/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/blog/tags/postman/" style="font-size: 13.33px;">postman</a> <a href="/blog/tags/postmessage/" style="font-size: 10px;">postmessage</a> <a href="/blog/tags/regular-expression/" style="font-size: 10px;">regular-expression</a> <a href="/blog/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/blog/tags/shell/" style="font-size: 16.67px;">shell</a> <a href="/blog/tags/svg/" style="font-size: 13.33px;">svg</a> <a href="/blog/tags/tarvis-ci/" style="font-size: 10px;">tarvis-ci</a> <a href="/blog/tags/test/" style="font-size: 13.33px;">test</a> <a href="/blog/tags/vue/" style="font-size: 13.33px;">vue</a> <a href="/blog/tags/vue-cli/" style="font-size: 10px;">vue-cli</a> <a href="/blog/tags/vuejs/" style="font-size: 10px;">vuejs</a> <a href="/blog/tags/vuepress/" style="font-size: 13.33px;">vuepress</a> <a href="/blog/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/blog/tags/windows/" style="font-size: 13.33px;">windows</a> <a href="/blog/tags/xml/" style="font-size: 10px;">xml</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">彙整</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">五月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">四月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/05/">五月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/04/">四月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">三月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/05/">五月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/01/">一月 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2022/05/09/vuepress-blog/">使用 VuePress 建立個人 blog</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/05/02/get-directories-in-lua/">使用 Lua 取得目錄中的檔案</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/05/01/use-dircolors/">使用 dircolors 設定 LS_COLORS</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/04/30/set-lscolors/">設定 ls 指令輸出的顏色</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/04/29/shell-sort-by-specific-fields/">在 Shell 中將指令結果依照特定欄位排序</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 Peter Chen<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/blog/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/blog/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

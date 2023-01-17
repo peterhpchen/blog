@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>JavaScript中的Let | LimitlessPing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="使用var宣告的變數跟我們一般的認知有很大的不同，主要的原因是抬升及其作用域的特性，使得開發者在使用的時候一不小心就會有誤用的情形，在ES2015後，我們多了let及const的宣告方式，沒有抬升也有了區塊作用域，讓我們擁有更加強固的變數宣告能力，本章會介紹let的相關特性。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript中的Let">
+<meta property="og:url" content="http://peterhpchen.github.io/blog/2018/02/08/javascript-let/index.html">
+<meta property="og:site_name" content="LimitlessPing">
+<meta property="og:description" content="使用var宣告的變數跟我們一般的認知有很大的不同，主要的原因是抬升及其作用域的特性，使得開發者在使用的時候一不小心就會有誤用的情形，在ES2015後，我們多了let及const的宣告方式，沒有抬升也有了區塊作用域，讓我們擁有更加強固的變數宣告能力，本章會介紹let的相關特性。">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2018-02-08T00:00:00.000Z">
+<meta property="article:modified_time" content="2023-01-17T16:06:20.575Z">
+<meta property="article:author" content="Peter Chen">
+<meta property="article:tag" content="javascript">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="LimitlessPing" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/blog/favicon/favicon.ico">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">LimitlessPing</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜尋"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜尋"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://peterhpchen.github.io/blog"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-javascript-let" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/blog/2018/02/08/javascript-let/" class="article-date">
+  <time class="dt-published" datetime="2018-02-08T00:00:00.000Z" itemprop="datePublished">2018-02-08</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      JavaScript中的Let
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>使用var宣告的變數跟我們一般的認知有很大的不同，主要的原因是抬升及其作用域的特性，使得開發者在使用的時候一不小心就會有誤用的情形，在ES2015後，我們多了let及const的宣告方式，沒有抬升也有了區塊作用域，讓我們擁有更加強固的變數宣告能力，本章會介紹let的相關特性。</p>
+<span id="more"></span>
+
+<h2 id="作用域的範圍"><a href="#作用域的範圍" class="headerlink" title="作用域的範圍"></a>作用域的範圍</h2><p><code>let</code>的作用域是在區塊內而非像<code>var</code>是在整個函式或是全域中，這就是所謂的區塊級別的宣告，區塊級宣告會存在於:</p>
+<ul>
+<li>宣告變數的函式中。</li>
+<li>區塊中(<code>&#123;&#125;</code>之間的區域)。</li>
+</ul>
+<p>第一點是<code>var</code>所宣告的變數也會滿足的條件，兩個的差別在第二點，如果在一個區塊中(ex: <code>if</code>)宣告變數，<code>let</code>的變數在離開區塊時就會被消滅，所以在區塊外是不能使用這個變數的，可是<code>var</code>因為Hoisting的影響，所以會被抬升至函式頂端，導致在其他區塊也可以使用。</p>
+<p>下面這個例子演示var的作用域範圍:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">varDemo</span>(<span class="params">condition</span>)&#123;</span><br><span class="line">  <span class="keyword">var</span> a = <span class="string">&#x27;A&#x27;</span>;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span>(condition)&#123;</span><br><span class="line">    <span class="keyword">var</span> b = <span class="string">&#x27;B&#x27;</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(a); <span class="comment">// A</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(b); <span class="comment">// B</span></span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(a); <span class="comment">// A</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(b); <span class="comment">// undefined</span></span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(a); <span class="comment">// A</span></span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(b); <span class="comment">// undefined</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">varDemo</span>(<span class="literal">true</span>);</span><br><span class="line"><span class="title function_">varDemo</span>(<span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(a); <span class="comment">// ReferenceError: a is not defined</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(b); <span class="comment">// ReferenceError: b is not defined</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>a</code>的作用域是整個<code>varDemo</code>函式。</li>
+<li><code>b</code>的作用域因為Hoisting抬至<code>varDemo</code>函式的頂端，所以作用域還是整個<code>varDemo</code>函式，但是初始值的設定還是在原本的位置，所以其他地方叫用<code>b</code>會是<code>undefined</code>。</li>
+</ul>
+<p>我們用上面完全相同的例子，但改用let宣告變數:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">letDemo</span>(<span class="params">condition</span>)&#123;</span><br><span class="line">  <span class="keyword">let</span> c = <span class="string">&#x27;C&#x27;</span>;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span>(condition)&#123;</span><br><span class="line">    <span class="keyword">let</span> d = <span class="string">&#x27;D&#x27;</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(c); <span class="comment">// C</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(d); <span class="comment">// D</span></span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(c); <span class="comment">// C</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(d); <span class="comment">// ReferenceError: d is not defined</span></span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(c); <span class="comment">// C</span></span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(d); <span class="comment">// ReferenceError: d is not defined</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">letDemo</span>(<span class="literal">true</span>);</span><br><span class="line"><span class="title function_">letDemo</span>(<span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(c); <span class="comment">// ReferenceError: c is not defined</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(d); <span class="comment">// ReferenceError: d is not defined</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>c</code>的作用域跟<code>var</code>的<code>a</code>一樣都是整個函式。</li>
+<li>因<code>let</code>沒有Hoisting，所以<code>d</code>的作用域只在<code>if</code>的區塊中。</li>
+</ul>
+<h2 id="禁止重複宣告"><a href="#禁止重複宣告" class="headerlink" title="禁止重複宣告"></a>禁止重複宣告</h2><p><code>var</code>可以對同一個變數重複宣告，可是對<code>let</code>來說是非法的:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ab = <span class="string">&#x27;A&#x27;</span>;</span><br><span class="line"><span class="keyword">let</span> ab = <span class="string">&#x27;B&#x27;</span>;  <span class="comment">// SyntaxError: redeclaration of var a</span></span><br></pre></td></tr></table></figure>
+
+<p>但是如前一節所提，在不同的作用域下的<code>let</code>變數會是不同的，所以不會有錯誤:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> cd = <span class="string">&#x27;C&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">  <span class="keyword">let</span> cd = <span class="string">&#x27;D&#x27;</span>; <span class="comment">// The scope of let cd is different from var cd.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>因為<code>let</code>禁止重複宣告，所以在使用<code>switch</code>時要特別小心，來看一下在<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let">MDN</a>中的例子:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> x = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">switch</span>(x) &#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="number">0</span>:</span><br><span class="line">    <span class="keyword">let</span> foo;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">    </span><br><span class="line">  <span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">    <span class="keyword">let</span> foo; <span class="comment">// SyntaxError for redeclaration.</span></span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>這個<code>switch</code>的例子因為在<code>case</code>裡沒有加上<code>&#123;&#125;</code>來限制<code>foo</code>變數的作用域，導致<code>foo</code>的作用域變成<code>switch</code>本身，所以<code>case 0</code>時已經宣告的<code>foo</code>在<code>case 1</code>中又宣告了一次，因而產生錯誤。</p>
+<p>上面的錯誤示範只要將<code>case</code>以<code>&#123;&#125;</code>包住即可:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> x = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">switch</span>(x) &#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="number">0</span>: &#123;</span><br><span class="line">    <span class="keyword">let</span> foo;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">  &#125;  </span><br><span class="line">  <span class="keyword">case</span> <span class="number">1</span>: &#123;</span><br><span class="line">    <span class="keyword">let</span> foo;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Temporal-Dead-Zone-TDZ"><a href="#Temporal-Dead-Zone-TDZ" class="headerlink" title="Temporal Dead Zone(TDZ)"></a>Temporal Dead Zone(TDZ)</h2><p>JavaScript的編譯器在發現變數宣告有可能會有兩個動作:</p>
+<ul>
+<li>遇到<code>var</code>宣告時，將變數<strong>抬升至作用域頂端</strong>。</li>
+<li>遇到<code>let</code>或是<code>const</code>宣告時，將變數**放至Temporal Dead Zone(TDZ)**。</li>
+</ul>
+<p><code>var</code>會將變數的宣告抬升至作用域頂端，所以在宣告前叫用變數是不會出錯的，只會拿到未宣告的初始值<code>undefined</code>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">hoistingDemo</span>(<span class="params"></span>)&#123;</span><br><span class="line">  <span class="comment">// var a  // Declaration of a By Hoisting</span></span><br><span class="line">  </span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="keyword">typeof</span> a);  <span class="comment">// undefined</span></span><br><span class="line">  </span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(a); <span class="comment">// undefined</span></span><br><span class="line">  </span><br><span class="line">  <span class="keyword">var</span> a = <span class="string">&#x27;A&#x27;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>而由於<code>let</code>及<code>const</code>並沒有抬升的機制，所以在區塊裡還未執行到宣告的行數前，這個變數都是在TDZ中，在這個範圍內叫用此變數的話會拋出<code>ReferenceError</code>的例外。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">TDZDemo</span>(<span class="params"></span>)&#123;</span><br><span class="line">  <span class="comment">// TDZ</span></span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="keyword">typeof</span> b);  <span class="comment">// undefined</span></span><br><span class="line"></span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="keyword">typeof</span> a);  <span class="comment">// ReferenceError: can&#x27;t access lexical declaration `a&#x27; before initialization</span></span><br><span class="line">  </span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(a); <span class="comment">// ReferenceError: can&#x27;t access lexical declaration `a&#x27; before initialization</span></span><br><span class="line">  <span class="comment">// TDZ</span></span><br><span class="line">  <span class="keyword">let</span> a = <span class="string">&#x27;A&#x27;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>從上面的程式可以看出來未宣告的<code>b</code>叫用<code>typeof</code>會回傳<code>undefined</code>，而用<code>let</code>宣告的變數<code>a</code>卻在叫用<code>typeof</code>的時候丟回<code>ReferenceError</code>的例外，這是<code>typeof</code>為了辨識未宣告變數及在TDZ中的變數所做的差異。</p>
+<p>接著來看幾個在<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let">MDN</a>上的特別例子。</p>
+<ul>
+<li>同一個陳述式中</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">test</span>(<span class="params"></span>)&#123;</span><br><span class="line">   <span class="keyword">var</span> foo = <span class="number">33</span>;</span><br><span class="line">   <span class="keyword">if</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">      <span class="keyword">let</span> foo = (foo + <span class="number">55</span>); <span class="comment">// ReferenceError</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>這裡會拋出<code>ReferenceError</code>的例外，是不是出乎意料呢? 其實仔細想想<code>(foo + 55)</code>已經在<code>if</code>的區塊中了，所以會先找<code>if</code>區塊中是否有宣告<code>foo</code>變數，而<code>if</code>區塊中確實有<code>let foo</code>的宣告，所以會抓到<code>if</code>區塊中的<code>foo</code>，但是這個<code>foo</code>在<code>(foo + 55)</code>執行時還是在TDZ中，所以就會拋出錯誤。</p>
+<ul>
+<li>迴圈中</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">go</span>(<span class="params">n</span>) &#123;</span><br><span class="line">  <span class="comment">// n here is defined!</span></span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(n); <span class="comment">// Object &#123;a: [1,2,3]&#125;</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> n <span class="keyword">of</span> n.<span class="property">a</span>) &#123; <span class="comment">// ReferenceError</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(n);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">go</span>(&#123;<span class="attr">a</span>: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>這裡的<code>(let n of n.a)</code>已經在for的區塊內了，所以會先找<code>for</code>區塊中有沒有<code>n</code>的宣告，發現區塊中的確有<code>let n</code>的宣告，但是在叫用<code>n.a</code>的時候，在<code>for</code>區塊內的<code>n</code>還未被宣告，因此是在TDZ中，所以會拋出<code>ReferenceError</code>例外。</p>
+<h2 id="迴圈中的let"><a href="#迴圈中的let" class="headerlink" title="迴圈中的let"></a>迴圈中的let</h2><p>在迴圈中如果想要用<code>index</code>設定函式的參數時，需要用IIFE來存入副本變數，否則每次的參考變數都會指向同一個。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">varForDemo</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> funcs = [];</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">    funcs.<span class="title function_">push</span>(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> i; <span class="comment">// same variable i</span></span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">  funcs.<span class="title function_">forEach</span>(<span class="keyword">function</span>(<span class="params">func</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">func</span>());  <span class="comment">// 10 10 10 10 10 10 10 10 10 10</span></span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">varForIIFEDemo</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> funcs = [];</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">    funcs.<span class="title function_">push</span>(</span><br><span class="line">      (<span class="keyword">function</span>(<span class="params">value</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">          <span class="keyword">return</span> value; <span class="comment">// value is a copy of i. every value is different variable.</span></span><br><span class="line">        &#125;;</span><br><span class="line">      &#125;)(i)</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">  funcs.<span class="title function_">forEach</span>(<span class="keyword">function</span>(<span class="params">func</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">func</span>());  <span class="comment">// 0 1 2 3 4 5 6 7 8 9</span></span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>而<code>let</code>可以幫我們很優雅地解決這個問題，因為<code>let</code>在每個區塊中都會是<strong>新的變數</strong>，所以每次的迭代都會是不同的變數。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">letForDemo</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> funcs = [];</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">    funcs.<span class="title function_">push</span>(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> i; <span class="comment">// every i is different variable.</span></span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">  funcs.<span class="title function_">forEach</span>(<span class="keyword">function</span>(<span class="params">func</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">func</span>());  <span class="comment">// 0 1 2 3 4 5 6 7 8 9</span></span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p><code>let</code>跟<code>var</code>最大的差別是在作用域的大小，相對於<code>var</code>是在整個函式或是全域中，<code>let</code>是在區塊內，而且不會有Hoisting的動作，也禁止重複宣告的限制，讓JavaScript的特性更接近我們所熟知的語言。</p>
+<p>在宣告<code>let</code>變數的同一個區塊中只要還沒有執行到宣告變數的行前，此變數都是在TDZ中，而TDZ會使<code>typeof</code>拋出<code>ReferenceError</code>的錯誤。</p>
+<p>迴圈中使用<code>var</code>宣告的變數放入函式的都會指向相同變數，導致我們在之後叫用函式時會產生非預期結果，使用IIFE或是用<code>let</code>宣告變數讓傳入的變數為新的實體即可解決此問題。</p>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let">MDN:let</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof">MDN:typeof</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://peterhpchen.github.io/blog/2018/02/08/javascript-let/" data-id="cld0fgoyn000dhjos7eah9coc" data-title="JavaScript中的Let" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/javascript/" rel="tag">javascript</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2018/02/09/javascript-const/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          JavaScript中的const
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2018/02/04/javascript-variable-statement/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">JavaScript的var陳述式</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ES2015/" rel="tag">ES2015</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/activex/" rel="tag">activex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/adobe-xd/" rel="tag">adobe-xd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/asp/" rel="tag">asp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/bash/" rel="tag">bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/basicauth/" rel="tag">basicauth</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/blogger/" rel="tag">blogger</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/bootstrap/" rel="tag">bootstrap</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/chrome-dev-tool/" rel="tag">chrome-dev-tool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/csharp/" rel="tag">csharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/cypress/" rel="tag">cypress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/debug/" rel="tag">debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/dotnet/" rel="tag">dotnet</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/font/" rel="tag">font</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github/" rel="tag">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github-page/" rel="tag">github-page</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/homebrew/" rel="tag">homebrew</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/icon/" rel="tag">icon</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/iframe/" rel="tag">iframe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/javascript-babel/" rel="tag">javascript babel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jekyll-theme/" rel="tag">jekyll-theme</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jquery/" rel="tag">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/lua/" rel="tag">lua</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/mdb/" rel="tag">mdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/memory-leak/" rel="tag">memory-leak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/message-channel/" rel="tag">message-channel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/odbc/" rel="tag">odbc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/open-source/" rel="tag">open-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/oracle/" rel="tag">oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/postman/" rel="tag">postman</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/postmessage/" rel="tag">postmessage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/regular-expression/" rel="tag">regular-expression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/shell/" rel="tag">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/svg/" rel="tag">svg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/tarvis-ci/" rel="tag">tarvis-ci</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/test/" rel="tag">test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vue/" rel="tag">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vue-cli/" rel="tag">vue-cli</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vuejs/" rel="tag">vuejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vuepress/" rel="tag">vuepress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/webpack/" rel="tag">webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/windows/" rel="tag">windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/xml/" rel="tag">xml</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤雲</h3>
+    <div class="widget tagcloud">
+      <a href="/blog/tags/ES2015/" style="font-size: 10px;">ES2015</a> <a href="/blog/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/blog/tags/activex/" style="font-size: 10px;">activex</a> <a href="/blog/tags/adobe-xd/" style="font-size: 10px;">adobe-xd</a> <a href="/blog/tags/asp/" style="font-size: 10px;">asp</a> <a href="/blog/tags/bash/" style="font-size: 13.33px;">bash</a> <a href="/blog/tags/basicauth/" style="font-size: 10px;">basicauth</a> <a href="/blog/tags/blogger/" style="font-size: 10px;">blogger</a> <a href="/blog/tags/bootstrap/" style="font-size: 10px;">bootstrap</a> <a href="/blog/tags/chrome-dev-tool/" style="font-size: 10px;">chrome-dev-tool</a> <a href="/blog/tags/csharp/" style="font-size: 10px;">csharp</a> <a href="/blog/tags/cypress/" style="font-size: 13.33px;">cypress</a> <a href="/blog/tags/debug/" style="font-size: 10px;">debug</a> <a href="/blog/tags/dotnet/" style="font-size: 10px;">dotnet</a> <a href="/blog/tags/font/" style="font-size: 10px;">font</a> <a href="/blog/tags/git/" style="font-size: 10px;">git</a> <a href="/blog/tags/github/" style="font-size: 13.33px;">github</a> <a href="/blog/tags/github-page/" style="font-size: 13.33px;">github-page</a> <a href="/blog/tags/golang/" style="font-size: 10px;">golang</a> <a href="/blog/tags/homebrew/" style="font-size: 10px;">homebrew</a> <a href="/blog/tags/icon/" style="font-size: 10px;">icon</a> <a href="/blog/tags/iframe/" style="font-size: 13.33px;">iframe</a> <a href="/blog/tags/javascript/" style="font-size: 20px;">javascript</a> <a href="/blog/tags/javascript-babel/" style="font-size: 10px;">javascript babel</a> <a href="/blog/tags/jekyll/" style="font-size: 13.33px;">jekyll</a> <a href="/blog/tags/jekyll-theme/" style="font-size: 10px;">jekyll-theme</a> <a href="/blog/tags/jquery/" style="font-size: 10px;">jquery</a> <a href="/blog/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/blog/tags/lua/" style="font-size: 10px;">lua</a> <a href="/blog/tags/mdb/" style="font-size: 10px;">mdb</a> <a href="/blog/tags/memory-leak/" style="font-size: 10px;">memory-leak</a> <a href="/blog/tags/message-channel/" style="font-size: 10px;">message-channel</a> <a href="/blog/tags/odbc/" style="font-size: 13.33px;">odbc</a> <a href="/blog/tags/open-source/" style="font-size: 10px;">open-source</a> <a href="/blog/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/blog/tags/postman/" style="font-size: 13.33px;">postman</a> <a href="/blog/tags/postmessage/" style="font-size: 10px;">postmessage</a> <a href="/blog/tags/regular-expression/" style="font-size: 10px;">regular-expression</a> <a href="/blog/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/blog/tags/shell/" style="font-size: 16.67px;">shell</a> <a href="/blog/tags/svg/" style="font-size: 13.33px;">svg</a> <a href="/blog/tags/tarvis-ci/" style="font-size: 10px;">tarvis-ci</a> <a href="/blog/tags/test/" style="font-size: 13.33px;">test</a> <a href="/blog/tags/vue/" style="font-size: 13.33px;">vue</a> <a href="/blog/tags/vue-cli/" style="font-size: 10px;">vue-cli</a> <a href="/blog/tags/vuejs/" style="font-size: 10px;">vuejs</a> <a href="/blog/tags/vuepress/" style="font-size: 13.33px;">vuepress</a> <a href="/blog/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/blog/tags/windows/" style="font-size: 13.33px;">windows</a> <a href="/blog/tags/xml/" style="font-size: 10px;">xml</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">彙整</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">五月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">四月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/05/">五月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/04/">四月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">三月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/05/">五月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/01/">一月 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2022/05/09/vuepress-blog/">使用 VuePress 建立個人 blog</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/05/02/get-directories-in-lua/">使用 Lua 取得目錄中的檔案</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/05/01/use-dircolors/">使用 dircolors 設定 LS_COLORS</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/04/30/set-lscolors/">設定 ls 指令輸出的顏色</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/04/29/shell-sort-by-specific-fields/">在 Shell 中將指令結果依照特定欄位排序</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 Peter Chen<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/blog/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/blog/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

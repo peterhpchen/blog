@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>使用 vue cli 建立 NPM package | LimitlessPing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="在寫程式的時候，常會有需要可以重複使用的代碼或是元件的情形，而這些很有可能對其他的開發者來說也十分的有用，這時候我們就可以把這些代碼或是元件包成 NPM 的 package 並且發布上 NPM ，一方面可以更有效的管理這些元件，另外也可以幫助到需要使用相同功能的開發者，貢獻開源專案。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 vue cli 建立 NPM package">
+<meta property="og:url" content="http://peterhpchen.github.io/blog/2019/03/24/build-library-by-vue-cli/index.html">
+<meta property="og:site_name" content="LimitlessPing">
+<meta property="og:description" content="在寫程式的時候，常會有需要可以重複使用的代碼或是元件的情形，而這些很有可能對其他的開發者來說也十分的有用，這時候我們就可以把這些代碼或是元件包成 NPM 的 package 並且發布上 NPM ，一方面可以更有效的管理這些元件，另外也可以幫助到需要使用相同功能的開發者，貢獻開源專案。">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2019-03-24T08:00:00.000Z">
+<meta property="article:modified_time" content="2023-01-17T16:06:20.619Z">
+<meta property="article:author" content="Peter Chen">
+<meta property="article:tag" content="vue">
+<meta property="article:tag" content="vue-cli">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="LimitlessPing" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/blog/favicon/favicon.ico">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">LimitlessPing</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜尋"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜尋"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://peterhpchen.github.io/blog"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-build-library-by-vue-cli" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/blog/2019/03/24/build-library-by-vue-cli/" class="article-date">
+  <time class="dt-published" datetime="2019-03-24T08:00:00.000Z" itemprop="datePublished">2019-03-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      使用 vue cli 建立 NPM package
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>在寫程式的時候，常會有需要可以重複使用的代碼或是元件的情形，而這些很有可能對其他的開發者來說也十分的有用，這時候我們就可以把這些代碼或是元件包成 NPM 的 package 並且發布上 NPM ，一方面可以更有效的管理這些元件，另外也可以幫助到需要使用相同功能的開發者，貢獻開源專案。</p>
+<span id="more"></span>
+
+<p>本文將會介紹如何使用 Vue CLI 來發布 Vue 的元件到 NPM 上。</p>
+<h2 id="前置條件"><a href="#前置條件" class="headerlink" title="前置條件"></a>前置條件</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://cli.vuejs.org/guide/installation.html">安裝 Vue CLI 3</a></li>
+<li>建立專案: <code>vue create [library name]</code></li>
+</ul>
+<h2 id="開發元件"><a href="#開發元件" class="headerlink" title="開發元件"></a>開發元件</h2><p>在 <code>components</code> 的資料夾中，我們可以開發這個庫需要的各種元件，用一般在專案的開發方式即可。</p>
+<h2 id="建置腳本"><a href="#建置腳本" class="headerlink" title="建置腳本"></a>建置腳本</h2><p>等到都開發完了以後，就要做建置的動作，建置時我們不能使用平常的專案建置方式，而是要改為使用建置 plugin 的方式。</p>
+<ul>
+<li>在 <code>src/components</code> 資料夾下建立 <code>index.js</code> :</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> component <span class="keyword">from</span> <span class="string">&#x27;./Triangle.vue&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Vue 安裝 Plugin 時 ( Vue.use ) 會叫用 install 函式，在此時註冊元件</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">install</span>(<span class="params">Vue</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (install.<span class="property">installed</span>) <span class="keyword">return</span>;</span><br><span class="line">  install.<span class="property">installed</span> = <span class="literal">true</span>;</span><br><span class="line">  <span class="title class_">Vue</span>.<span class="title function_">component</span>(<span class="string">&#x27;VTriangle&#x27;</span>, component);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 建立 Plugin 物件</span></span><br><span class="line"><span class="keyword">const</span> plugin = &#123;</span><br><span class="line">  install,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 如果使用全域 Vue 物件 (例如 &lt;script&gt; 載入) 時直接使用 Plugin</span></span><br><span class="line"><span class="keyword">let</span> <span class="title class_">GlobalVue</span> = <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="variable language_">window</span> !== <span class="string">&#x27;undefined&#x27;</span>) &#123;</span><br><span class="line">  <span class="title class_">GlobalVue</span> = <span class="variable language_">window</span>.<span class="property">Vue</span>;</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="variable language_">global</span> !== <span class="string">&#x27;undefined&#x27;</span>) &#123;</span><br><span class="line">  <span class="title class_">GlobalVue</span> = <span class="variable language_">global</span>.<span class="property">Vue</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> (<span class="title class_">GlobalVue</span>) &#123;</span><br><span class="line">  <span class="title class_">GlobalVue</span>.<span class="title function_">use</span>(plugin);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在 Local 引入時要直接使用元件</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> component;</span><br></pre></td></tr></table></figure>
+
+<h2 id="建置指令"><a href="#建置指令" class="headerlink" title="建置指令"></a>建置指令</h2><p>Vue CLI 有提供建置 package 的指令:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  ...</span><br><span class="line">  <span class="string">&quot;scripts&quot;</span>: &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="string">&quot;build-bundle&quot;</span>: <span class="string">&quot;vue-cli-service build --target lib --name v-triangle ./src/components/index.js&quot;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>target</code> 要設為 <code>lib</code> 表示要建立為 package 。</li>
+<li><code>name</code> 為此 package 的名稱。</li>
+<li>入口要改為我們剛剛建立的 <code>src/components/index.js</code> 腳本檔。</li>
+</ul>
+<p>現在一切準備就緒了，下 <code>yarn build-bundle</code> 執行建置，建置好後會在 dist 出現幾個檔案:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">File                          Size                   Gzipped</span><br><span class="line"></span><br><span class="line">dist/v-triangle.umd.min.js    22.52 KiB              6.99 KiB</span><br><span class="line">dist/v-triangle.umd.js        61.47 KiB              13.57 KiB</span><br><span class="line">dist/v-triangle.common.js     61.08 KiB              13.45 KiB</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>umd</code> : 直接在 browser 上或是 AMD Loader 使用。</li>
+<li><code>common</code> : CommonJS 使用。</li>
+</ul>
+<h2 id="設定-package-json"><a href="#設定-package-json" class="headerlink" title="設定 package.json"></a>設定 package.json</h2><p>在發布上 npm 之前，可以將此庫的介紹及資訊寫在 package.json 上，在 <code>publish</code> 時，這些資訊會被 npm 所讀取並且顯示在 package 的資訊頁上，下面列了幾個我使用到的資訊:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;name&quot;</span>: <span class="string">&quot;v-triangle&quot;</span>,</span><br><span class="line">  <span class="string">&quot;version&quot;</span>: <span class="string">&quot;0.1.1&quot;</span>,</span><br><span class="line">  <span class="string">&quot;description&quot;</span>: <span class="string">&quot;Simple triangle icon which made by html element.&quot;</span>,</span><br><span class="line">  <span class="string">&quot;author&quot;</span>: <span class="string">&quot;Peter Chen &lt;peterhsinpingchen@gmail.com&gt; (https://github.com/peterhpchen)&quot;</span>,</span><br><span class="line">  <span class="string">&quot;bugs&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;url&quot;</span>: <span class="string">&quot;https://github.com/peterhpchen/v-triangle/issues&quot;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">&quot;homepage&quot;</span>: <span class="string">&quot;https://github.com/peterhpchen/v-triangle&quot;</span>,</span><br><span class="line">  <span class="string">&quot;jsdelivr&quot;</span>: <span class="string">&quot;dist/v-triangle.umd.js&quot;</span>,</span><br><span class="line">  <span class="string">&quot;keywords&quot;</span>: [</span><br><span class="line">    <span class="string">&quot;vue&quot;</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="string">&quot;license&quot;</span>: <span class="string">&quot;MIT&quot;</span>,</span><br><span class="line">  <span class="string">&quot;main&quot;</span>: <span class="string">&quot;dist/v-triangle.common.js&quot;</span>,</span><br><span class="line">  <span class="string">&quot;repository&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;type&quot;</span>: <span class="string">&quot;git&quot;</span>,</span><br><span class="line">    <span class="string">&quot;url&quot;</span>: <span class="string">&quot;https://github.com/peterhpchen/v-triangle&quot;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">&quot;unpkg&quot;</span>: <span class="string">&quot;dist/v-triangle.umd.js&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>大多都滿直觀的，都是一些跟此 package 相關的資訊，比較需要注意的有下面幾個:</p>
+<ul>
+<li><code>main</code>: npm 抓取的檔案。</li>
+<li><code>unpkg</code>: unpkg 抓取的檔案。</li>
+<li><code>jsdelivr</code>: jsdelivr 抓取的檔案。</li>
+</ul>
+<p>每個服務都需要設定個預設抓去的檔案， <code>unpkg</code> 及 <code>jsdelivr</code> 需要使用 <code>umd</code> 的來源。</p>
+<h2 id="登入-npm"><a href="#登入-npm" class="headerlink" title="登入 npm"></a>登入 npm</h2><p>在 npm 中註冊帳號後，使用 <code>npm login</code> 登入。</p>
+<h2 id="發布-package"><a href="#發布-package" class="headerlink" title="發布 package"></a>發布 package</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm publish</span><br></pre></td></tr></table></figure>
+
+<p>接著就可以在 npm 上看到剛剛上傳的 package 了。</p>
+<h2 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h2><p>這次的文章是因為自己想要把 v-triangle 這個簡單的元件分享出來而研究的， 需要參考的可以去看一下這個庫。</p>
+<p><a target="_blank" rel="noopener" href="https://www.npmjs.com/package/v-triangle">v-triangle</a></p>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>只要使用 library 的建置方式，再加上 npm 所需的資訊就可以發布 package 了，是不是很方便呢~~~。</p>
+<h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://medium.com/justfrontendthings/how-to-create-and-publish-your-own-vuejs-component-library-on-npm-using-vue-cli-28e60943eed3">Divyam Rastogi: How to create, publish and use your own VueJS Component library on NPM using @vue&#x2F;cli 3.0</a></li>
+<li><a target="_blank" rel="noopener" href="https://vuejs.org/v2/cookbook/packaging-sfc-for-npm.html">Vue Cookbook: Packaging Vue Components for npm</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/chrisvfritz/hello-vue-components">chrisvfritz&#x2F;hello-vue-components</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://peterhpchen.github.io/blog/2019/03/24/build-library-by-vue-cli/" data-id="cld0fgoz5001bhjos44moh1qe" data-title="使用 vue cli 建立 NPM package" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/vue/" rel="tag">vue</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/vue-cli/" rel="tag">vue-cli</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2019/04/29/post-message-from-iframe-to-main/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          使用 postMessage 由嵌入頁 ( IFrame ) 傳訊息給主頁
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2019/02/20/publish-vuepress-by-travis/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">使用 Travis CI 部署 VuePress 靜態網頁至 Github Page</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ES2015/" rel="tag">ES2015</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/activex/" rel="tag">activex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/adobe-xd/" rel="tag">adobe-xd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/asp/" rel="tag">asp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/bash/" rel="tag">bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/basicauth/" rel="tag">basicauth</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/blogger/" rel="tag">blogger</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/bootstrap/" rel="tag">bootstrap</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/chrome-dev-tool/" rel="tag">chrome-dev-tool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/csharp/" rel="tag">csharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/cypress/" rel="tag">cypress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/debug/" rel="tag">debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/dotnet/" rel="tag">dotnet</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/font/" rel="tag">font</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github/" rel="tag">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github-page/" rel="tag">github-page</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/homebrew/" rel="tag">homebrew</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/icon/" rel="tag">icon</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/iframe/" rel="tag">iframe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/javascript-babel/" rel="tag">javascript babel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jekyll-theme/" rel="tag">jekyll-theme</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jquery/" rel="tag">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/lua/" rel="tag">lua</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/mdb/" rel="tag">mdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/memory-leak/" rel="tag">memory-leak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/message-channel/" rel="tag">message-channel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/odbc/" rel="tag">odbc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/open-source/" rel="tag">open-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/oracle/" rel="tag">oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/postman/" rel="tag">postman</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/postmessage/" rel="tag">postmessage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/regular-expression/" rel="tag">regular-expression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/shell/" rel="tag">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/svg/" rel="tag">svg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/tarvis-ci/" rel="tag">tarvis-ci</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/test/" rel="tag">test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vue/" rel="tag">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vue-cli/" rel="tag">vue-cli</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vuejs/" rel="tag">vuejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vuepress/" rel="tag">vuepress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/webpack/" rel="tag">webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/windows/" rel="tag">windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/xml/" rel="tag">xml</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤雲</h3>
+    <div class="widget tagcloud">
+      <a href="/blog/tags/ES2015/" style="font-size: 10px;">ES2015</a> <a href="/blog/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/blog/tags/activex/" style="font-size: 10px;">activex</a> <a href="/blog/tags/adobe-xd/" style="font-size: 10px;">adobe-xd</a> <a href="/blog/tags/asp/" style="font-size: 10px;">asp</a> <a href="/blog/tags/bash/" style="font-size: 13.33px;">bash</a> <a href="/blog/tags/basicauth/" style="font-size: 10px;">basicauth</a> <a href="/blog/tags/blogger/" style="font-size: 10px;">blogger</a> <a href="/blog/tags/bootstrap/" style="font-size: 10px;">bootstrap</a> <a href="/blog/tags/chrome-dev-tool/" style="font-size: 10px;">chrome-dev-tool</a> <a href="/blog/tags/csharp/" style="font-size: 10px;">csharp</a> <a href="/blog/tags/cypress/" style="font-size: 13.33px;">cypress</a> <a href="/blog/tags/debug/" style="font-size: 10px;">debug</a> <a href="/blog/tags/dotnet/" style="font-size: 10px;">dotnet</a> <a href="/blog/tags/font/" style="font-size: 10px;">font</a> <a href="/blog/tags/git/" style="font-size: 10px;">git</a> <a href="/blog/tags/github/" style="font-size: 13.33px;">github</a> <a href="/blog/tags/github-page/" style="font-size: 13.33px;">github-page</a> <a href="/blog/tags/golang/" style="font-size: 10px;">golang</a> <a href="/blog/tags/homebrew/" style="font-size: 10px;">homebrew</a> <a href="/blog/tags/icon/" style="font-size: 10px;">icon</a> <a href="/blog/tags/iframe/" style="font-size: 13.33px;">iframe</a> <a href="/blog/tags/javascript/" style="font-size: 20px;">javascript</a> <a href="/blog/tags/javascript-babel/" style="font-size: 10px;">javascript babel</a> <a href="/blog/tags/jekyll/" style="font-size: 13.33px;">jekyll</a> <a href="/blog/tags/jekyll-theme/" style="font-size: 10px;">jekyll-theme</a> <a href="/blog/tags/jquery/" style="font-size: 10px;">jquery</a> <a href="/blog/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/blog/tags/lua/" style="font-size: 10px;">lua</a> <a href="/blog/tags/mdb/" style="font-size: 10px;">mdb</a> <a href="/blog/tags/memory-leak/" style="font-size: 10px;">memory-leak</a> <a href="/blog/tags/message-channel/" style="font-size: 10px;">message-channel</a> <a href="/blog/tags/odbc/" style="font-size: 13.33px;">odbc</a> <a href="/blog/tags/open-source/" style="font-size: 10px;">open-source</a> <a href="/blog/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/blog/tags/postman/" style="font-size: 13.33px;">postman</a> <a href="/blog/tags/postmessage/" style="font-size: 10px;">postmessage</a> <a href="/blog/tags/regular-expression/" style="font-size: 10px;">regular-expression</a> <a href="/blog/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/blog/tags/shell/" style="font-size: 16.67px;">shell</a> <a href="/blog/tags/svg/" style="font-size: 13.33px;">svg</a> <a href="/blog/tags/tarvis-ci/" style="font-size: 10px;">tarvis-ci</a> <a href="/blog/tags/test/" style="font-size: 13.33px;">test</a> <a href="/blog/tags/vue/" style="font-size: 13.33px;">vue</a> <a href="/blog/tags/vue-cli/" style="font-size: 10px;">vue-cli</a> <a href="/blog/tags/vuejs/" style="font-size: 10px;">vuejs</a> <a href="/blog/tags/vuepress/" style="font-size: 13.33px;">vuepress</a> <a href="/blog/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/blog/tags/windows/" style="font-size: 13.33px;">windows</a> <a href="/blog/tags/xml/" style="font-size: 10px;">xml</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">彙整</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">五月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">四月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/05/">五月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/04/">四月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">三月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/05/">五月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/01/">一月 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2022/05/09/vuepress-blog/">使用 VuePress 建立個人 blog</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/05/02/get-directories-in-lua/">使用 Lua 取得目錄中的檔案</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/05/01/use-dircolors/">使用 dircolors 設定 LS_COLORS</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/04/30/set-lscolors/">設定 ls 指令輸出的顏色</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/04/29/shell-sort-by-specific-fields/">在 Shell 中將指令結果依照特定欄位排序</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 Peter Chen<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/blog/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/blog/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

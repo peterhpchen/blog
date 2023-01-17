@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>如何用Bootstrap做左導覽列 | LimitlessPing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Bootstrap上有個navbar的功能，裡面提供了一個External content的功能讓我們可以將內容先隱藏起來，等到使用者點擊按鈕觸發後才會以動畫的方式拉開內容，這樣的動畫呈現是使用了Bootstrap它自己的Collapse元件，但是Collapse只提供上下的展開，並沒有左右伸縮的功能，這讓我很苦惱，因為需求是要做從左邊展開的導覽列，自己刻一個是沒有問題，但既然Bootstrap都">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何用Bootstrap做左導覽列">
+<meta property="og:url" content="http://peterhpchen.github.io/blog/2018/02/01/bootstrap-left-collapse/index.html">
+<meta property="og:site_name" content="LimitlessPing">
+<meta property="og:description" content="Bootstrap上有個navbar的功能，裡面提供了一個External content的功能讓我們可以將內容先隱藏起來，等到使用者點擊按鈕觸發後才會以動畫的方式拉開內容，這樣的動畫呈現是使用了Bootstrap它自己的Collapse元件，但是Collapse只提供上下的展開，並沒有左右伸縮的功能，這讓我很苦惱，因為需求是要做從左邊展開的導覽列，自己刻一個是沒有問題，但既然Bootstrap都">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2018/02/01/bootstrap-left-collapse/transform-vs-width-transition.gif">
+<meta property="article:published_time" content="2018-02-01T15:00:00.000Z">
+<meta property="article:modified_time" content="2018-02-08T00:00:00.000Z">
+<meta property="article:author" content="Peter Chen">
+<meta property="article:tag" content="bootstrap">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://peterhpchen.github.io/blog/2018/02/01/bootstrap-left-collapse/transform-vs-width-transition.gif">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="LimitlessPing" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/blog/favicon/favicon.ico">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">LimitlessPing</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜尋"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜尋"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://peterhpchen.github.io/blog"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-bootstrap-left-collapse" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/blog/2018/02/01/bootstrap-left-collapse/" class="article-date">
+  <time class="dt-published" datetime="2018-02-01T15:00:00.000Z" itemprop="datePublished">2018-02-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      如何用Bootstrap做左導覽列
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>Bootstrap上有個navbar的功能，裡面提供了一個<a target="_blank" rel="noopener" href="https://getbootstrap.com/docs/4.0/components/navbar/#external-content">External content</a>的功能讓我們可以將內容先隱藏起來，等到使用者點擊按鈕觸發後才會以動畫的方式拉開內容，這樣的動畫呈現是使用了Bootstrap它自己的<a target="_blank" rel="noopener" href="https://getbootstrap.com/docs/4.0/components/collapse/">Collapse元件</a>，但是Collapse只提供上下的展開，並沒有左右伸縮的功能，這讓我很苦惱，因為需求是要做從左邊展開的導覽列，<a target="_blank" rel="noopener" href="https://codepen.io/peterhpchen/pen/qppNwR">自己刻一個</a>是沒有問題，但既然Bootstrap都有提供Collapse以及跟按鈕的整合了，不用一下說不過去，這篇就來看看要怎麼使用Bootstrap做出一個可以有轉換動畫做隱藏及顯示的左清單列吧。</p>
+<blockquote>
+<p>2018-02-08: add new content: 使用transform的轉場動畫</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="Navbar-external-content"><a href="#Navbar-external-content" class="headerlink" title="Navbar external content"></a>Navbar external content</h2><blockquote>
+<p>先來做個一般的隱藏內容。</p>
+</blockquote>
+<p>新增一個<strong>隱藏內容</strong>的元素:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;collapse&quot;</span> <span class="attr">id</span>=<span class="string">&quot;navbarToggleExternalContent&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;bg-dark p-4&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h4</span> <span class="attr">class</span>=<span class="string">&quot;text-white&quot;</span>&gt;</span>Collapsed content<span class="tag">&lt;/<span class="name">h4</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;text-muted&quot;</span>&gt;</span>Toggleable via the navbar brand.<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>class</code>要加上<code>collaspe</code>。</li>
+</ul>
+<p>新增一個觸發按鈕:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">&quot;navbar-toggler&quot;</span> <span class="attr">type</span>=<span class="string">&quot;button&quot;</span> <span class="attr">data-toggle</span>=<span class="string">&quot;collapse&quot;</span> <span class="attr">data-target</span>=<span class="string">&quot;#navbarToggleExternalContent&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;navbar-toggler-icon&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>data-toggle</code>要設為<code>collapse</code>。</li>
+<li><code>data-target</code>設定選擇器，指向你要隱藏的元素(這裡是<code>#navbarToggleExternalContent</code>)。</li>
+</ul>
+<p>這樣我們就完成了一個簡單的隱藏&#x2F;顯示內容的功能了，下面是完整的程式碼:</p>
+<p data-height="265" data-theme-id="0" data-slug-hash="NyqmoZ" data-default-tab="html,result" data-user="peterhpchen" data-embed-version="2" data-pen-title="bootstrap 4 simple collapse with navbar" class="codepen">See the Pen <a target="_blank" rel="noopener" href="https://codepen.io/peterhpchen/pen/NyqmoZ/">bootstrap 4 simple collapse with navbar</a> by Peter Chen (<a target="_blank" rel="noopener" href="https://codepen.io/peterhpchen">@peterhpchen</a>) on <a target="_blank" rel="noopener" href="https://codepen.io">CodePen</a>.</p>
+<script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
+
+<h2 id="Collapse"><a href="#Collapse" class="headerlink" title="Collapse"></a>Collapse</h2><p>要動手前我們要先知道關於<strong>Collapse</strong>這個元件的用法，它是一個可以讓對象在動作時有<strong>慢慢展開的效果</strong>，主要是由下面三個class來控制:</p>
+<ul>
+<li><code>collapse</code>: 初始化時設定的class，會將<strong>元素隱藏</strong>。</li>
+<li><code>collapsing</code>: 觸發展開&#x2F;縮回時開始到完成前會有的class，這上面設定了<strong>轉換時的動畫</strong>。</li>
+<li><code>collapse.show</code>: 展開後的元素會多一個show的class，將<strong>元素顯示</strong>出來。</li>
+</ul>
+<h3 id="小小的原碼探險"><a href="#小小的原碼探險" class="headerlink" title="小小的原碼探險"></a>小小的原碼探險</h3><p>我們由文件知道了上面三個類別會做的動作，從我們的需求上看，<code>collapsing</code>是我們應該深入的地方，因為這裡是在處理<strong>動畫呈現</strong>的部分，現在來看Bootstrap是怎麼實作出來的，我們可以看到<a target="_blank" rel="noopener" href="https://github.com/twbs/bootstrap/blob/v4-dev/scss/_transitions.scss">_transitions.scss</a>這個檔案，把焦點聚在<code>Collapsing</code>這邊:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* _transitions.scss */</span></span><br><span class="line"><span class="selector-class">.collapsing</span> &#123;</span><br><span class="line">  <span class="attribute">position</span>: relative;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">overflow</span>: hidden;</span><br><span class="line">  <span class="keyword">@include</span> transition($transition-collapse);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* _variables.scss */</span></span><br><span class="line">$<span class="attribute">transition</span>-collapse:         height .<span class="number">35s</span> ease !default;</span><br></pre></td></tr></table></figure>
+
+<p>我們可以注意到<code>transition-property</code>是設定<code>height</code>，所以<strong>Collapse</strong>是不會有橫向的動畫的，所以之後再覆寫時應該要改動這個設置。</p>
+<p>上面<code>collapsing</code>的樣式會看到它將<code>height</code>設為<code>0</code>，而<code>transition</code>會在<code>height</code>改變的時候動作，所以一定有個地方改變了元素的<code>height</code>，接著找到了<a target="_blank" rel="noopener" href="https://github.com/twbs/bootstrap/blob/v4-dev/js/src/collapse.js">collapse.js</a>:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> dimension = <span class="variable language_">this</span>.<span class="title function_">_getDimension</span>()</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> capitalizedDimension = dimension[<span class="number">0</span>].<span class="title function_">toUpperCase</span>() + dimension.<span class="title function_">slice</span>(<span class="number">1</span>)</span><br><span class="line"><span class="keyword">const</span> scrollSize = <span class="string">`scroll<span class="subst">$&#123;capitalizedDimension&#125;</span>`</span></span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="variable language_">this</span>.<span class="property">_element</span>.<span class="property">style</span>[dimension] = <span class="string">`<span class="subst">$&#123;<span class="variable language_">this</span>._element[scrollSize]&#125;</span>px`</span>   <span class="comment">// 用元素的scrollWidth(scrollHeight)來決定展開的大小</span></span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="title function_">_getDimension</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> hasWidth = $(<span class="variable language_">this</span>.<span class="property">_element</span>).<span class="title function_">hasClass</span>(<span class="title class_">Dimension</span>.<span class="property">WIDTH</span>)   <span class="comment">// 判斷有沒有width class來決定要抓高度還是寬度</span></span><br><span class="line">  <span class="keyword">return</span> hasWidth ? <span class="title class_">Dimension</span>.<span class="property">WIDTH</span> : <span class="title class_">Dimension</span>.<span class="property">HEIGHT</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>這邊有兩個重點:</p>
+<ul>
+<li><code>_getDimension()</code>會決定要抓的是<strong>Width</strong>還是<strong>Height</strong>，如果有設定<strong>Width類別</strong>的話就會抓<strong>Width</strong>。</li>
+<li>展開的大小是由<a target="_blank" rel="noopener" href="https://www.w3schools.com/jsref/prop_element_scrollwidth.asp">scrollwidth</a>(<a target="_blank" rel="noopener" href="https://www.w3schools.com/jsref/prop_element_scrollheight.asp">scrollHeight</a>)決定。</li>
+</ul>
+<p>這樣就萬事具備了，接著我們來試著開發吧。</p>
+<h2 id="將隱藏內容由左邊展開"><a href="#將隱藏內容由左邊展開" class="headerlink" title="將隱藏內容由左邊展開"></a>將隱藏內容由左邊展開</h2><blockquote>
+<p>接著進入本篇的重點，我們想要把隱藏的內容由左邊展開。</p>
+</blockquote>
+<p>加上<code>width</code>類別讓<code>_getDimension()</code>取到的是<strong>Width</strong>:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;collapse width&quot;</span> <span class="attr">id</span>=<span class="string">&quot;navbarToggleExternalContent&quot;</span>&gt;</span></span><br><span class="line">...</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>覆寫<code>.collapsing</code>:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.collapsing</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">transition-property</span>: width;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100%</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>覆寫的原因說明在下面:</p>
+<ul>
+<li><code>width</code>設為<code>0</code>: <strong>起始</strong>寬度設置。</li>
+<li><code>transition-property</code>設為<code>width</code>: 轉換的<strong>目標</strong>變為<code>width</code>。</li>
+<li><code>height</code>設為<code>100%</code>: 因<strong>高度不再是轉換的目標</strong>，所以原本的<code>height: 0</code>要改為<strong>原來的高度</strong>，要不然會因為長寬都是0造成在轉換期間會看不到元素的錯誤。</li>
+</ul>
+<p>下面是依照上面設置後的演示:</p>
+<p data-height="265" data-theme-id="0" data-slug-hash="ddoEwL" data-default-tab="html,result" data-user="peterhpchen" data-embed-version="2" data-pen-title="bootstrap 4 simple collapse with navbar(have scrollWidth Problem)" class="codepen">See the Pen <a target="_blank" rel="noopener" href="https://codepen.io/peterhpchen/pen/ddoEwL/">bootstrap 4 simple collapse with navbar(have scrollWidth Problem)</a> by Peter Chen (<a target="_blank" rel="noopener" href="https://codepen.io/peterhpchen">@peterhpchen</a>) on <a target="_blank" rel="noopener" href="https://codepen.io">CodePen</a>.</p>
+<script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
+
+<p>上面這樣成功讓隱藏內容由右邊展開了，但有兩個問題:</p>
+<ul>
+<li>展開後的元素會<strong>擠掉其他元素</strong>。</li>
+<li>在展開過程中內文的<strong>文字會依照目前的寬度折行</strong>。</li>
+</ul>
+<p>第一個問題可以用<code>position:fixed</code>的設置來解決，我們用Bootstrap的<code>position-fixed</code>類別來實作。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;collapse width position-fixed&quot;</span> <span class="attr">id</span>=<span class="string">&quot;navbarToggleExternalContent&quot;</span>&gt;</span></span><br><span class="line">...</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>第二個問題可以<code>white-space</code>設為<code>nowrap</code>來實現(參考自<a target="_blank" rel="noopener" href="https://stackoverflow.com/a/1383147/9265131">StackOverflow</a>)。</p>
+<p>解決這兩個問題後，現在會像是下面這樣。</p>
+<p data-height="265" data-theme-id="0" data-slug-hash="vdOoNZ" data-default-tab="html,result" data-user="peterhpchen" data-embed-version="2" data-pen-title="bootstrap 4 left navbar(have scrollWidth Problem)" class="codepen">See the Pen <a target="_blank" rel="noopener" href="https://codepen.io/peterhpchen/pen/vdOoNZ/">bootstrap 4 left navbar(have scrollWidth Problem)</a> by Peter Chen (<a target="_blank" rel="noopener" href="https://codepen.io/peterhpchen">@peterhpchen</a>) on <a target="_blank" rel="noopener" href="https://codepen.io">CodePen</a>.</p>
+<script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
+
+<p>如果觸發的話我們又會看到另一個問題，在轉換的最後會突然的顯示一節，有<strong>不平滑</strong>的感覺。</p>
+<p>經過觀察發現<code>scrollwidth</code>的長度並不是真正的長度，它並不包含<code>right padding</code>，從這篇<a target="_blank" rel="noopener" href="https://stackoverflow.com/a/10055302/9265131">StackOverflow</a>我們可以知道將<code>padding</code>改為用<code>margin</code>實作就好，因此我們將內容改為下面這樣:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;bg-dark py-4&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">h4</span> <span class="attr">class</span>=<span class="string">&quot;text-white mx-4&quot;</span>&gt;</span>Collapsed content<span class="tag">&lt;/<span class="name">h4</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;text-muted mx-4&quot;</span>&gt;</span>Toggleable via the navbar brand.<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>程式如下:</p>
+<p data-height="265" data-theme-id="0" data-slug-hash="yvYXbK" data-default-tab="html,result" data-user="peterhpchen" data-embed-version="2" data-pen-title="bootstrap v4 left menu bar(not height 100%)" class="codepen">See the Pen <a target="_blank" rel="noopener" href="https://codepen.io/peterhpchen/pen/yvYXbK/">bootstrap v4 left menu bar(not height 100%)</a> by Peter Chen (<a target="_blank" rel="noopener" href="https://codepen.io/peterhpchen">@peterhpchen</a>) on <a target="_blank" rel="noopener" href="https://codepen.io">CodePen</a>.</p>
+<script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
+
+<h2 id="使用transform的轉場動畫"><a href="#使用transform的轉場動畫" class="headerlink" title="使用transform的轉場動畫"></a>使用transform的轉場動畫</h2><p>上面的例子所使用的轉場對象是<code>width</code>，看到的是清單內容慢慢隱沒的效果，還有另一種是直接把內容向左推，推動的是整個區塊，我們來看兩者的效果差別:</p>
+<p><img src="/blog/2018/02/01/bootstrap-left-collapse/transform-vs-width-transition.gif" alt="transform-vs-width-transition"></p>
+<p>上面的比較圖我們可以看到左邊的是我們目前使用<code>width</code>做轉換的版本，可以看到它會慢慢的把內容文字從又變捲掉，而右邊會是整個區塊往左推，所以可以看到是從左邊的內容開始消失。</p>
+<p>兩種不同的版本會因設計需求不同而被採用，現在來示範用<code>translate</code>的方式實作。</p>
+<p>首先因為bootstrap的<code>collapse</code>是對長度(寬度或高度)做轉換，而<code>translate</code>的效果是不需要動到長度的，因此我們先把原本設定寬度<code>dimension</code>的<code>width</code>類別拿掉:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;bg-dark collapse position-fixed&quot;</span> <span class="attr">id</span>=<span class="string">&quot;navbarToggleExternalContent&quot;</span>&gt;</span>...<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>拿掉<code>width</code>後，bootstrap變回抓預設的<code>dimension</code>: <code>Height</code>了，所以我們現在要<strong>固定高度</strong>:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-id">#navbarToggleExternalContent</span>&#123;</span><br><span class="line">  <span class="attribute">display</span>: block;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100%</span>;</span><br><span class="line">  <span class="attribute">min-height</span>: <span class="number">100%</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在固定高度後，就要來修改動畫的部分，前面有說因為<code>collapse</code>是以長度為動畫依據，所以全部的預設動畫都沒有用處了，我們需要自己加上動畫。</p>
+<p>為此我們需要定義一個<code>class</code>，在<code>show</code>的時候加到元素上，藉這個<code>class</code>來設定開啟時候的狀態，為了達到這個目的我們用bootstrap提供的js事件來實作:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> $menu = $(<span class="string">&#x27;#navbarToggleExternalContent&#x27;</span>);</span><br><span class="line"></span><br><span class="line">$menu.<span class="title function_">on</span>(<span class="string">&#x27;show.bs.collapse&#x27;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  $menu.<span class="title function_">addClass</span>(<span class="string">&#x27;menu-show&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">$menu.<span class="title function_">on</span>(<span class="string">&#x27;hide.bs.collapse&#x27;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  $menu.<span class="title function_">removeClass</span>(<span class="string">&#x27;menu-show&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>使用<code>menu-show</code> class，在<code>show</code>的時候加上，在<code>hidden</code>的時候清掉，現在我們在<code>show</code>的時候元素上會有<code>menu-show</code>這個類別了。</p>
+<p>最後我們來加上動畫吧，在<strong>初始的狀態下我們是要隱藏menu的</strong>，所以我們用<code>translateX(-100%)</code>來隱藏清單:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-id">#navbarToggleExternalContent</span>&#123;</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">translateX</span>(-<span class="number">100%</span>);</span><br><span class="line">  <span class="attribute">transition</span>: transform .<span class="number">35s</span> ease;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接著在顯示的狀態下，清單的起始位置應該要在<code>0px</code>(靠左)的地方:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-id">#navbarToggleExternalContent</span><span class="selector-class">.menu-show</span>&#123;</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">translateX</span>(<span class="number">0%</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如此一來，我們就可以得到一個<code>translate</code>的左導覽列了:</p>
+<p data-height="265" data-theme-id="0" data-slug-hash="MQbYgp" data-default-tab="html,result" data-user="peterhpchen" data-embed-version="2" data-pen-title="bootstrap v4 left menu transform bar" class="codepen">See the Pen <a target="_blank" rel="noopener" href="https://codepen.io/peterhpchen/pen/MQbYgp/">bootstrap v4 left menu transform bar</a> by Peter Chen (<a target="_blank" rel="noopener" href="https://codepen.io/peterhpchen">@peterhpchen</a>) on <a target="_blank" rel="noopener" href="https://codepen.io">CodePen</a>.</p>
+<script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
+
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>Bootstrap是個很易用的元件庫，我們可以用它來節省不少的時間及精力，像這次的覆寫也是因為Bootstrap本身就已經有開好入口讓我們可以輕鬆地修改，會卡住的應該就是對Transition還不太了解的人(就是我)，理解CSS的Transition後就很簡單了。</p>
+<h2 id="備註"><a href="#備註" class="headerlink" title="備註"></a>備註</h2><ul>
+<li>本文使用的是<strong>Bootstrap 4</strong>。</li>
+</ul>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/twbs/bootstrap/blob/v4-dev/scss/_transitions.scss">Github:bootstrap-_transitions.scss</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/twbs/bootstrap/blob/v4-dev/scss/_variables.scss">Github:bootstrap-_variables.scss</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/twbs/bootstrap/blob/v4-dev/js/src/collapse.js">Github:bootstrap-collapse.js</a></li>
+<li><a target="_blank" rel="noopener" href="https://getbootstrap.com/docs/4.0/components/collapse/">bootstrap:collapse</a></li>
+<li><a target="_blank" rel="noopener" href="https://getbootstrap.com/docs/4.0/components/navbar/">bootstrap:navbar</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://peterhpchen.github.io/blog/2018/02/01/bootstrap-left-collapse/" data-id="cld0fgoyl000ahjos3iq7chsz" data-title="如何用Bootstrap做左導覽列" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/bootstrap/" rel="tag">bootstrap</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2018/02/04/javascript-variable-statement/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          JavaScript的var陳述式
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2018/01/31/javascript-hoisting/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">JavaScript的Hoisting</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ES2015/" rel="tag">ES2015</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/activex/" rel="tag">activex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/adobe-xd/" rel="tag">adobe-xd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/asp/" rel="tag">asp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/bash/" rel="tag">bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/basicauth/" rel="tag">basicauth</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/blogger/" rel="tag">blogger</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/bootstrap/" rel="tag">bootstrap</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/chrome-dev-tool/" rel="tag">chrome-dev-tool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/csharp/" rel="tag">csharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/cypress/" rel="tag">cypress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/debug/" rel="tag">debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/dotnet/" rel="tag">dotnet</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/font/" rel="tag">font</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github/" rel="tag">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github-page/" rel="tag">github-page</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/homebrew/" rel="tag">homebrew</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/icon/" rel="tag">icon</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/iframe/" rel="tag">iframe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/javascript-babel/" rel="tag">javascript babel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jekyll-theme/" rel="tag">jekyll-theme</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jquery/" rel="tag">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/lua/" rel="tag">lua</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/mdb/" rel="tag">mdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/memory-leak/" rel="tag">memory-leak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/message-channel/" rel="tag">message-channel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/odbc/" rel="tag">odbc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/open-source/" rel="tag">open-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/oracle/" rel="tag">oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/postman/" rel="tag">postman</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/postmessage/" rel="tag">postmessage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/regular-expression/" rel="tag">regular-expression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/shell/" rel="tag">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/svg/" rel="tag">svg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/tarvis-ci/" rel="tag">tarvis-ci</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/test/" rel="tag">test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vue/" rel="tag">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vue-cli/" rel="tag">vue-cli</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vuejs/" rel="tag">vuejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vuepress/" rel="tag">vuepress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/webpack/" rel="tag">webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/windows/" rel="tag">windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/xml/" rel="tag">xml</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤雲</h3>
+    <div class="widget tagcloud">
+      <a href="/blog/tags/ES2015/" style="font-size: 10px;">ES2015</a> <a href="/blog/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/blog/tags/activex/" style="font-size: 10px;">activex</a> <a href="/blog/tags/adobe-xd/" style="font-size: 10px;">adobe-xd</a> <a href="/blog/tags/asp/" style="font-size: 10px;">asp</a> <a href="/blog/tags/bash/" style="font-size: 13.33px;">bash</a> <a href="/blog/tags/basicauth/" style="font-size: 10px;">basicauth</a> <a href="/blog/tags/blogger/" style="font-size: 10px;">blogger</a> <a href="/blog/tags/bootstrap/" style="font-size: 10px;">bootstrap</a> <a href="/blog/tags/chrome-dev-tool/" style="font-size: 10px;">chrome-dev-tool</a> <a href="/blog/tags/csharp/" style="font-size: 10px;">csharp</a> <a href="/blog/tags/cypress/" style="font-size: 13.33px;">cypress</a> <a href="/blog/tags/debug/" style="font-size: 10px;">debug</a> <a href="/blog/tags/dotnet/" style="font-size: 10px;">dotnet</a> <a href="/blog/tags/font/" style="font-size: 10px;">font</a> <a href="/blog/tags/git/" style="font-size: 10px;">git</a> <a href="/blog/tags/github/" style="font-size: 13.33px;">github</a> <a href="/blog/tags/github-page/" style="font-size: 13.33px;">github-page</a> <a href="/blog/tags/golang/" style="font-size: 10px;">golang</a> <a href="/blog/tags/homebrew/" style="font-size: 10px;">homebrew</a> <a href="/blog/tags/icon/" style="font-size: 10px;">icon</a> <a href="/blog/tags/iframe/" style="font-size: 13.33px;">iframe</a> <a href="/blog/tags/javascript/" style="font-size: 20px;">javascript</a> <a href="/blog/tags/javascript-babel/" style="font-size: 10px;">javascript babel</a> <a href="/blog/tags/jekyll/" style="font-size: 13.33px;">jekyll</a> <a href="/blog/tags/jekyll-theme/" style="font-size: 10px;">jekyll-theme</a> <a href="/blog/tags/jquery/" style="font-size: 10px;">jquery</a> <a href="/blog/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/blog/tags/lua/" style="font-size: 10px;">lua</a> <a href="/blog/tags/mdb/" style="font-size: 10px;">mdb</a> <a href="/blog/tags/memory-leak/" style="font-size: 10px;">memory-leak</a> <a href="/blog/tags/message-channel/" style="font-size: 10px;">message-channel</a> <a href="/blog/tags/odbc/" style="font-size: 13.33px;">odbc</a> <a href="/blog/tags/open-source/" style="font-size: 10px;">open-source</a> <a href="/blog/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/blog/tags/postman/" style="font-size: 13.33px;">postman</a> <a href="/blog/tags/postmessage/" style="font-size: 10px;">postmessage</a> <a href="/blog/tags/regular-expression/" style="font-size: 10px;">regular-expression</a> <a href="/blog/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/blog/tags/shell/" style="font-size: 16.67px;">shell</a> <a href="/blog/tags/svg/" style="font-size: 13.33px;">svg</a> <a href="/blog/tags/tarvis-ci/" style="font-size: 10px;">tarvis-ci</a> <a href="/blog/tags/test/" style="font-size: 13.33px;">test</a> <a href="/blog/tags/vue/" style="font-size: 13.33px;">vue</a> <a href="/blog/tags/vue-cli/" style="font-size: 10px;">vue-cli</a> <a href="/blog/tags/vuejs/" style="font-size: 10px;">vuejs</a> <a href="/blog/tags/vuepress/" style="font-size: 13.33px;">vuepress</a> <a href="/blog/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/blog/tags/windows/" style="font-size: 13.33px;">windows</a> <a href="/blog/tags/xml/" style="font-size: 10px;">xml</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">彙整</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">五月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">四月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/05/">五月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/04/">四月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">三月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/05/">五月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/01/">一月 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2022/05/09/vuepress-blog/">使用 VuePress 建立個人 blog</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/05/02/get-directories-in-lua/">使用 Lua 取得目錄中的檔案</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/05/01/use-dircolors/">使用 dircolors 設定 LS_COLORS</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/04/30/set-lscolors/">設定 ls 指令輸出的顏色</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/04/29/shell-sort-by-specific-fields/">在 Shell 中將指令結果依照特定欄位排序</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 Peter Chen<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/blog/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/blog/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

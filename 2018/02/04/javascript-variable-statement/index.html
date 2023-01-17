@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>JavaScript的var陳述式 | LimitlessPing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="對JavaScript有稍微了解的人都知道，JavaScript中的var是在宣告變數時所使用的陳述式，但很多人對於var的理解都是建立在像是Java這樣的強型別語言的變數宣告上，這樣的理解對於JavaScript的開發者來說是很致命的，這樣的錯誤會產生Bug讓你多加兩天的班，為了避免少了兩個晚上的悠閒，我們現在來看看var究竟在玩什麼把戲。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript的var陳述式">
+<meta property="og:url" content="http://peterhpchen.github.io/blog/2018/02/04/javascript-variable-statement/index.html">
+<meta property="og:site_name" content="LimitlessPing">
+<meta property="og:description" content="對JavaScript有稍微了解的人都知道，JavaScript中的var是在宣告變數時所使用的陳述式，但很多人對於var的理解都是建立在像是Java這樣的強型別語言的變數宣告上，這樣的理解對於JavaScript的開發者來說是很致命的，這樣的錯誤會產生Bug讓你多加兩天的班，為了避免少了兩個晚上的悠閒，我們現在來看看var究竟在玩什麼把戲。">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2018-02-04T12:00:00.000Z">
+<meta property="article:modified_time" content="2023-01-17T16:06:20.575Z">
+<meta property="article:author" content="Peter Chen">
+<meta property="article:tag" content="javascript">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="LimitlessPing" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/blog/favicon/favicon.ico">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">LimitlessPing</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜尋"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜尋"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://peterhpchen.github.io/blog"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-javascript-variable-statement" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/blog/2018/02/04/javascript-variable-statement/" class="article-date">
+  <time class="dt-published" datetime="2018-02-04T12:00:00.000Z" itemprop="datePublished">2018-02-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      JavaScript的var陳述式
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>對JavaScript有稍微了解的人都知道，JavaScript中的var是在宣告變數時所使用的陳述式，但很多人對於var的理解都是建立在像是Java這樣的強型別語言的變數宣告上，這樣的理解對於JavaScript的開發者來說是很致命的，這樣的錯誤會產生Bug讓你多加兩天的班，為了避免少了兩個晚上的悠閒，我們現在來看看var究竟在玩什麼把戲。</p>
+<span id="more"></span>
+
+<h2 id="抬升-Hoisting"><a href="#抬升-Hoisting" class="headerlink" title="抬升(Hoisting)"></a>抬升(Hoisting)</h2><p>在<a href="!--swig%EF%BF%BC11--">JavaScript的Hoisting</a>一文有介紹變數的抬升機制，會有這樣的現象是因為編譯器會先掃過所有的程式碼，如果有<code>var</code>宣告的變數就會將其的定義放入記憶體中，現在再來看幾個比較特別的例子，鞏固觀念。</p>
+<h3 id="兩個變數在同行宣告"><a href="#兩個變數在同行宣告" class="headerlink" title="兩個變數在同行宣告"></a>兩個變數在同行宣告</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = b, b = <span class="string">&#x27;B&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`a: <span class="subst">$&#123;a&#125;</span>, b: <span class="subst">$&#123;b&#125;</span>`</span>);  <span class="comment">// a: undefined, b: B</span></span><br></pre></td></tr></table></figure>
+
+<p>上面的程式在<strong>抬升</strong>作用下會變得跟下面一樣:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a, b;</span><br><span class="line"></span><br><span class="line">a = b;</span><br><span class="line">b = <span class="string">&#x27;B&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`a: <span class="subst">$&#123;a&#125;</span>, b: <span class="subst">$&#123;b&#125;</span>`</span>);  <span class="comment">// a: undefined, b: B</span></span><br></pre></td></tr></table></figure>
+
+<p>因為<strong>抬升</strong>的關係，<code>a</code>跟<code>b</code>的宣告已經被抓到<strong>Scope</strong>的最前面，因此<code>a=b</code>不會出現<strong>Reference Error</strong>，而因為<code>b</code>還<strong>未設定初始值</strong>，所以<code>a</code>會是拿到<code>undefined</code>的值。</p>
+<h3 id="迭代中的var"><a href="#迭代中的var" class="headerlink" title="迭代中的var"></a>迭代中的<code>var</code></h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(i);   <span class="comment">// 0 1 2 3 4 5 6 7 8 9</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(i); <span class="comment">// 10</span></span><br></pre></td></tr></table></figure>
+
+<p>上面的程式在<strong>抬升</strong>作用下會變得跟下面一樣:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> i;</span><br><span class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(i); <span class="comment">// 0 1 2 3 4 5 6 7 8 9</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(i); <span class="comment">// 10</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>抬升</strong>會將<code>i</code>抬至<code>for</code>的設置外，這代表著一個令人喪氣的結果: 所有在<code>for</code>區塊中的<code>i</code>都<strong>共享著相同的變數</strong>，所以在<code>for</code>迴圈後依然可以叫用<code>i</code>並且其值會是<strong>迭代結束的數字10</strong>。</p>
+<h2 id="for中的function"><a href="#for中的function" class="headerlink" title="for中的function"></a><code>for</code>中的<code>function</code></h2><p>上節提到了抬升，我們接續迭代的例子，來看看將一般的程式觀念帶進JS是多麼的危險，請看下面的例子:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> funcs = [];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">  funcs.<span class="title function_">push</span>(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> i;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">funcs.<span class="title function_">forEach</span>(<span class="keyword">function</span>(<span class="params">func</span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">func</span>()); <span class="comment">// all output 10</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>這裡我們在迴圈中將<code>return i</code>的函式加到<code>funcs</code>的陣列中，並在迭代後各別叫用陣列中的function，並且期望它出現0~9的結果，但卻出乎意料的傳回了10個10。</p>
+<p>這是因為它們共享著相同的變數i，這個變數在叫用<code>funcs</code>陣列中的函式時已經因為迭代結束的關係被變成10了，所以才會得到錯誤的結果。</p>
+<p>為了避免共享相同的變數，我們需要在每個函式中建立i的副本，這樣的目的可以用<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Glossary/IIFE">IIFE</a>達到，下面我們用<strong>IIFE</strong>改寫上面的程式碼:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> funcs = [];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">  funcs.<span class="title function_">push</span>(</span><br><span class="line">    (<span class="keyword">function</span>(<span class="params">value</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">      &#125;;</span><br><span class="line">    &#125;)(i)</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">funcs.<span class="title function_">forEach</span>(<span class="keyword">function</span>(<span class="params">func</span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">func</span>()); <span class="comment">// 0 1 2 3 4 5 6 7 8 9</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><code>IIFE</code>為每個回傳函式建立<code>value</code>的變數，而這個變數就是每個<code>i</code>的數值，這樣每個函式就<strong>不是共享著變數i</strong>的數值，而是<strong>每次IIFE中的value</strong>，如此一來就可以取得期望的答案了。</p>
+<h2 id="覆寫全域物件"><a href="#覆寫全域物件" class="headerlink" title="覆寫全域物件"></a>覆寫全域物件</h2><p>當在<strong>全域</strong>下用<code>var</code>宣告變數時會<strong>蓋掉全域物件(window in browsers)同名的資料</strong>，我們看下面的例子:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">window</span>.<span class="property">RegExp</span>); <span class="comment">// function RegExp()</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> <span class="title class_">RegExp</span> = <span class="string">&#x27;Override!!&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">window</span>.<span class="property">RegExp</span>); <span class="comment">// Override!!</span></span><br></pre></td></tr></table></figure>
+
+<p>原本的<code>window.RegExp</code>因為我們<strong>宣告了同名的變數</strong>而被蓋掉了，在全域中使用<code>var</code>宣告變數要注意這樣的現象。</p>
+<h2 id="未宣告變數-Undeclared-Variable"><a href="#未宣告變數-Undeclared-Variable" class="headerlink" title="未宣告變數(Undeclared Variable)"></a>未宣告變數(Undeclared Variable)</h2><p>只有給予變數初始值(ex: <code>a=&quot;A&quot;</code>)稱為未宣告變數(<strong>undeclared variable</strong>)，它跟宣告變數(<strong>declared variable</strong>)有下面幾點的不同。</p>
+<ul>
+<li>在嚴格模式下不能使用未宣告變數。</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&#x27;use strict&#x27;</span></span><br><span class="line">a = <span class="string">&#x27;A&#x27;</span>;    <span class="comment">// ReferenceError: assignment to undeclared variable a</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>不管宣告的在何處，一定是全域變數。</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">demo</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> a = <span class="string">&#x27;A&#x27;</span>;</span><br><span class="line">  b = <span class="string">&#x27;B&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">demo</span>();</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(a); <span class="comment">// ReferenceError: a is not defined</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(b); <span class="comment">// B</span></span><br></pre></td></tr></table></figure>
+
+<p>在之前的<a href="!--swig%EF%BF%BC12--">JavaScript的Hoisting</a>時有提到抬升只會在相同的作用域下動作，所以<code>var</code>宣告的<code>a</code>並不能在全域中被叫用，而未宣告變數可以。</p>
+<ul>
+<li>宣告變數可以在未賦值前叫用，而未宣告變數會拋出錯誤。</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(c); <span class="comment">// ReferenceError: c is not defined</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> d;</span><br><span class="line">conosle.<span class="title function_">log</span>(d); <span class="comment">// undefined</span></span><br></pre></td></tr></table></figure>
+
+<p>未宣告變數在沒有賦值前都是不存在的。</p>
+<ul>
+<li>宣告變數不是configurable，而未宣告變數是configurable</li>
+</ul>
+<p>在<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty">Proerty Descriptor</a>中的<code>configurable</code>是決定可不可以修改<code>Property Decriptor</code>及可不可以<code>delete</code>的設定值，<code>true</code>的話就是可以做上述的操作，否則就不行。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> e = <span class="string">&#x27;E&#x27;</span>;</span><br><span class="line">f = <span class="string">&#x27;F&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">delete</span> e;   <span class="comment">// Uncaught SyntaxError: Delete of an unqualified identifier in strict mode.</span></span><br><span class="line"><span class="keyword">delete</span> f;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(e); <span class="comment">// E</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(f); <span class="comment">// ReferenceError: f is not defined</span></span><br></pre></td></tr></table></figure>
+
+<p>上面的例子有一個<strong>宣告變數e</strong>及<strong>未宣告變數f</strong>，對它們做<code>delete</code>，我們可以看到<code>e</code>因為<code>configurable</code>是<code>false</code>所以不能刪除，還是維持原來的值<code>E</code>，可是<code>f</code>已經被刪除了。</p>
+<p>實際上在<strong>嚴格模式</strong>下，刪除宣告變數會拋出<strong>Uncaught SyntaxError</strong>。</p>
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>總結一下var的特別之處:</p>
+<ol>
+<li>宣告會被<strong>抬升至Scope的頂端</strong>。</li>
+<li>在<strong>迴圈</strong>中叫用函式時會因共享相同變數，而在函式中產生非預期結果，使用<strong>IIFE可以避免</strong>這樣的問題。</li>
+<li>在全域下宣告變數會<strong>覆蓋<code>window</code>的變數</strong>。</li>
+</ol>
+<p>未宣告變數有下面幾個特性:</p>
+<ol>
+<li><strong>嚴格模式</strong>下未宣告變數會拋<strong>例外</strong></li>
+<li>未宣告變數在任何Scope下都會是<strong>全域變數</strong></li>
+<li><strong>賦值時才會建立</strong></li>
+<li>是<code>configurable</code></li>
+</ol>
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var">MDN:var</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Glossary/IIFE">MDN:IIFE</a></li>
+<li><a target="_blank" rel="noopener" href="https://leanpub.com/understandinges6">Understanding ES6</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://peterhpchen.github.io/blog/2018/02/04/javascript-variable-statement/" data-id="cld0fgoym000chjos5rkodoxn" data-title="JavaScript的var陳述式" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/javascript/" rel="tag">javascript</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2018/02/08/javascript-let/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          JavaScript中的Let
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2018/02/01/bootstrap-left-collapse/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">如何用Bootstrap做左導覽列</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ES2015/" rel="tag">ES2015</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/activex/" rel="tag">activex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/adobe-xd/" rel="tag">adobe-xd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/asp/" rel="tag">asp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/bash/" rel="tag">bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/basicauth/" rel="tag">basicauth</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/blogger/" rel="tag">blogger</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/bootstrap/" rel="tag">bootstrap</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/chrome-dev-tool/" rel="tag">chrome-dev-tool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/csharp/" rel="tag">csharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/cypress/" rel="tag">cypress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/debug/" rel="tag">debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/dotnet/" rel="tag">dotnet</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/font/" rel="tag">font</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github/" rel="tag">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github-page/" rel="tag">github-page</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/homebrew/" rel="tag">homebrew</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/icon/" rel="tag">icon</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/iframe/" rel="tag">iframe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/javascript-babel/" rel="tag">javascript babel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jekyll-theme/" rel="tag">jekyll-theme</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jquery/" rel="tag">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/lua/" rel="tag">lua</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/mdb/" rel="tag">mdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/memory-leak/" rel="tag">memory-leak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/message-channel/" rel="tag">message-channel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/odbc/" rel="tag">odbc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/open-source/" rel="tag">open-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/oracle/" rel="tag">oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/postman/" rel="tag">postman</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/postmessage/" rel="tag">postmessage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/regular-expression/" rel="tag">regular-expression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/shell/" rel="tag">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/svg/" rel="tag">svg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/tarvis-ci/" rel="tag">tarvis-ci</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/test/" rel="tag">test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vue/" rel="tag">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vue-cli/" rel="tag">vue-cli</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vuejs/" rel="tag">vuejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vuepress/" rel="tag">vuepress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/webpack/" rel="tag">webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/windows/" rel="tag">windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/xml/" rel="tag">xml</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤雲</h3>
+    <div class="widget tagcloud">
+      <a href="/blog/tags/ES2015/" style="font-size: 10px;">ES2015</a> <a href="/blog/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/blog/tags/activex/" style="font-size: 10px;">activex</a> <a href="/blog/tags/adobe-xd/" style="font-size: 10px;">adobe-xd</a> <a href="/blog/tags/asp/" style="font-size: 10px;">asp</a> <a href="/blog/tags/bash/" style="font-size: 13.33px;">bash</a> <a href="/blog/tags/basicauth/" style="font-size: 10px;">basicauth</a> <a href="/blog/tags/blogger/" style="font-size: 10px;">blogger</a> <a href="/blog/tags/bootstrap/" style="font-size: 10px;">bootstrap</a> <a href="/blog/tags/chrome-dev-tool/" style="font-size: 10px;">chrome-dev-tool</a> <a href="/blog/tags/csharp/" style="font-size: 10px;">csharp</a> <a href="/blog/tags/cypress/" style="font-size: 13.33px;">cypress</a> <a href="/blog/tags/debug/" style="font-size: 10px;">debug</a> <a href="/blog/tags/dotnet/" style="font-size: 10px;">dotnet</a> <a href="/blog/tags/font/" style="font-size: 10px;">font</a> <a href="/blog/tags/git/" style="font-size: 10px;">git</a> <a href="/blog/tags/github/" style="font-size: 13.33px;">github</a> <a href="/blog/tags/github-page/" style="font-size: 13.33px;">github-page</a> <a href="/blog/tags/golang/" style="font-size: 10px;">golang</a> <a href="/blog/tags/homebrew/" style="font-size: 10px;">homebrew</a> <a href="/blog/tags/icon/" style="font-size: 10px;">icon</a> <a href="/blog/tags/iframe/" style="font-size: 13.33px;">iframe</a> <a href="/blog/tags/javascript/" style="font-size: 20px;">javascript</a> <a href="/blog/tags/javascript-babel/" style="font-size: 10px;">javascript babel</a> <a href="/blog/tags/jekyll/" style="font-size: 13.33px;">jekyll</a> <a href="/blog/tags/jekyll-theme/" style="font-size: 10px;">jekyll-theme</a> <a href="/blog/tags/jquery/" style="font-size: 10px;">jquery</a> <a href="/blog/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/blog/tags/lua/" style="font-size: 10px;">lua</a> <a href="/blog/tags/mdb/" style="font-size: 10px;">mdb</a> <a href="/blog/tags/memory-leak/" style="font-size: 10px;">memory-leak</a> <a href="/blog/tags/message-channel/" style="font-size: 10px;">message-channel</a> <a href="/blog/tags/odbc/" style="font-size: 13.33px;">odbc</a> <a href="/blog/tags/open-source/" style="font-size: 10px;">open-source</a> <a href="/blog/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/blog/tags/postman/" style="font-size: 13.33px;">postman</a> <a href="/blog/tags/postmessage/" style="font-size: 10px;">postmessage</a> <a href="/blog/tags/regular-expression/" style="font-size: 10px;">regular-expression</a> <a href="/blog/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/blog/tags/shell/" style="font-size: 16.67px;">shell</a> <a href="/blog/tags/svg/" style="font-size: 13.33px;">svg</a> <a href="/blog/tags/tarvis-ci/" style="font-size: 10px;">tarvis-ci</a> <a href="/blog/tags/test/" style="font-size: 13.33px;">test</a> <a href="/blog/tags/vue/" style="font-size: 13.33px;">vue</a> <a href="/blog/tags/vue-cli/" style="font-size: 10px;">vue-cli</a> <a href="/blog/tags/vuejs/" style="font-size: 10px;">vuejs</a> <a href="/blog/tags/vuepress/" style="font-size: 13.33px;">vuepress</a> <a href="/blog/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/blog/tags/windows/" style="font-size: 13.33px;">windows</a> <a href="/blog/tags/xml/" style="font-size: 10px;">xml</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">彙整</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">五月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">四月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/05/">五月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/04/">四月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">三月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/05/">五月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/01/">一月 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2022/05/09/vuepress-blog/">使用 VuePress 建立個人 blog</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/05/02/get-directories-in-lua/">使用 Lua 取得目錄中的檔案</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/05/01/use-dircolors/">使用 dircolors 設定 LS_COLORS</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/04/30/set-lscolors/">設定 ls 指令輸出的顏色</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/04/29/shell-sort-by-specific-fields/">在 Shell 中將指令結果依照特定欄位排序</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 Peter Chen<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/blog/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/blog/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

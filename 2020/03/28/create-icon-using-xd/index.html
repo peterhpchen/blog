@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>使用 Adobe XD 建立 Icon | LimitlessPing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="現在網路上可以找到許多免費 Icon ，對於大部分的網頁開發已經很足夠了，但真的需要自己設計 Icon 時該怎麼辦呢？這篇來分享一下一個工程師要如何用 Adobe XD (免費)建立一個屬於自己的 Icon 。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 Adobe XD 建立 Icon">
+<meta property="og:url" content="http://peterhpchen.github.io/blog/2020/03/28/create-icon-using-xd/index.html">
+<meta property="og:site_name" content="LimitlessPing">
+<meta property="og:description" content="現在網路上可以找到許多免費 Icon ，對於大部分的網頁開發已經很足夠了，但真的需要自己設計 Icon 時該怎麼辦呢？這篇來分享一下一個工程師要如何用 Adobe XD (免費)建立一個屬於自己的 Icon 。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2020/03/28/create-icon-using-xd/download.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2020/03/28/create-icon-using-xd/new.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2020/03/28/create-icon-using-xd/artboard.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2020/03/28/create-icon-using-xd/tools.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2020/03/28/create-icon-using-xd/select.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2020/03/28/create-icon-using-xd/select-size.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2020/03/28/create-icon-using-xd/custom.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2020/03/28/create-icon-using-xd/artboard-create.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2020/03/28/create-icon-using-xd/rectangle.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2020/03/28/create-icon-using-xd/rectangle-angle.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2020/03/28/create-icon-using-xd/rectangle-single.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2020/03/28/create-icon-using-xd/rectangle-detail.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2020/03/28/create-icon-using-xd/ellipse.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2020/03/28/create-icon-using-xd/triangle.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2020/03/28/create-icon-using-xd/triangle-angle.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2020/03/28/create-icon-using-xd/triangle-star.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2020/03/28/create-icon-using-xd/triangle-detail.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2020/03/28/create-icon-using-xd/line.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2020/03/28/create-icon-using-xd/pen.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2020/03/28/create-icon-using-xd/arc.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2020/03/28/create-icon-using-xd/arc-after.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2020/03/28/create-icon-using-xd/text.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2020/03/28/create-icon-using-xd/color.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2020/03/28/create-icon-using-xd/shadow.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2020/03/28/create-icon-using-xd/asset.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2020/03/28/create-icon-using-xd/sector.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2020/03/28/create-icon-using-xd/half.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2020/03/28/create-icon-using-xd/export.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2020/03/28/create-icon-using-xd/type.png">
+<meta property="article:published_time" content="2020-03-28T00:00:00.000Z">
+<meta property="article:modified_time" content="2023-01-17T16:06:20.635Z">
+<meta property="article:author" content="Peter Chen">
+<meta property="article:tag" content="svg">
+<meta property="article:tag" content="icon">
+<meta property="article:tag" content="adobe-xd">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://peterhpchen.github.io/blog/2020/03/28/create-icon-using-xd/download.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="LimitlessPing" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/blog/favicon/favicon.ico">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">LimitlessPing</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜尋"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜尋"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://peterhpchen.github.io/blog"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-create-icon-using-xd" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/blog/2020/03/28/create-icon-using-xd/" class="article-date">
+  <time class="dt-published" datetime="2020-03-28T00:00:00.000Z" itemprop="datePublished">2020-03-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      使用 Adobe XD 建立 Icon
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>現在網路上可以找到許多免費 Icon ，對於大部分的網頁開發已經很足夠了，但真的需要自己設計 Icon 時該怎麼辦呢？這篇來分享一下一個工程師要如何用 Adobe XD (免費)建立一個屬於自己的 Icon 。</p>
+<span id="more"></span>
+
+<blockquote>
+<p>這篇是從美學概念很差的工程師(小弟我)出發的，所做的只是簡易的 favicon 用在部落格上，因此使用到的都是基本簡單的技巧而已，設計師大大們可以忽略這篇。</p>
+</blockquote>
+<h2 id="安裝-Adobe-XD"><a href="#安裝-Adobe-XD" class="headerlink" title="安裝 Adobe XD"></a>安裝 Adobe XD</h2><p>做一個簡單的圖標使用免費的 Adobe XD 就很夠用了，首先到<a target="_blank" rel="noopener" href="https://www.adobe.com/tw/products/xd.html">官網</a>下載。</p>
+<p><img src="/blog/2020/03/28/create-icon-using-xd/download.png" alt="download"></p>
+<p>照著步驟就可以完成安裝了。</p>
+<h2 id="建立專案"><a href="#建立專案" class="headerlink" title="建立專案"></a>建立專案</h2><p>我們只是要建立圖示，使用 <strong>Custom Size</strong> ，調整為 <strong>512*512</strong> 的大小，並按下圖示建立專案。</p>
+<p><img src="/blog/2020/03/28/create-icon-using-xd/new.png" alt="new"></p>
+<h2 id="設定畫布"><a href="#設定畫布" class="headerlink" title="設定畫布"></a>設定畫布</h2><p>建立完成後會看到一個白色的區塊，在 XD 中叫做 artboard ，將名稱改為 <code>Icon</code> ，並將右下角的格線開出來，這樣一來作業環境就完成了～</p>
+<p><img src="/blog/2020/03/28/create-icon-using-xd/artboard.png" alt="artboard"></p>
+<h2 id="工具欄"><a href="#工具欄" class="headerlink" title="工具欄"></a>工具欄</h2><p>工具欄上有多種工具可供使用，由上而下依序是：</p>
+<ul>
+<li>Select: 選取元素</li>
+<li>Rectangle: 四邊形元素</li>
+<li>Ellipse: 圓形元素</li>
+<li>Polygon: 有角形元素</li>
+<li>Line: 直線元素</li>
+<li>Pen: 畫筆元素</li>
+<li>Text: 文字元素</li>
+<li>Artboard: 新增畫布</li>
+<li>Zoom: 放大</li>
+</ul>
+<p><img src="/blog/2020/03/28/create-icon-using-xd/tools.png" alt="tools"></p>
+<p>元素的部分下一節會提到，先來介紹功能性的工具：Select, Artboard 及 Zoom。</p>
+<h3 id="Select-工具"><a href="#Select-工具" class="headerlink" title="Select 工具"></a>Select 工具</h3><p>Select 工具(快捷鍵為 <code>v</code>)，可以選取元素並做修改。</p>
+<p>選取後，右方會出現細節的調整工具，這時就可以針對元素作細節的調整。</p>
+<p><img src="/blog/2020/03/28/create-icon-using-xd/select.png" alt="select"></p>
+<p>也可以直接拖拉元素上<strong>各邊的點</strong>做大小的調整。</p>
+<p><img src="/blog/2020/03/28/create-icon-using-xd/select-size.png" alt="select-size"></p>
+<p>再往<strong>點稍遠</strong>的地方移動鼠標，可以轉動元素。</p>
+<blockquote>
+<p>按住 <code>Shift</code> 做拉移的動作可以保持等比例。</p>
+</blockquote>
+<p>對元素<strong>連點兩下</strong>，可以開啟自訂模式，以圓形為例：</p>
+<p><img src="/blog/2020/03/28/create-icon-using-xd/custom.png" alt="custom"></p>
+<p>就可以自由地改變圖形，中間是決定<strong>邊的位置</strong>，左右兩個點是<strong>調整弧度</strong>。</p>
+<blockquote>
+<p>Rectangle, Ellispe, Polygon, Line, Pen 都可以使用此功能任意的改變圖形樣貌。</p>
+</blockquote>
+<h3 id="Artboard"><a href="#Artboard" class="headerlink" title="Artboard"></a>Artboard</h3><p>此工具為增加一個畫布，當你有不只一個 Icon 想要在同個專案下設計的話可以按此工具增加一塊畫布。</p>
+<p><img src="/blog/2020/03/28/create-icon-using-xd/artboard-create.png" alt="artboard-create"></p>
+<p>可以自己拖拉一個自訂大小的畫布(左上)，也可以在空白處點一下產生與原本相同的畫布(右下)。</p>
+<h3 id="Zoom"><a href="#Zoom" class="headerlink" title="Zoom"></a>Zoom</h3><p>局部放大，通常都用滾輪達成此功能。</p>
+<h2 id="使用元素"><a href="#使用元素" class="headerlink" title="使用元素"></a>使用元素</h2><p>元素的種類有 Rectangle, Ellipse, Polygon, Line, Pen, Text，接下來會介紹各別的特殊功能，一般常用的功能都滿直覺的就不浪費篇幅了。</p>
+<h3 id="Rectangle"><a href="#Rectangle" class="headerlink" title="Rectangle"></a>Rectangle</h3><p>Rectangle 畫出四邊形元素，按著 <code>Shift</code> 拉的話可以畫出正方形。</p>
+<p><img src="/blog/2020/03/28/create-icon-using-xd/rectangle.png" alt="rectangle"></p>
+<p>拉動內部四個虛點可以改變角的弧度：</p>
+<p><img src="/blog/2020/03/28/create-icon-using-xd/rectangle-angle.png" alt="rectangle-angle"></p>
+<p>按住 <code>option</code> 拖拉虛點可以只拉單角：</p>
+<p><img src="/blog/2020/03/28/create-icon-using-xd/rectangle-single.png" alt="rectangle-single"></p>
+<p>如果想要直接指定各角度的話可以在設定欄的下方個別調整：</p>
+<p><img src="/blog/2020/03/28/create-icon-using-xd/rectangle-detail.png" alt="rectangle-detail"></p>
+<h3 id="Ellipse"><a href="#Ellipse" class="headerlink" title="Ellipse"></a>Ellipse</h3><p>Ellipse 畫出圓形，按著 <code>Shift</code> 拉的話可以畫出正圓形。</p>
+<p><img src="/blog/2020/03/28/create-icon-using-xd/ellipse.png" alt="ellipse"></p>
+<h3 id="Polygon"><a href="#Polygon" class="headerlink" title="Polygon"></a>Polygon</h3><p>畫出多邊形，一開始拉出來的會是三角形，按著 <code>Shift</code> 拉的話可以畫出正三角形。</p>
+<p><img src="/blog/2020/03/28/create-icon-using-xd/triangle.png" alt="triangle"></p>
+<p>拉動內部的<strong>虛點</strong>可以改變角的弧度：</p>
+<p><img src="/blog/2020/03/28/create-icon-using-xd/triangle-angle.png" alt="triangle-angle"></p>
+<p>拉動邊上的<strong>實點</strong>，可以產生對應角數量的星形。</p>
+<p><img src="/blog/2020/03/28/create-icon-using-xd/triangle-star.png" alt="triangle-star"></p>
+<p>設定欄上可以調整角的數量也可以做角度及星形內縮率的調整：</p>
+<p><img src="/blog/2020/03/28/create-icon-using-xd/triangle-detail.png" alt="triangle-detail"></p>
+<h3 id="Line"><a href="#Line" class="headerlink" title="Line"></a>Line</h3><p>Line 畫出直線，按著 <code>Shift</code> 拉的話可以畫出水平, 垂直及 45 度角的直線。</p>
+<p><img src="/blog/2020/03/28/create-icon-using-xd/line.png" alt="line"></p>
+<h3 id="Pen"><a href="#Pen" class="headerlink" title="Pen"></a>Pen</h3><p>Pen 可以畫出隨意的線條，點一下為線的起始，直到按下 <code>esc</code> 結束或連回起始點形成圖形。</p>
+<p><img src="/blog/2020/03/28/create-icon-using-xd/pen.png" alt="pen"></p>
+<p>在畫線時，單指拉移決定線段，三指拉移會拉出弧線：</p>
+<p><img src="/blog/2020/03/28/create-icon-using-xd/arc.png" alt="arc"></p>
+<p>Line 及 Pen 在<strong>自訂模式</strong>下都可以改變任一地方的弧度，因此可以先畫直線，在做細部的弧度調整。</p>
+<p><img src="/blog/2020/03/28/create-icon-using-xd/arc-after.png" alt="arc-after"></p>
+<h3 id="Text"><a href="#Text" class="headerlink" title="Text"></a>Text</h3><p>Text 可以插入字串，對字串點兩下可以在設定欄中設定字體及配置。</p>
+<p><img src="/blog/2020/03/28/create-icon-using-xd/text.png" alt="text"></p>
+<h3 id="通用功能"><a href="#通用功能" class="headerlink" title="通用功能"></a>通用功能</h3><p>元素中有些共通的設定，例如顏色或是陰影的調整，會在這裡介紹一下。</p>
+<h4 id="Color"><a href="#Color" class="headerlink" title="Color"></a>Color</h4><p>顏色的調整可以直接使用調色盤，或是在畫面上看到適合的顏色可以直接使用右方的選擇器取用顏色。</p>
+<p><img src="/blog/2020/03/28/create-icon-using-xd/color.png" alt="color"></p>
+<h4 id="Shadow"><a href="#Shadow" class="headerlink" title="Shadow"></a>Shadow</h4><p>可以在設定欄上設定陰影：</p>
+<p><img src="/blog/2020/03/28/create-icon-using-xd/shadow.png" alt="shadow"></p>
+<h2 id="儲存常用的顏色-字型-元件"><a href="#儲存常用的顏色-字型-元件" class="headerlink" title="儲存常用的顏色, 字型, 元件"></a>儲存常用的顏色, 字型, 元件</h2><p>接著我們可以放些常用顏色, 字型, 元件到 ASSETS 中，使我們在使用的時候可以不用在重新調整這些設定。</p>
+<p>使用的方法如下:</p>
+<ul>
+<li>點擊目標元件</li>
+<li>在右方 ASSETS 中選擇想加的項目</li>
+<li>按右方的加號</li>
+</ul>
+<p><img src="/blog/2020/03/28/create-icon-using-xd/asset.png" alt="asset"></p>
+<p>已經加過或是不適配的(例如字型只會在 Text 選中時才能加入)，加號會是暗掉的狀態。</p>
+<p>另外使用同個 asset 產生的元件，<strong>只要一個做修改，其他的都會跟著修改</strong>。</p>
+<h2 id="產生更多的圖形"><a href="#產生更多的圖形" class="headerlink" title="產生更多的圖形"></a>產生更多的圖形</h2><p>XD 他已經提供了基本的圖形：四邊形，圓形及三角形，足夠應付大部分的場境，但還是有一些圖形會需要自己做，下面介紹幾個較常用的圖形。</p>
+<h3 id="扇形"><a href="#扇形" class="headerlink" title="扇形"></a>扇形</h3><p>將正方形的其中一角弧度拉到最大：</p>
+<p><img src="/blog/2020/03/28/create-icon-using-xd/sector.png" alt="sector"></p>
+<h3 id="半圓形"><a href="#半圓形" class="headerlink" title="半圓形"></a>半圓形</h3><p>將一個圓形及一個四邊形成別，使用交集功能，就可以產生半圓形：</p>
+<p><img src="/blog/2020/03/28/create-icon-using-xd/half.png" alt="half"></p>
+<h2 id="輸出"><a href="#輸出" class="headerlink" title="輸出"></a>輸出</h2><p>上面講要如何使用各類的工具，現在花費了千辛萬苦終於完成了，剩下最後的輸出過程，只要按下 <code>Export</code> 就大功告成了！</p>
+<p><img src="/blog/2020/03/28/create-icon-using-xd/export.png" alt="export"></p>
+<p>可以選擇目標的格式：</p>
+<p><img src="/blog/2020/03/28/create-icon-using-xd/type.png" alt="type"></p>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>最近在設計部落格的 Icon ，花了一些時間研究 XD 的用法，目前只有設計 Icon 的時候使用到 XD ，但 XD 的主要功能其實是設計 UX 的，如果之後有機會用到的話，再來分享這部分。</p>
+<h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><p><a target="_blank" rel="noopener" href="https://www.smashingmagazine.com/2016/07/how-to-create-icons-adobe-xd/#icon-nr-1-clipboard">Smashing Magazine: How To Create Icons In Adobe XD</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://peterhpchen.github.io/blog/2020/03/28/create-icon-using-xd/" data-id="cld0fgozd001vhjosa5rifqt2" data-title="使用 Adobe XD 建立 Icon" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/adobe-xd/" rel="tag">adobe-xd</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/icon/" rel="tag">icon</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/svg/" rel="tag">svg</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2020/04/10/csharp-measure-time-execution/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          在C#中取得執行時間
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2020/03/23/wip/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">在 PR 時使用 WIP 避免 Merge</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ES2015/" rel="tag">ES2015</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/activex/" rel="tag">activex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/adobe-xd/" rel="tag">adobe-xd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/asp/" rel="tag">asp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/bash/" rel="tag">bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/basicauth/" rel="tag">basicauth</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/blogger/" rel="tag">blogger</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/bootstrap/" rel="tag">bootstrap</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/chrome-dev-tool/" rel="tag">chrome-dev-tool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/csharp/" rel="tag">csharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/cypress/" rel="tag">cypress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/debug/" rel="tag">debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/dotnet/" rel="tag">dotnet</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/font/" rel="tag">font</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github/" rel="tag">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github-page/" rel="tag">github-page</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/homebrew/" rel="tag">homebrew</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/icon/" rel="tag">icon</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/iframe/" rel="tag">iframe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/javascript-babel/" rel="tag">javascript babel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jekyll-theme/" rel="tag">jekyll-theme</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jquery/" rel="tag">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/lua/" rel="tag">lua</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/mdb/" rel="tag">mdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/memory-leak/" rel="tag">memory-leak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/message-channel/" rel="tag">message-channel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/odbc/" rel="tag">odbc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/open-source/" rel="tag">open-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/oracle/" rel="tag">oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/postman/" rel="tag">postman</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/postmessage/" rel="tag">postmessage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/regular-expression/" rel="tag">regular-expression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/shell/" rel="tag">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/svg/" rel="tag">svg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/tarvis-ci/" rel="tag">tarvis-ci</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/test/" rel="tag">test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vue/" rel="tag">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vue-cli/" rel="tag">vue-cli</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vuejs/" rel="tag">vuejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vuepress/" rel="tag">vuepress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/webpack/" rel="tag">webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/windows/" rel="tag">windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/xml/" rel="tag">xml</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤雲</h3>
+    <div class="widget tagcloud">
+      <a href="/blog/tags/ES2015/" style="font-size: 10px;">ES2015</a> <a href="/blog/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/blog/tags/activex/" style="font-size: 10px;">activex</a> <a href="/blog/tags/adobe-xd/" style="font-size: 10px;">adobe-xd</a> <a href="/blog/tags/asp/" style="font-size: 10px;">asp</a> <a href="/blog/tags/bash/" style="font-size: 13.33px;">bash</a> <a href="/blog/tags/basicauth/" style="font-size: 10px;">basicauth</a> <a href="/blog/tags/blogger/" style="font-size: 10px;">blogger</a> <a href="/blog/tags/bootstrap/" style="font-size: 10px;">bootstrap</a> <a href="/blog/tags/chrome-dev-tool/" style="font-size: 10px;">chrome-dev-tool</a> <a href="/blog/tags/csharp/" style="font-size: 10px;">csharp</a> <a href="/blog/tags/cypress/" style="font-size: 13.33px;">cypress</a> <a href="/blog/tags/debug/" style="font-size: 10px;">debug</a> <a href="/blog/tags/dotnet/" style="font-size: 10px;">dotnet</a> <a href="/blog/tags/font/" style="font-size: 10px;">font</a> <a href="/blog/tags/git/" style="font-size: 10px;">git</a> <a href="/blog/tags/github/" style="font-size: 13.33px;">github</a> <a href="/blog/tags/github-page/" style="font-size: 13.33px;">github-page</a> <a href="/blog/tags/golang/" style="font-size: 10px;">golang</a> <a href="/blog/tags/homebrew/" style="font-size: 10px;">homebrew</a> <a href="/blog/tags/icon/" style="font-size: 10px;">icon</a> <a href="/blog/tags/iframe/" style="font-size: 13.33px;">iframe</a> <a href="/blog/tags/javascript/" style="font-size: 20px;">javascript</a> <a href="/blog/tags/javascript-babel/" style="font-size: 10px;">javascript babel</a> <a href="/blog/tags/jekyll/" style="font-size: 13.33px;">jekyll</a> <a href="/blog/tags/jekyll-theme/" style="font-size: 10px;">jekyll-theme</a> <a href="/blog/tags/jquery/" style="font-size: 10px;">jquery</a> <a href="/blog/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/blog/tags/lua/" style="font-size: 10px;">lua</a> <a href="/blog/tags/mdb/" style="font-size: 10px;">mdb</a> <a href="/blog/tags/memory-leak/" style="font-size: 10px;">memory-leak</a> <a href="/blog/tags/message-channel/" style="font-size: 10px;">message-channel</a> <a href="/blog/tags/odbc/" style="font-size: 13.33px;">odbc</a> <a href="/blog/tags/open-source/" style="font-size: 10px;">open-source</a> <a href="/blog/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/blog/tags/postman/" style="font-size: 13.33px;">postman</a> <a href="/blog/tags/postmessage/" style="font-size: 10px;">postmessage</a> <a href="/blog/tags/regular-expression/" style="font-size: 10px;">regular-expression</a> <a href="/blog/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/blog/tags/shell/" style="font-size: 16.67px;">shell</a> <a href="/blog/tags/svg/" style="font-size: 13.33px;">svg</a> <a href="/blog/tags/tarvis-ci/" style="font-size: 10px;">tarvis-ci</a> <a href="/blog/tags/test/" style="font-size: 13.33px;">test</a> <a href="/blog/tags/vue/" style="font-size: 13.33px;">vue</a> <a href="/blog/tags/vue-cli/" style="font-size: 10px;">vue-cli</a> <a href="/blog/tags/vuejs/" style="font-size: 10px;">vuejs</a> <a href="/blog/tags/vuepress/" style="font-size: 13.33px;">vuepress</a> <a href="/blog/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/blog/tags/windows/" style="font-size: 13.33px;">windows</a> <a href="/blog/tags/xml/" style="font-size: 10px;">xml</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">彙整</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">五月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">四月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/05/">五月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/04/">四月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">三月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/05/">五月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/01/">一月 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2022/05/09/vuepress-blog/">使用 VuePress 建立個人 blog</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/05/02/get-directories-in-lua/">使用 Lua 取得目錄中的檔案</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/05/01/use-dircolors/">使用 dircolors 設定 LS_COLORS</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/04/30/set-lscolors/">設定 ls 指令輸出的顏色</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/04/29/shell-sort-by-specific-fields/">在 Shell 中將指令結果依照特定欄位排序</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 Peter Chen<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/blog/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/blog/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

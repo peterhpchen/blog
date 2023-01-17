@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>使用 postMessage 由嵌入頁 ( IFrame ) 傳訊息給主頁 | LimitlessPing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="嵌入頁因為跟主頁屬於不同的視窗，所以不能直接傳遞訊息，本文紀錄如何使用 postMessage 在兩個視窗間傳遞訊息。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 postMessage 由嵌入頁 ( IFrame ) 傳訊息給主頁">
+<meta property="og:url" content="http://peterhpchen.github.io/blog/2019/04/29/post-message-from-iframe-to-main/index.html">
+<meta property="og:site_name" content="LimitlessPing">
+<meta property="og:description" content="嵌入頁因為跟主頁屬於不同的視窗，所以不能直接傳遞訊息，本文紀錄如何使用 postMessage 在兩個視窗間傳遞訊息。">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2019-04-29T04:00:00.000Z">
+<meta property="article:modified_time" content="2023-01-17T16:06:20.619Z">
+<meta property="article:author" content="Peter Chen">
+<meta property="article:tag" content="iframe">
+<meta property="article:tag" content="postmessage">
+<meta property="article:tag" content="message-channel">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="LimitlessPing" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/blog/favicon/favicon.ico">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">LimitlessPing</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜尋"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜尋"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://peterhpchen.github.io/blog"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-post-message-from-iframe-to-main" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/blog/2019/04/29/post-message-from-iframe-to-main/" class="article-date">
+  <time class="dt-published" datetime="2019-04-29T04:00:00.000Z" itemprop="datePublished">2019-04-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      使用 postMessage 由嵌入頁 ( IFrame ) 傳訊息給主頁
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>嵌入頁因為跟主頁屬於不同的視窗，所以不能直接傳遞訊息，本文紀錄如何使用 postMessage 在兩個視窗間傳遞訊息。</p>
+<span id="more"></span>
+
+<h2 id="使用-postMessage-傳遞訊息"><a href="#使用-postMessage-傳遞訊息" class="headerlink" title="使用 postMessage 傳遞訊息"></a>使用 postMessage 傳遞訊息</h2><p>視窗物件有提供 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/MessagePort/postMessage"><code>postMessage</code></a> 函式，這個函式會叫起監聽 <code>message</code> 事件的處理式，因此我們就可以在想要取得訊息的視窗 ( e.g: 主頁 ) 中加上 <code>message</code> 的監聽器，並在要傳訊息的視窗中叫用目標視窗的 <code>postMessage</code> 就可以在視窗間傳遞訊息。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 主頁</span></span><br><span class="line"><span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;message&#x27;</span>, <span class="variable language_">this</span>.<span class="property">receiveMessageFromIframe</span>); <span class="comment">// 嵌入頁傳回訊息時要叫用的事件</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// IFrame</span></span><br><span class="line"><span class="keyword">const</span> message = &#123;</span><br><span class="line">  <span class="attr">event</span>: <span class="string">&#x27;download&#x27;</span>,</span><br><span class="line">  <span class="attr">args</span>: &#123;</span><br><span class="line">    <span class="attr">opt</span>: <span class="string">&#x27;opt&#x27;</span>,</span><br><span class="line">    <span class="attr">pname</span>: <span class="string">&#x27;pname&#x27;</span>,</span><br><span class="line">    <span class="attr">nname</span>: <span class="string">&#x27;nname&#x27;</span>,</span><br><span class="line">    <span class="attr">nid</span>: <span class="string">&#x27;nid&#x27;</span>,</span><br><span class="line">    <span class="attr">bNid</span>: <span class="string">&#x27;bNid&#x27;</span>,</span><br><span class="line">    <span class="attr">acc</span>: <span class="string">&#x27;acc&#x27;</span></span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">window</span>.<span class="property">parent</span>.<span class="title function_">postMessage</span>(message); <span class="comment">// 使用目標視窗物件叫用 postMessage</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="支援-IE-10"><a href="#支援-IE-10" class="headerlink" title="支援 IE 10"></a>支援 IE 10</h2><p>雖然上面的方法在大部分的瀏覽器中運作正常，但在 <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/16226924/is-cross-origin-postmessage-broken-in-ie10">IE 10 中跨域使用此方式時會不能正確的傳遞訊息</a>，如果要支援 IE 10 ，必須要使用 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/MessageChannel">MessageChannel</a> 。</p>
+<h3 id="使用-MessageChannel-傳遞訊息"><a href="#使用-MessageChannel-傳遞訊息" class="headerlink" title="使用 MessageChannel 傳遞訊息"></a>使用 MessageChannel 傳遞訊息</h3><p>MessageChannel 使用兩個 <code>port</code> 物件，個別對應一個視窗，分別為 <code>port1</code> ( e.g: 主頁) 及 <code>port2</code> ( e.g: 嵌入頁)，使用的方式與直接使用 <code>postMessage</code> 差別在於由其中一個視窗建立 MessageChannel 後要把 <code>port</code> 的資訊拋給另一個視窗，然後兩個視窗使用 <code>port</code> 物件傳遞訊息。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 主頁</span></span><br><span class="line">wa8Iframe.<span class="title function_">addEventListener</span>(<span class="string">&#x27;load&#x27;</span>, <span class="variable language_">this</span>.<span class="property">wa8IframeLoad</span>); <span class="comment">// 嵌入頁載入時建立 MessageChannel</span></span><br><span class="line"></span><br><span class="line"><span class="title function_">wa8IframeLoad</span>(<span class="params"></span>) &#123;</span><br><span class="line">  ...</span><br><span class="line">  <span class="keyword">const</span> channel = <span class="keyword">new</span> <span class="title class_">MessageChannel</span>();</span><br><span class="line"></span><br><span class="line">  channel.<span class="property">port1</span>.<span class="property">onmessage</span> = <span class="variable language_">this</span>.<span class="property">receiveMessageFromIframe</span>; <span class="comment">// 嵌入頁傳回訊息時要叫用的事件</span></span><br><span class="line">  wa8Iframe.<span class="property">contentWindow</span>.<span class="title function_">postMessage</span>(<span class="string">&#x27;Pass port2 to IFrame&#x27;</span>, <span class="string">&#x27;*&#x27;</span>, [channel.<span class="property">port2</span>]); <span class="comment">// 由主頁傳遞 port (channel.port2) 資訊給嵌入頁</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 嵌入頁</span></span><br><span class="line"><span class="keyword">var</span> mainFramePort = <span class="literal">null</span></span><br><span class="line"><span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;message&#x27;</span>, <span class="keyword">function</span>(<span class="params">e</span>) &#123;</span><br><span class="line">  mainFramePort = e.<span class="property">ports</span>[<span class="number">0</span>]; <span class="comment">// 主頁傳給嵌入頁 port 資訊</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">clickDownload</span>(<span class="params">msg</span>) &#123;</span><br><span class="line">  mainFramePort.<span class="title function_">postMessage</span>(msg); <span class="comment">// 藉由 port 送訊息給主頁</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>使用 <code>postMessage</code> 可以很方便地在視窗間傳遞訊息，但要注意目標瀏覽器的支援度，在 IE 10 時須改用較複雜的 MessageChannel 實作。</p>
+<h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage">MDN: Window​.post​Message()</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/16226924/is-cross-origin-postmessage-broken-in-ie10">stackoverflow: Is cross-origin postMessage broken in IE10?</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/MessageChannel">MDN: Message​Channel
+</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://peterhpchen.github.io/blog/2019/04/29/post-message-from-iframe-to-main/" data-id="cld0fgoz6001dhjosgxbt87ue" data-title="使用 postMessage 由嵌入頁 ( IFrame ) 傳訊息給主頁" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/iframe/" rel="tag">iframe</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/message-channel/" rel="tag">message-channel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/postmessage/" rel="tag">postmessage</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2019/05/02/div-on-top-of-activex/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          使 div 元素在 ActiveX frame 之上
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2019/03/24/build-library-by-vue-cli/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">使用 vue cli 建立 NPM package</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ES2015/" rel="tag">ES2015</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/activex/" rel="tag">activex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/adobe-xd/" rel="tag">adobe-xd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/asp/" rel="tag">asp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/bash/" rel="tag">bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/basicauth/" rel="tag">basicauth</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/blogger/" rel="tag">blogger</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/bootstrap/" rel="tag">bootstrap</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/chrome-dev-tool/" rel="tag">chrome-dev-tool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/csharp/" rel="tag">csharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/cypress/" rel="tag">cypress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/debug/" rel="tag">debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/dotnet/" rel="tag">dotnet</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/font/" rel="tag">font</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github/" rel="tag">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github-page/" rel="tag">github-page</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/homebrew/" rel="tag">homebrew</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/icon/" rel="tag">icon</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/iframe/" rel="tag">iframe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/javascript-babel/" rel="tag">javascript babel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jekyll-theme/" rel="tag">jekyll-theme</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jquery/" rel="tag">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/lua/" rel="tag">lua</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/mdb/" rel="tag">mdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/memory-leak/" rel="tag">memory-leak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/message-channel/" rel="tag">message-channel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/odbc/" rel="tag">odbc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/open-source/" rel="tag">open-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/oracle/" rel="tag">oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/postman/" rel="tag">postman</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/postmessage/" rel="tag">postmessage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/regular-expression/" rel="tag">regular-expression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/shell/" rel="tag">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/svg/" rel="tag">svg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/tarvis-ci/" rel="tag">tarvis-ci</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/test/" rel="tag">test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vue/" rel="tag">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vue-cli/" rel="tag">vue-cli</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vuejs/" rel="tag">vuejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vuepress/" rel="tag">vuepress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/webpack/" rel="tag">webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/windows/" rel="tag">windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/xml/" rel="tag">xml</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤雲</h3>
+    <div class="widget tagcloud">
+      <a href="/blog/tags/ES2015/" style="font-size: 10px;">ES2015</a> <a href="/blog/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/blog/tags/activex/" style="font-size: 10px;">activex</a> <a href="/blog/tags/adobe-xd/" style="font-size: 10px;">adobe-xd</a> <a href="/blog/tags/asp/" style="font-size: 10px;">asp</a> <a href="/blog/tags/bash/" style="font-size: 13.33px;">bash</a> <a href="/blog/tags/basicauth/" style="font-size: 10px;">basicauth</a> <a href="/blog/tags/blogger/" style="font-size: 10px;">blogger</a> <a href="/blog/tags/bootstrap/" style="font-size: 10px;">bootstrap</a> <a href="/blog/tags/chrome-dev-tool/" style="font-size: 10px;">chrome-dev-tool</a> <a href="/blog/tags/csharp/" style="font-size: 10px;">csharp</a> <a href="/blog/tags/cypress/" style="font-size: 13.33px;">cypress</a> <a href="/blog/tags/debug/" style="font-size: 10px;">debug</a> <a href="/blog/tags/dotnet/" style="font-size: 10px;">dotnet</a> <a href="/blog/tags/font/" style="font-size: 10px;">font</a> <a href="/blog/tags/git/" style="font-size: 10px;">git</a> <a href="/blog/tags/github/" style="font-size: 13.33px;">github</a> <a href="/blog/tags/github-page/" style="font-size: 13.33px;">github-page</a> <a href="/blog/tags/golang/" style="font-size: 10px;">golang</a> <a href="/blog/tags/homebrew/" style="font-size: 10px;">homebrew</a> <a href="/blog/tags/icon/" style="font-size: 10px;">icon</a> <a href="/blog/tags/iframe/" style="font-size: 13.33px;">iframe</a> <a href="/blog/tags/javascript/" style="font-size: 20px;">javascript</a> <a href="/blog/tags/javascript-babel/" style="font-size: 10px;">javascript babel</a> <a href="/blog/tags/jekyll/" style="font-size: 13.33px;">jekyll</a> <a href="/blog/tags/jekyll-theme/" style="font-size: 10px;">jekyll-theme</a> <a href="/blog/tags/jquery/" style="font-size: 10px;">jquery</a> <a href="/blog/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/blog/tags/lua/" style="font-size: 10px;">lua</a> <a href="/blog/tags/mdb/" style="font-size: 10px;">mdb</a> <a href="/blog/tags/memory-leak/" style="font-size: 10px;">memory-leak</a> <a href="/blog/tags/message-channel/" style="font-size: 10px;">message-channel</a> <a href="/blog/tags/odbc/" style="font-size: 13.33px;">odbc</a> <a href="/blog/tags/open-source/" style="font-size: 10px;">open-source</a> <a href="/blog/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/blog/tags/postman/" style="font-size: 13.33px;">postman</a> <a href="/blog/tags/postmessage/" style="font-size: 10px;">postmessage</a> <a href="/blog/tags/regular-expression/" style="font-size: 10px;">regular-expression</a> <a href="/blog/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/blog/tags/shell/" style="font-size: 16.67px;">shell</a> <a href="/blog/tags/svg/" style="font-size: 13.33px;">svg</a> <a href="/blog/tags/tarvis-ci/" style="font-size: 10px;">tarvis-ci</a> <a href="/blog/tags/test/" style="font-size: 13.33px;">test</a> <a href="/blog/tags/vue/" style="font-size: 13.33px;">vue</a> <a href="/blog/tags/vue-cli/" style="font-size: 10px;">vue-cli</a> <a href="/blog/tags/vuejs/" style="font-size: 10px;">vuejs</a> <a href="/blog/tags/vuepress/" style="font-size: 13.33px;">vuepress</a> <a href="/blog/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/blog/tags/windows/" style="font-size: 13.33px;">windows</a> <a href="/blog/tags/xml/" style="font-size: 10px;">xml</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">彙整</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">五月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">四月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/05/">五月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/04/">四月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">三月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/05/">五月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/01/">一月 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2022/05/09/vuepress-blog/">使用 VuePress 建立個人 blog</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/05/02/get-directories-in-lua/">使用 Lua 取得目錄中的檔案</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/05/01/use-dircolors/">使用 dircolors 設定 LS_COLORS</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/04/30/set-lscolors/">設定 ls 指令輸出的顏色</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/04/29/shell-sort-by-specific-fields/">在 Shell 中將指令結果依照特定欄位排序</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 Peter Chen<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/blog/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/blog/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

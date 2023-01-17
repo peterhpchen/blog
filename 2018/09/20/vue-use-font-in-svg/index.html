@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>在 Vue.js 專案中的 svg 檔裡使用客製的字型 | LimitlessPing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="當在 svg 檔中需要有文字，而文字的字型卻是客製的時候，會發生在 svg 中的文字無法吃到 @font-face 設定的字型，本文紀錄解決方法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在 Vue.js 專案中的 svg 檔裡使用客製的字型">
+<meta property="og:url" content="http://peterhpchen.github.io/blog/2018/09/20/vue-use-font-in-svg/index.html">
+<meta property="og:site_name" content="LimitlessPing">
+<meta property="og:description" content="當在 svg 檔中需要有文字，而文字的字型卻是客製的時候，會發生在 svg 中的文字無法吃到 @font-face 設定的字型，本文紀錄解決方法。">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2018-09-20T17:00:00.000Z">
+<meta property="article:modified_time" content="2023-01-17T16:06:20.579Z">
+<meta property="article:author" content="Peter Chen">
+<meta property="article:tag" content="vue">
+<meta property="article:tag" content="svg">
+<meta property="article:tag" content="font">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="LimitlessPing" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/blog/favicon/favicon.ico">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">LimitlessPing</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜尋"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜尋"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://peterhpchen.github.io/blog"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-vue-use-font-in-svg" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/blog/2018/09/20/vue-use-font-in-svg/" class="article-date">
+  <time class="dt-published" datetime="2018-09-20T17:00:00.000Z" itemprop="datePublished">2018-09-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      在 Vue.js 專案中的 svg 檔裡使用客製的字型
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>當在 svg 檔中需要有文字，而文字的字型卻是客製的時候，會發生在 svg 中的文字無法吃到 @font-face 設定的字型，本文紀錄解決方法。</p>
+<span id="more"></span>
+
+<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>使用 <code>&lt;img&gt;</code> 載入 svg 檔時，它會將檔案以 Base64 編碼，因此你看到的 <code>src</code> 值會像下面這樣:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iOTNweCIgaGVpZ2h0PSI0OHB4IiB2aWV3Qm94PSIwIDAgOTMgNDgiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8IS0tIEdlbmVyYXRvcjogU2tldGNoIDUxLjEgKDU3NTAxKSAtIGh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaCAtLT4KICAgIDx0aXRsZT5idG4vbWFpbi9jYW5jZWwvbm9ybWFsPC90aXRsZT4KICAgIDxkZXNjPkNyZWF0ZWQgd2l0aCBTa2V0Y2guPC9kZXNjPgogICAgPGRlZnM+PC9kZWZzPgogICAgPGcgaWQ9ImJ0bi9tYWluL2NhbmNlbC9ub3JtYWwiIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxyZWN0IGlkPSJSZWN0YW5nbGUtMyIgZmlsbC1ydWxlPSJub256ZXJvIiB4PSIwIiB5PSIwIiB3aWR0aD0iOTMiIGhlaWdodD0iNDgiPjwvcmVjdD4KICAgICAgICA8dGV4dCBpZD0iQ0FOQ0VMIiBmb250LWZhbWlseT0iUm9ib3RvIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0iIzc4Nzg3OCI+CiAgICAgICAgICAgIDx0c3BhbiB4PSIxNi4xNjc5Njg4IiB5PSIyNyI+Q0FOQ0VMPC90c3Bhbj4KICAgICAgICA8L3RleHQ+CiAgICA8L2c+Cjwvc3ZnPgo=&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>這樣的做法圖的確會出來，但因為已經轉換為 Base64 了，這個 svg 已經不再是 html 的 tag 所組成，因此在 <code>@font-face</code> 定義的客製字型自然也就吃不到了。</p>
+<h2 id="解決方法"><a href="#解決方法" class="headerlink" title="解決方法"></a>解決方法</h2><p>解決問題的辦法就是不要將其編碼，用原來的 svg 程式碼加到 html 中，這樣的載入方式稱為 inline ，程式碼如下面所示:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">svg</span> <span class="attr">width</span>=<span class="string">&quot;93px&quot;</span> <span class="attr">height</span>=<span class="string">&quot;48px&quot;</span> <span class="attr">viewBox</span>=<span class="string">&quot;0 0 93 48&quot;</span> <span class="attr">version</span>=<span class="string">&quot;1.1&quot;</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.w3.org/2000/svg&quot;</span> <span class="attr">xmlns:xlink</span>=<span class="string">&quot;http://www.w3.org/1999/xlink&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- Generator: Sketch 51.1 (57501) - http://www.bohemiancoding.com/sketch --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>btn/main/cancel/normal<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">desc</span>&gt;</span>Created with Sketch.<span class="tag">&lt;/<span class="name">desc</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">defs</span>&gt;</span><span class="tag">&lt;/<span class="name">defs</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">g</span> <span class="attr">id</span>=<span class="string">&quot;btn/main/cancel/normal&quot;</span> <span class="attr">stroke</span>=<span class="string">&quot;none&quot;</span> <span class="attr">stroke-width</span>=<span class="string">&quot;1&quot;</span> <span class="attr">fill</span>=<span class="string">&quot;none&quot;</span> <span class="attr">fill-rule</span>=<span class="string">&quot;evenodd&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">rect</span> <span class="attr">id</span>=<span class="string">&quot;Rectangle-3&quot;</span> <span class="attr">fill-rule</span>=<span class="string">&quot;nonzero&quot;</span> <span class="attr">x</span>=<span class="string">&quot;0&quot;</span> <span class="attr">y</span>=<span class="string">&quot;0&quot;</span> <span class="attr">width</span>=<span class="string">&quot;93&quot;</span> <span class="attr">height</span>=<span class="string">&quot;48&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">rect</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">text</span> <span class="attr">id</span>=<span class="string">&quot;CANCEL&quot;</span> <span class="attr">font-family</span>=<span class="string">&quot;Roboto&quot;</span> <span class="attr">font-size</span>=<span class="string">&quot;16&quot;</span> <span class="attr">font-weight</span>=<span class="string">&quot;bold&quot;</span> <span class="attr">fill</span>=<span class="string">&quot;#787878&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">tspan</span> <span class="attr">x</span>=<span class="string">&quot;16.1679688&quot;</span> <span class="attr">y</span>=<span class="string">&quot;27&quot;</span>&gt;</span>CANCEL<span class="tag">&lt;/<span class="name">tspan</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">text</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">g</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">svg</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>這樣就可以吃到客製的 <code>Roboto</code> 字型了。</p>
+<h2 id="解法的難處"><a href="#解法的難處" class="headerlink" title="解法的難處"></a>解法的難處</h2><p>這樣的解法雖然解決了字型的問題，但在實作上會十分麻煩，需要將 svg 檔的程式碼複製然後貼至對應的 html 位置，而且使用多次的圖片會在程式碼中被重複貼上，造成維護上的困難。</p>
+<h2 id="更好的解決方法"><a href="#更好的解決方法" class="headerlink" title="更好的解決方法"></a>更好的解決方法</h2><h3 id="vue-svg-inline-loader"><a href="#vue-svg-inline-loader" class="headerlink" title="vue-svg-inline-loader"></a>vue-svg-inline-loader</h3><p><a target="_blank" rel="noopener" href="https://github.com/oliverfindl/vue-svg-inline-loader">vue-svg-inline-loader</a> 提供了將載入的 svg 置換為 inline 形式的功能:</p>
+<ol>
+<li>Install <code>vue-svg-inline-loader</code></li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install vue-svg-inline-loader --save-dev</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>Add Webpack Config</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  ...</span><br><span class="line">  <span class="attr">module</span>: &#123;</span><br><span class="line">    <span class="attr">rules</span>: [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">test</span>: <span class="regexp">/\.vue$/</span>,</span><br><span class="line">        <span class="attr">use</span>: [</span><br><span class="line">          ...</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="attr">loader</span>: <span class="string">&#x27;vue-svg-inline-loader&#x27;</span></span><br><span class="line">          &#125;</span><br><span class="line">        ]</span><br><span class="line">      &#125;,</span><br><span class="line">      ...</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>Add <code>svg-inline</code> directive to img tag</li>
+</ol>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">svg-inline</span> <span class="attr">src</span>=<span class="string">&quot;./assets/img/normal.svg&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="vue-svg-loader"><a href="#vue-svg-loader" class="headerlink" title="vue-svg-loader"></a>vue-svg-loader</h3><p><a target="_blank" rel="noopener" href="https://github.com/visualfanatic/vue-svg-loader">vue-svg-loader</a> 提供了將載入的 svg 用 vue component 的形式載入，底子裡還是把 svg 的 html 賦予給 component。</p>
+<ol>
+<li>Install <code>vue-svg-loader</code></li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i -D vue-svg-loader</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>Add Webpack Config</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  ...</span><br><span class="line">  <span class="attr">module</span>: &#123;</span><br><span class="line">    <span class="attr">rules</span>: [</span><br><span class="line">      ...</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">test</span>: <span class="regexp">/\.svg$/</span>,</span><br><span class="line">        <span class="attr">loader</span>: <span class="string">&#x27;vue-svg-loader&#x27;</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">      ...</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>Import svg component</li>
+</ol>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;app&quot;</span>&gt;</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="tag">&lt;<span class="name">normal</span> /&gt;</span></span><br><span class="line">    ...</span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">...</span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> normal <span class="keyword">from</span> <span class="string">&#x27;./assets/img/normal.svg&#x27;</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">name</span>: <span class="string">&#x27;App&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">components</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">    ...</span></span><br><span class="line"><span class="language-javascript">    normal</span></span><br><span class="line"><span class="language-javascript">  &#125;,</span></span><br><span class="line"><span class="language-javascript">  ...</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>這兩個方式都可以達成目的又減輕開發的負擔。</p>
+<h2 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h2><p><a target="_blank" rel="noopener" href="https://github.com/peterhpchen/vue-font-in-svg">GitHub</a></p>
+<h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://css-tricks.com/using-custom-fonts-with-svg-in-an-image-tag/">Using Custom Fonts With SVG in an Image Tag</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/oliverfindl/vue-svg-inline-loader">vue-svg-inline-loader</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/visualfanatic/vue-svg-loader">vue-svg-loader</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://peterhpchen.github.io/blog/2018/09/20/vue-use-font-in-svg/" data-id="cld0fgoyz000vhjosex7q2h5q" data-title="在 Vue.js 專案中的 svg 檔裡使用客製的字型" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/font/" rel="tag">font</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/svg/" rel="tag">svg</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/vue/" rel="tag">vue</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2018/10/01/Install-oracle-odbc-client/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          安裝 Oracle ODBC Client
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2018/09/16/prevent-browser-basic-auth-popup/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">避免瀏覽器的基本驗證彈跳視窗</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ES2015/" rel="tag">ES2015</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/activex/" rel="tag">activex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/adobe-xd/" rel="tag">adobe-xd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/asp/" rel="tag">asp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/bash/" rel="tag">bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/basicauth/" rel="tag">basicauth</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/blogger/" rel="tag">blogger</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/bootstrap/" rel="tag">bootstrap</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/chrome-dev-tool/" rel="tag">chrome-dev-tool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/csharp/" rel="tag">csharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/cypress/" rel="tag">cypress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/debug/" rel="tag">debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/dotnet/" rel="tag">dotnet</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/font/" rel="tag">font</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github/" rel="tag">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github-page/" rel="tag">github-page</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/homebrew/" rel="tag">homebrew</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/icon/" rel="tag">icon</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/iframe/" rel="tag">iframe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/javascript-babel/" rel="tag">javascript babel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jekyll-theme/" rel="tag">jekyll-theme</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jquery/" rel="tag">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/lua/" rel="tag">lua</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/mdb/" rel="tag">mdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/memory-leak/" rel="tag">memory-leak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/message-channel/" rel="tag">message-channel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/odbc/" rel="tag">odbc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/open-source/" rel="tag">open-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/oracle/" rel="tag">oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/postman/" rel="tag">postman</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/postmessage/" rel="tag">postmessage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/regular-expression/" rel="tag">regular-expression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/shell/" rel="tag">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/svg/" rel="tag">svg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/tarvis-ci/" rel="tag">tarvis-ci</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/test/" rel="tag">test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vue/" rel="tag">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vue-cli/" rel="tag">vue-cli</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vuejs/" rel="tag">vuejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vuepress/" rel="tag">vuepress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/webpack/" rel="tag">webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/windows/" rel="tag">windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/xml/" rel="tag">xml</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤雲</h3>
+    <div class="widget tagcloud">
+      <a href="/blog/tags/ES2015/" style="font-size: 10px;">ES2015</a> <a href="/blog/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/blog/tags/activex/" style="font-size: 10px;">activex</a> <a href="/blog/tags/adobe-xd/" style="font-size: 10px;">adobe-xd</a> <a href="/blog/tags/asp/" style="font-size: 10px;">asp</a> <a href="/blog/tags/bash/" style="font-size: 13.33px;">bash</a> <a href="/blog/tags/basicauth/" style="font-size: 10px;">basicauth</a> <a href="/blog/tags/blogger/" style="font-size: 10px;">blogger</a> <a href="/blog/tags/bootstrap/" style="font-size: 10px;">bootstrap</a> <a href="/blog/tags/chrome-dev-tool/" style="font-size: 10px;">chrome-dev-tool</a> <a href="/blog/tags/csharp/" style="font-size: 10px;">csharp</a> <a href="/blog/tags/cypress/" style="font-size: 13.33px;">cypress</a> <a href="/blog/tags/debug/" style="font-size: 10px;">debug</a> <a href="/blog/tags/dotnet/" style="font-size: 10px;">dotnet</a> <a href="/blog/tags/font/" style="font-size: 10px;">font</a> <a href="/blog/tags/git/" style="font-size: 10px;">git</a> <a href="/blog/tags/github/" style="font-size: 13.33px;">github</a> <a href="/blog/tags/github-page/" style="font-size: 13.33px;">github-page</a> <a href="/blog/tags/golang/" style="font-size: 10px;">golang</a> <a href="/blog/tags/homebrew/" style="font-size: 10px;">homebrew</a> <a href="/blog/tags/icon/" style="font-size: 10px;">icon</a> <a href="/blog/tags/iframe/" style="font-size: 13.33px;">iframe</a> <a href="/blog/tags/javascript/" style="font-size: 20px;">javascript</a> <a href="/blog/tags/javascript-babel/" style="font-size: 10px;">javascript babel</a> <a href="/blog/tags/jekyll/" style="font-size: 13.33px;">jekyll</a> <a href="/blog/tags/jekyll-theme/" style="font-size: 10px;">jekyll-theme</a> <a href="/blog/tags/jquery/" style="font-size: 10px;">jquery</a> <a href="/blog/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/blog/tags/lua/" style="font-size: 10px;">lua</a> <a href="/blog/tags/mdb/" style="font-size: 10px;">mdb</a> <a href="/blog/tags/memory-leak/" style="font-size: 10px;">memory-leak</a> <a href="/blog/tags/message-channel/" style="font-size: 10px;">message-channel</a> <a href="/blog/tags/odbc/" style="font-size: 13.33px;">odbc</a> <a href="/blog/tags/open-source/" style="font-size: 10px;">open-source</a> <a href="/blog/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/blog/tags/postman/" style="font-size: 13.33px;">postman</a> <a href="/blog/tags/postmessage/" style="font-size: 10px;">postmessage</a> <a href="/blog/tags/regular-expression/" style="font-size: 10px;">regular-expression</a> <a href="/blog/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/blog/tags/shell/" style="font-size: 16.67px;">shell</a> <a href="/blog/tags/svg/" style="font-size: 13.33px;">svg</a> <a href="/blog/tags/tarvis-ci/" style="font-size: 10px;">tarvis-ci</a> <a href="/blog/tags/test/" style="font-size: 13.33px;">test</a> <a href="/blog/tags/vue/" style="font-size: 13.33px;">vue</a> <a href="/blog/tags/vue-cli/" style="font-size: 10px;">vue-cli</a> <a href="/blog/tags/vuejs/" style="font-size: 10px;">vuejs</a> <a href="/blog/tags/vuepress/" style="font-size: 13.33px;">vuepress</a> <a href="/blog/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/blog/tags/windows/" style="font-size: 13.33px;">windows</a> <a href="/blog/tags/xml/" style="font-size: 10px;">xml</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">彙整</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">五月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">四月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/05/">五月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/04/">四月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">三月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/05/">五月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/01/">一月 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2022/05/09/vuepress-blog/">使用 VuePress 建立個人 blog</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/05/02/get-directories-in-lua/">使用 Lua 取得目錄中的檔案</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/05/01/use-dircolors/">使用 dircolors 設定 LS_COLORS</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/04/30/set-lscolors/">設定 ls 指令輸出的顏色</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/04/29/shell-sort-by-specific-fields/">在 Shell 中將指令結果依照特定欄位排序</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 Peter Chen<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/blog/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/blog/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

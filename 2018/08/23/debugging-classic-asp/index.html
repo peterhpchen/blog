@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>在 Visual Studio 中除錯 ASP  | LimitlessPing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="本文介紹開發 Active Server Pages 時的除錯方法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在 Visual Studio 中除錯 ASP ">
+<meta property="og:url" content="http://peterhpchen.github.io/blog/2018/08/23/debugging-classic-asp/index.html">
+<meta property="og:site_name" content="LimitlessPing">
+<meta property="og:description" content="本文介紹開發 Active Server Pages 時的除錯方法。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2018/08/23/debugging-classic-asp/emptysolution.PNG">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2018/08/23/debugging-classic-asp/addexistingwebsitefromfilesystem.PNG">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2018/08/23/debugging-classic-asp/attachtoprocess.PNG">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2018/08/23/debugging-classic-asp/debugdisable.PNG">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2018/08/23/debugging-classic-asp/debugiisexpress.PNG">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2018/08/23/debugging-classic-asp/openw3wp.PNG">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2018/08/23/debugging-classic-asp/debuggingbystop.PNG">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2018/08/23/debugging-classic-asp/addexistingwebsitefromiis.PNG">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2018/08/23/debugging-classic-asp/w3wp.PNG">
+<meta property="article:published_time" content="2018-08-23T11:00:00.000Z">
+<meta property="article:modified_time" content="2023-01-17T16:06:20.575Z">
+<meta property="article:author" content="Peter Chen">
+<meta property="article:tag" content="asp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://peterhpchen.github.io/blog/2018/08/23/debugging-classic-asp/emptysolution.PNG">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="LimitlessPing" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/blog/favicon/favicon.ico">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">LimitlessPing</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜尋"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜尋"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://peterhpchen.github.io/blog"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-debugging-classic-asp" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/blog/2018/08/23/debugging-classic-asp/" class="article-date">
+  <time class="dt-published" datetime="2018-08-23T11:00:00.000Z" itemprop="datePublished">2018-08-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      在 Visual Studio 中除錯 ASP 
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>本文介紹開發 Active Server Pages 時的除錯方法。</p>
+<span id="more"></span>
+
+<p>在開發時會有兩個不同情境下的除錯:</p>
+<ul>
+<li>未部署至 IIS 。</li>
+<li>已部屬至 IIS 。</li>
+</ul>
+<h2 id="未部署至-IIS"><a href="#未部署至-IIS" class="headerlink" title="未部署至 IIS"></a>未部署至 IIS</h2><p>在未部署上 IIS 前，要除錯 ASP 需要在 Visual Studio 中使用 IIS Express 將網站跑起來。</p>
+<p>步驟如下:</p>
+<ul>
+<li>修改 <strong>IIS Express</strong> 的設定</li>
+</ul>
+<p>在 <strong>%USERPROFILE%\Documents\IISExpress\config\applicationhost.config</strong> 中的 <strong>&lt;system.webServer&gt;</strong> 中找到 <strong>&lt;asp&gt;</strong> 的標籤:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">asp</span> <span class="attr">scriptErrorSentToBrowser</span>=<span class="string">&quot;true&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">cache</span> <span class="attr">diskTemplateCacheDirectory</span>=<span class="string">&quot;%TEMP%\iisexpress\ASP Compiled Templates&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">limits</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">asp</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>改為下面這樣:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">asp</span> <span class="attr">scriptErrorSentToBrowser</span>=<span class="string">&quot;true&quot;</span> <span class="attr">enableParentPaths</span>=<span class="string">&quot;true&quot;</span> <span class="attr">bufferingOn</span>=<span class="string">&quot;true&quot;</span> <span class="attr">errorsToNTLog</span>=<span class="string">&quot;true&quot;</span> <span class="attr">appAllowDebugging</span>=<span class="string">&quot;true&quot;</span> <span class="attr">appAllowClientDebug</span>=<span class="string">&quot;true&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">cache</span> <span class="attr">diskTemplateCacheDirectory</span>=<span class="string">&quot;%TEMP%\iisexpress\ASP Compiled Templates&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">session</span> <span class="attr">allowSessionState</span>=<span class="string">&quot;true&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">limits</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">asp</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>建立一個空的<strong>解決方案</strong>( Solution )。</li>
+</ul>
+<p><img src="/blog/2018/08/23/debugging-classic-asp/emptysolution.PNG" alt="empty solution"></p>
+<ul>
+<li>新增已存在的網站至方案中(使用 <strong>File System</strong> )。</li>
+</ul>
+<p><img src="/blog/2018/08/23/debugging-classic-asp/addexistingwebsitefromfilesystem.PNG" alt="add existing website from file system"></p>
+<ul>
+<li>不啟用偵錯下啟動網站( <code>Ctrl+F5</code> )。</li>
+<li>在 <strong>Debug</strong> 中的 <strong>Attach to Process</strong> 將 <strong>Attach to</strong> 的選項改為 <strong>Script Code</strong> 。</li>
+<li>在下方選擇 <strong>iisexpress.exe</strong> ( <strong>ID</strong> 需與啟動的網站相同))。</li>
+<li>按下 <strong>Attach</strong> 即可開始偵錯。</li>
+</ul>
+<p><img src="/blog/2018/08/23/debugging-classic-asp/attachtoprocess.PNG" alt="attach to process"></p>
+<ul>
+<li>如果在方案總管看到 <strong>應用程式除錯已停用</strong> ，代表 IIS Express 沒有吃預設的設定檔，是吃方案下的設定檔。</li>
+</ul>
+<p><img src="/blog/2018/08/23/debugging-classic-asp/debugdisable.PNG" alt="debug disable"></p>
+<ul>
+<li>將 <strong>%Solution%&#x2F;.vs&#x2F;config&#x2F;applicationhost.config</strong> 中同樣的地方做修改。</li>
+<li>在方案總管中選擇 <strong>Script Documents</strong> 下的檔案，下中斷點。</li>
+<li>不能使用網站中的檔案下中斷點。</li>
+</ul>
+<p><img src="/blog/2018/08/23/debugging-classic-asp/debugiisexpress.PNG" alt="debug iis express"></p>
+<h2 id="已部屬至-IIS"><a href="#已部屬至-IIS" class="headerlink" title="已部屬至 IIS"></a>已部屬至 IIS</h2><p>對於已部屬至 IIS 的網站必須先到 <strong>IIS 管理員</strong>中將站台中 <strong>ASP</strong> 的設定<strong>啟用伺服器端偵錯</strong>。</p>
+<h3 id="使用-stop-除錯"><a href="#使用-stop-除錯" class="headerlink" title="使用 stop 除錯"></a>使用 stop 除錯</h3><ul>
+<li>在想要除錯的程式行前加上 <code>stop</code> 。</li>
+<li>開啟網站。</li>
+<li>執行到 <code>stop</code> 的行數會跳出詢問是否調適 <strong>w3wp</strong> ，按<strong>是</strong>即可開啟 Visual Studio 偵錯。</li>
+</ul>
+<p><img src="/blog/2018/08/23/debugging-classic-asp/openw3wp.PNG" alt="open w3wp"></p>
+<p><img src="/blog/2018/08/23/debugging-classic-asp/debuggingbystop.PNG" alt="debugging by stop"></p>
+<h3 id="使用-Visual-Studio-的中斷點除錯"><a href="#使用-Visual-Studio-的中斷點除錯" class="headerlink" title="使用 Visual Studio 的中斷點除錯"></a>使用 Visual Studio 的中斷點除錯</h3><p>上面使用 <code>stop</code> 的方式有個缺點，因為在程式碼中加了 <code>stop</code> ，之後如果忘記拔掉就部屬到正式機，會導致錯誤。</p>
+<p>因此最保險的方式還是在 Visual Studio 上下中斷點。</p>
+<p>下面是設置步驟:</p>
+<ul>
+<li>建立一個空的<strong>解決方案</strong>( Solution )。</li>
+<li>新增已存在的網站至方案中(使用 Local IIS ))。</li>
+</ul>
+<p><img src="/blog/2018/08/23/debugging-classic-asp/addexistingwebsitefromiis.PNG" alt="add existing web site from iis"></p>
+<ul>
+<li>在 <strong>Debug</strong> 中的 <strong>Attach to Process</strong> 將 <strong>Attach to</strong> 的選項改為 <strong>Script Code</strong> 。</li>
+<li>在下方選擇 <strong>w3wp.exe</strong> ( <strong>User Name</strong> 是此網站))。</li>
+<li>按下 <strong>Attach</strong> 即可開始偵錯。</li>
+</ul>
+<p><img src="/blog/2018/08/23/debugging-classic-asp/w3wp.PNG" alt="w3wp"></p>
+<h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://weblogs.asp.net/dixin/debugging-classic-asp-with-visual-studio">Dixin’s Blog: Debugging Classic ASP with Modern Visual Studio</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://peterhpchen.github.io/blog/2018/08/23/debugging-classic-asp/" data-id="cld0fgoyv000rhjos8i5id636" data-title="在 Visual Studio 中除錯 ASP " class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/asp/" rel="tag">asp</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2018/09/08/use-postman-mock-server/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          使用Postman的Mock Server
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2018/05/04/postman-env-variable/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">在Postman中使用環境變數</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ES2015/" rel="tag">ES2015</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/activex/" rel="tag">activex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/adobe-xd/" rel="tag">adobe-xd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/asp/" rel="tag">asp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/bash/" rel="tag">bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/basicauth/" rel="tag">basicauth</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/blogger/" rel="tag">blogger</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/bootstrap/" rel="tag">bootstrap</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/chrome-dev-tool/" rel="tag">chrome-dev-tool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/csharp/" rel="tag">csharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/cypress/" rel="tag">cypress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/debug/" rel="tag">debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/dotnet/" rel="tag">dotnet</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/font/" rel="tag">font</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github/" rel="tag">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github-page/" rel="tag">github-page</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/homebrew/" rel="tag">homebrew</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/icon/" rel="tag">icon</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/iframe/" rel="tag">iframe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/javascript-babel/" rel="tag">javascript babel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jekyll-theme/" rel="tag">jekyll-theme</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jquery/" rel="tag">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/lua/" rel="tag">lua</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/mdb/" rel="tag">mdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/memory-leak/" rel="tag">memory-leak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/message-channel/" rel="tag">message-channel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/odbc/" rel="tag">odbc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/open-source/" rel="tag">open-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/oracle/" rel="tag">oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/postman/" rel="tag">postman</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/postmessage/" rel="tag">postmessage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/regular-expression/" rel="tag">regular-expression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/shell/" rel="tag">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/svg/" rel="tag">svg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/tarvis-ci/" rel="tag">tarvis-ci</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/test/" rel="tag">test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vue/" rel="tag">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vue-cli/" rel="tag">vue-cli</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vuejs/" rel="tag">vuejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vuepress/" rel="tag">vuepress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/webpack/" rel="tag">webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/windows/" rel="tag">windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/xml/" rel="tag">xml</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤雲</h3>
+    <div class="widget tagcloud">
+      <a href="/blog/tags/ES2015/" style="font-size: 10px;">ES2015</a> <a href="/blog/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/blog/tags/activex/" style="font-size: 10px;">activex</a> <a href="/blog/tags/adobe-xd/" style="font-size: 10px;">adobe-xd</a> <a href="/blog/tags/asp/" style="font-size: 10px;">asp</a> <a href="/blog/tags/bash/" style="font-size: 13.33px;">bash</a> <a href="/blog/tags/basicauth/" style="font-size: 10px;">basicauth</a> <a href="/blog/tags/blogger/" style="font-size: 10px;">blogger</a> <a href="/blog/tags/bootstrap/" style="font-size: 10px;">bootstrap</a> <a href="/blog/tags/chrome-dev-tool/" style="font-size: 10px;">chrome-dev-tool</a> <a href="/blog/tags/csharp/" style="font-size: 10px;">csharp</a> <a href="/blog/tags/cypress/" style="font-size: 13.33px;">cypress</a> <a href="/blog/tags/debug/" style="font-size: 10px;">debug</a> <a href="/blog/tags/dotnet/" style="font-size: 10px;">dotnet</a> <a href="/blog/tags/font/" style="font-size: 10px;">font</a> <a href="/blog/tags/git/" style="font-size: 10px;">git</a> <a href="/blog/tags/github/" style="font-size: 13.33px;">github</a> <a href="/blog/tags/github-page/" style="font-size: 13.33px;">github-page</a> <a href="/blog/tags/golang/" style="font-size: 10px;">golang</a> <a href="/blog/tags/homebrew/" style="font-size: 10px;">homebrew</a> <a href="/blog/tags/icon/" style="font-size: 10px;">icon</a> <a href="/blog/tags/iframe/" style="font-size: 13.33px;">iframe</a> <a href="/blog/tags/javascript/" style="font-size: 20px;">javascript</a> <a href="/blog/tags/javascript-babel/" style="font-size: 10px;">javascript babel</a> <a href="/blog/tags/jekyll/" style="font-size: 13.33px;">jekyll</a> <a href="/blog/tags/jekyll-theme/" style="font-size: 10px;">jekyll-theme</a> <a href="/blog/tags/jquery/" style="font-size: 10px;">jquery</a> <a href="/blog/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/blog/tags/lua/" style="font-size: 10px;">lua</a> <a href="/blog/tags/mdb/" style="font-size: 10px;">mdb</a> <a href="/blog/tags/memory-leak/" style="font-size: 10px;">memory-leak</a> <a href="/blog/tags/message-channel/" style="font-size: 10px;">message-channel</a> <a href="/blog/tags/odbc/" style="font-size: 13.33px;">odbc</a> <a href="/blog/tags/open-source/" style="font-size: 10px;">open-source</a> <a href="/blog/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/blog/tags/postman/" style="font-size: 13.33px;">postman</a> <a href="/blog/tags/postmessage/" style="font-size: 10px;">postmessage</a> <a href="/blog/tags/regular-expression/" style="font-size: 10px;">regular-expression</a> <a href="/blog/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/blog/tags/shell/" style="font-size: 16.67px;">shell</a> <a href="/blog/tags/svg/" style="font-size: 13.33px;">svg</a> <a href="/blog/tags/tarvis-ci/" style="font-size: 10px;">tarvis-ci</a> <a href="/blog/tags/test/" style="font-size: 13.33px;">test</a> <a href="/blog/tags/vue/" style="font-size: 13.33px;">vue</a> <a href="/blog/tags/vue-cli/" style="font-size: 10px;">vue-cli</a> <a href="/blog/tags/vuejs/" style="font-size: 10px;">vuejs</a> <a href="/blog/tags/vuepress/" style="font-size: 13.33px;">vuepress</a> <a href="/blog/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/blog/tags/windows/" style="font-size: 13.33px;">windows</a> <a href="/blog/tags/xml/" style="font-size: 10px;">xml</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">彙整</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">五月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">四月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/05/">五月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/04/">四月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">三月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/05/">五月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/01/">一月 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2022/05/09/vuepress-blog/">使用 VuePress 建立個人 blog</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/05/02/get-directories-in-lua/">使用 Lua 取得目錄中的檔案</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/05/01/use-dircolors/">使用 dircolors 設定 LS_COLORS</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/04/30/set-lscolors/">設定 ls 指令輸出的顏色</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/04/29/shell-sort-by-specific-fields/">在 Shell 中將指令結果依照特定欄位排序</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 Peter Chen<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/blog/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/blog/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>使用 Travis CI 部署 VuePress 靜態網頁至 Github Page | LimitlessPing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="本文介紹如何使用 Travis CI 將 VuePress 的靜態網頁部署到 Github Page 上。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 Travis CI 部署 VuePress 靜態網頁至 Github Page">
+<meta property="og:url" content="http://peterhpchen.github.io/blog/2019/02/20/publish-vuepress-by-travis/index.html">
+<meta property="og:site_name" content="LimitlessPing">
+<meta property="og:description" content="本文介紹如何使用 Travis CI 將 VuePress 的靜態網頁部署到 Github Page 上。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2019/02/20/publish-vuepress-by-travis/github-page-setting.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2019/02/20/publish-vuepress-by-travis/travis-setting.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2019/02/20/publish-vuepress-by-travis/travis-github-token.png">
+<meta property="article:published_time" content="2019-02-20T13:00:00.000Z">
+<meta property="article:modified_time" content="2023-01-17T16:06:20.615Z">
+<meta property="article:author" content="Peter Chen">
+<meta property="article:tag" content="tarvis-ci">
+<meta property="article:tag" content="vuepress">
+<meta property="article:tag" content="github-page">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://peterhpchen.github.io/blog/2019/02/20/publish-vuepress-by-travis/github-page-setting.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="LimitlessPing" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/blog/favicon/favicon.ico">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">LimitlessPing</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜尋"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜尋"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://peterhpchen.github.io/blog"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-publish-vuepress-by-travis" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/blog/2019/02/20/publish-vuepress-by-travis/" class="article-date">
+  <time class="dt-published" datetime="2019-02-20T13:00:00.000Z" itemprop="datePublished">2019-02-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      使用 Travis CI 部署 VuePress 靜態網頁至 Github Page
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>本文介紹如何使用 Travis CI 將 VuePress 的靜態網頁部署到 Github Page 上。</p>
+<span id="more"></span>
+
+<h2 id="VuePress"><a href="#VuePress" class="headerlink" title="VuePress"></a>VuePress</h2><p>VuePress 是用 Vue.js 開發的靜態網站產生工具，在 Vuepress 中，我們可以使用熟悉的 Vue.js 元件及 Markdown 語法撰寫技術文件。</p>
+<p>VuePress 的使用方式相當簡單，沒有繁雜的配置，只要將文件放在對應的資料夾中，就能建立漂亮的文件網頁。</p>
+<h2 id="Travis-CI"><a href="#Travis-CI" class="headerlink" title="Travis CI"></a>Travis CI</h2><p>Travis CI 是個跟 Github 高度整合的工具，利用其強大的部屬功能，我們可以很輕鬆的部署網站。</p>
+<h2 id="Github-Page"><a href="#Github-Page" class="headerlink" title="Github Page"></a>Github Page</h2><p>Github Page 是 可以將 Github 上的專案文件部署到靜態網頁的服務。</p>
+<h2 id="在專案中配置-VuePress"><a href="#在專案中配置-VuePress" class="headerlink" title="在專案中配置 VuePress"></a>在專案中配置 VuePress</h2><h3 id="在專案中安裝-VuePress"><a href="#在專案中安裝-VuePress" class="headerlink" title="在專案中安裝 VuePress"></a>在專案中安裝 VuePress</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ yarn add -D vuepress</span><br></pre></td></tr></table></figure>
+
+<h3 id="在-package-json-的-scripts-中加入建置指令"><a href="#在-package-json-的-scripts-中加入建置指令" class="headerlink" title="在 package.json 的 scripts 中加入建置指令"></a>在 package.json 的 scripts 中加入建置指令</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;scripts&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;docs:dev&quot;</span>: <span class="string">&quot;vuepress dev docs&quot;</span>,</span><br><span class="line">    <span class="string">&quot;docs:build&quot;</span>: <span class="string">&quot;vuepress build docs&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>docs:dev</code> : 開發環境，有 hot reload ，在修改文件或是代碼時會立即反應在頁面上。</li>
+<li><code>docs:build</code> : 發行環境，此指令會在 <code>docs/.vuepress/dist</code> 中建立部屬時所需的環境。</li>
+</ul>
+<h3 id="將文件放至-docs-資料夾中"><a href="#將文件放至-docs-資料夾中" class="headerlink" title="將文件放至 docs 資料夾中"></a>將文件放至 docs 資料夾中</h3><ul>
+<li>目錄頁以 README.md 命名，此檔案會是 <code>/</code> 路由取得的內容。</li>
+<li>剩餘的檔案依照想要配置的路由放置， root 是 docs ，每下一個層級就會多一層資料夾名稱的路由。</li>
+</ul>
+<p>如此一來， Vuepress 就已經配置完成，現在可以使用 <code>yarn docs:dev</code> 開始撰寫文件了。</p>
+<h3 id="在-vuepress-中建立-config-js"><a href="#在-vuepress-中建立-config-js" class="headerlink" title="在 .vuepress 中建立 config.js"></a>在 .vuepress 中建立 config.js</h3><p>我們要配置在 https:&#x2F;&#x2F;<USERNAME or GROUP>.gitlab.io&#x2F;<REPO>&#x2F; 路徑下，因此 base 不再是 <code>/</code> ，而是 <code>/&lt;REPO&gt;/</code> :</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="attr">base</span>: <span class="string">&quot;/&lt;REPO&gt;/&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="在專案上設定-Github-Page"><a href="#在專案上設定-Github-Page" class="headerlink" title="在專案上設定 Github Page"></a>在專案上設定 Github Page</h2><p>在專案的 Settings 中將 Github Page 設置如下圖:</p>
+<p><img src="/blog/2019/02/20/publish-vuepress-by-travis/github-page-setting.png" alt="github-page-setting"></p>
+<ul>
+<li>Source 調整為 gh-pages branch : Travis 會將建置結果部署至 gh-pages 分支中，故這裡要設定為 gh-pages 。</li>
+</ul>
+<h2 id="將專案加入-Travis-CI"><a href="#將專案加入-Travis-CI" class="headerlink" title="將專案加入 Travis CI"></a>將專案加入 Travis CI</h2><p>在使用者的設定中，將 Travis 的設定加入目前的專案:</p>
+<p><img src="/blog/2019/02/20/publish-vuepress-by-travis/travis-setting.png" alt="tarvis-setting"></p>
+<h3 id="設定-github-token"><a href="#設定-github-token" class="headerlink" title="設定 github token"></a>設定 github token</h3><p>因為 Travis 在將建置好的檔案部署至專案時會需要專案的存取權限，因此需要給它一個 token 。</p>
+<ul>
+<li><p>依照 <a target="_blank" rel="noopener" href="https://docs.travis-ci.com/user/deployment/pages/#setting-the-github-token">文件說明</a> 產生所需的 github token 。</p>
+</li>
+<li><p>在 Travis 的設置中加上 GITHUB_TOKEN 這個環境變數:</p>
+</li>
+</ul>
+<p><img src="/blog/2019/02/20/publish-vuepress-by-travis/travis-github-token.png" alt="travis-github-token"></p>
+<h3 id="建立-travis-yml"><a href="#建立-travis-yml" class="headerlink" title="建立 .travis.yml"></a>建立 <code>.travis.yml</code></h3><p>在專案根目錄中建立 <code>.travis.yml</code> 檔案:</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">language:</span> <span class="string">node_js</span></span><br><span class="line"><span class="attr">node_js:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">&quot;10&quot;</span></span><br><span class="line"><span class="attr">script:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">npm</span> <span class="string">run</span> <span class="string">docs:build</span></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">provider:</span> <span class="string">pages</span></span><br><span class="line">  <span class="attr">skip-cleanup:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">local_dir:</span> <span class="string">docs/.vuepress/dist</span></span><br><span class="line">  <span class="attr">github-token:</span> <span class="string">$GITHUB_TOKEN</span> <span class="comment"># a token generated on github allowing travis to push code on you repository</span></span><br><span class="line">  <span class="attr">keep-history:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">on:</span></span><br><span class="line">    <span class="attr">branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
+
+<p>接著，將修改都的檔案 push 至 master 分支， travis 就會開始部署程序了，建置完成後專案會多一個 gh-pages 分支，這樣就可以在對應的路徑下看到成果了。</p>
+<h2 id="DEMO"><a href="#DEMO" class="headerlink" title="DEMO"></a>DEMO</h2><p><a target="_blank" rel="noopener" href="https://github.com/peterhpchen/VuejsQuest">peterhpchen&#x2F;VuejsQuest</a></p>
+<h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><p><a target="_blank" rel="noopener" href="https://vuepress.vuejs.org/">VuePress</a><br><a target="_blank" rel="noopener" href="https://docs.travis-ci.com/user/deployment/pages/">Travis CI : GitHub Pages Deployment</a><br><a target="_blank" rel="noopener" href="https://itnext.io/publish-a-vuepress-site-on-github-pages-with-travis-82036243bf36">Publish a Vuepress site on GitHub pages with Travis</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://peterhpchen.github.io/blog/2019/02/20/publish-vuepress-by-travis/" data-id="cld0fgoz40019hjoscj6y1s1b" data-title="使用 Travis CI 部署 VuePress 靜態網頁至 Github Page" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/github-page/" rel="tag">github-page</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/tarvis-ci/" rel="tag">tarvis-ci</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/vuepress/" rel="tag">vuepress</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2019/03/24/build-library-by-vue-cli/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          使用 vue cli 建立 NPM package
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2018/12/04/cypress-code/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">使用 Cypress 做 E2E 測試 Part 2 : 撰寫測試腳本</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ES2015/" rel="tag">ES2015</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/activex/" rel="tag">activex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/adobe-xd/" rel="tag">adobe-xd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/asp/" rel="tag">asp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/bash/" rel="tag">bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/basicauth/" rel="tag">basicauth</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/blogger/" rel="tag">blogger</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/bootstrap/" rel="tag">bootstrap</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/chrome-dev-tool/" rel="tag">chrome-dev-tool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/csharp/" rel="tag">csharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/cypress/" rel="tag">cypress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/debug/" rel="tag">debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/dotnet/" rel="tag">dotnet</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/font/" rel="tag">font</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github/" rel="tag">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github-page/" rel="tag">github-page</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/homebrew/" rel="tag">homebrew</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/icon/" rel="tag">icon</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/iframe/" rel="tag">iframe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/javascript-babel/" rel="tag">javascript babel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jekyll-theme/" rel="tag">jekyll-theme</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jquery/" rel="tag">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/lua/" rel="tag">lua</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/mdb/" rel="tag">mdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/memory-leak/" rel="tag">memory-leak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/message-channel/" rel="tag">message-channel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/odbc/" rel="tag">odbc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/open-source/" rel="tag">open-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/oracle/" rel="tag">oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/postman/" rel="tag">postman</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/postmessage/" rel="tag">postmessage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/regular-expression/" rel="tag">regular-expression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/shell/" rel="tag">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/svg/" rel="tag">svg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/tarvis-ci/" rel="tag">tarvis-ci</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/test/" rel="tag">test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vue/" rel="tag">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vue-cli/" rel="tag">vue-cli</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vuejs/" rel="tag">vuejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vuepress/" rel="tag">vuepress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/webpack/" rel="tag">webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/windows/" rel="tag">windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/xml/" rel="tag">xml</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤雲</h3>
+    <div class="widget tagcloud">
+      <a href="/blog/tags/ES2015/" style="font-size: 10px;">ES2015</a> <a href="/blog/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/blog/tags/activex/" style="font-size: 10px;">activex</a> <a href="/blog/tags/adobe-xd/" style="font-size: 10px;">adobe-xd</a> <a href="/blog/tags/asp/" style="font-size: 10px;">asp</a> <a href="/blog/tags/bash/" style="font-size: 13.33px;">bash</a> <a href="/blog/tags/basicauth/" style="font-size: 10px;">basicauth</a> <a href="/blog/tags/blogger/" style="font-size: 10px;">blogger</a> <a href="/blog/tags/bootstrap/" style="font-size: 10px;">bootstrap</a> <a href="/blog/tags/chrome-dev-tool/" style="font-size: 10px;">chrome-dev-tool</a> <a href="/blog/tags/csharp/" style="font-size: 10px;">csharp</a> <a href="/blog/tags/cypress/" style="font-size: 13.33px;">cypress</a> <a href="/blog/tags/debug/" style="font-size: 10px;">debug</a> <a href="/blog/tags/dotnet/" style="font-size: 10px;">dotnet</a> <a href="/blog/tags/font/" style="font-size: 10px;">font</a> <a href="/blog/tags/git/" style="font-size: 10px;">git</a> <a href="/blog/tags/github/" style="font-size: 13.33px;">github</a> <a href="/blog/tags/github-page/" style="font-size: 13.33px;">github-page</a> <a href="/blog/tags/golang/" style="font-size: 10px;">golang</a> <a href="/blog/tags/homebrew/" style="font-size: 10px;">homebrew</a> <a href="/blog/tags/icon/" style="font-size: 10px;">icon</a> <a href="/blog/tags/iframe/" style="font-size: 13.33px;">iframe</a> <a href="/blog/tags/javascript/" style="font-size: 20px;">javascript</a> <a href="/blog/tags/javascript-babel/" style="font-size: 10px;">javascript babel</a> <a href="/blog/tags/jekyll/" style="font-size: 13.33px;">jekyll</a> <a href="/blog/tags/jekyll-theme/" style="font-size: 10px;">jekyll-theme</a> <a href="/blog/tags/jquery/" style="font-size: 10px;">jquery</a> <a href="/blog/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/blog/tags/lua/" style="font-size: 10px;">lua</a> <a href="/blog/tags/mdb/" style="font-size: 10px;">mdb</a> <a href="/blog/tags/memory-leak/" style="font-size: 10px;">memory-leak</a> <a href="/blog/tags/message-channel/" style="font-size: 10px;">message-channel</a> <a href="/blog/tags/odbc/" style="font-size: 13.33px;">odbc</a> <a href="/blog/tags/open-source/" style="font-size: 10px;">open-source</a> <a href="/blog/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/blog/tags/postman/" style="font-size: 13.33px;">postman</a> <a href="/blog/tags/postmessage/" style="font-size: 10px;">postmessage</a> <a href="/blog/tags/regular-expression/" style="font-size: 10px;">regular-expression</a> <a href="/blog/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/blog/tags/shell/" style="font-size: 16.67px;">shell</a> <a href="/blog/tags/svg/" style="font-size: 13.33px;">svg</a> <a href="/blog/tags/tarvis-ci/" style="font-size: 10px;">tarvis-ci</a> <a href="/blog/tags/test/" style="font-size: 13.33px;">test</a> <a href="/blog/tags/vue/" style="font-size: 13.33px;">vue</a> <a href="/blog/tags/vue-cli/" style="font-size: 10px;">vue-cli</a> <a href="/blog/tags/vuejs/" style="font-size: 10px;">vuejs</a> <a href="/blog/tags/vuepress/" style="font-size: 13.33px;">vuepress</a> <a href="/blog/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/blog/tags/windows/" style="font-size: 13.33px;">windows</a> <a href="/blog/tags/xml/" style="font-size: 10px;">xml</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">彙整</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">五月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">四月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/05/">五月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/04/">四月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">三月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/05/">五月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/01/">一月 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2022/05/09/vuepress-blog/">使用 VuePress 建立個人 blog</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/05/02/get-directories-in-lua/">使用 Lua 取得目錄中的檔案</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/05/01/use-dircolors/">使用 dircolors 設定 LS_COLORS</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/04/30/set-lscolors/">設定 ls 指令輸出的顏色</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/04/29/shell-sort-by-specific-fields/">在 Shell 中將指令結果依照特定欄位排序</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 Peter Chen<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/blog/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/blog/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
