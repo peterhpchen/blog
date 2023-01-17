@@ -15,7 +15,7 @@ tags: shell
 ls --color=auto
 ```
 
-![ls --color=auto](./2022-04-30-set-lscolors/ls-color-auto.png)
+![ls --color=auto](ls-color-auto.png)
 
 ## 設定 `LS_COLORS` 修改 `ls` 輸出顏色
 
@@ -82,7 +82,7 @@ ln|SYMLINK, LINK, LNK| Symbolic link
 LS_COLORS='di=01;04;44;31:'; export LS_COLORS
 ```
 
-![設定 LS_COLORS 後](./2022-04-30-set-lscolors/set-lscolors.png)
+![設定 LS_COLORS 後](set-lscolors.png)
 
 完整的編碼表可以參考這篇文章： [Configuring LS_COLORS](http://www.bigsoft.co.uk/blog/2008/04/11/configuring-ls_colors) 。
 
