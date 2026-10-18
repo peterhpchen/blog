@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Chrome Devtools 的 Overrides 功能 | LimitlessPing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="前端開發常常會碰到資料不足的問題，有可能是後端還沒開發好，或是測試資料沒辦法涵蓋所有的業務邏輯，甚至上到生產環境後，也可能需要配合使用者的操作情境與權限去復現各種狀況。在本地開發時，我們可以使用 MSW 這類的工具自己客製 API 的回覆，但是只要上到遠端環境上，這類工具的靈活性就會大大降低。以前的我在這種資料不適配的情況下，通常就只能退回本地環境後回去修改 MSW 的資料內容了。這整個繁複的除錯">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Chrome Devtools 的 Overrides 功能">
+<meta property="og:url" content="http://peterhpchen.github.io/blog/2026/10/18/chrome-devtools-overrides/index.html">
+<meta property="og:site_name" content="LimitlessPing">
+<meta property="og:description" content="前端開發常常會碰到資料不足的問題，有可能是後端還沒開發好，或是測試資料沒辦法涵蓋所有的業務邏輯，甚至上到生產環境後，也可能需要配合使用者的操作情境與權限去復現各種狀況。在本地開發時，我們可以使用 MSW 這類的工具自己客製 API 的回覆，但是只要上到遠端環境上，這類工具的靈活性就會大大降低。以前的我在這種資料不適配的情況下，通常就只能退回本地環境後回去修改 MSW 的資料內容了。這整個繁複的除錯">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2026/10/18/chrome-devtools-overrides/click-api-you-want-to-override.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2026/10/18/chrome-devtools-overrides/click-override-content.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2026/10/18/chrome-devtools-overrides/select-folder-to-save-override-data.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2026/10/18/chrome-devtools-overrides/allow-devtools-to-access-files.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2026/10/18/chrome-devtools-overrides/complete-override-setting.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2026/10/18/chrome-devtools-overrides/modify-data-you-want-to-override.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2026/10/18/chrome-devtools-overrides/save-override-data.png">
+<meta property="og:image" content="http://peterhpchen.github.io/blog/2026/10/18/chrome-devtools-overrides/refresh-to-see-override-result.png">
+<meta property="article:published_time" content="2026-10-18T15:56:07.000Z">
+<meta property="article:modified_time" content="2026-10-18T08:13:08.252Z">
+<meta property="article:author" content="Peter Chen">
+<meta property="article:tag" content="chrome-devtools">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://peterhpchen.github.io/blog/2026/10/18/chrome-devtools-overrides/click-api-you-want-to-override.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="LimitlessPing" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/blog/favicon/favicon.ico">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">LimitlessPing</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜尋"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜尋"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://peterhpchen.github.io/blog"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-chrome-devtools-overrides" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/blog/2026/10/18/chrome-devtools-overrides/" class="article-date">
+  <time class="dt-published" datetime="2026-10-18T15:56:07.000Z" itemprop="datePublished">2026-10-18</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      Chrome Devtools 的 Overrides 功能
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>前端開發常常會碰到資料不足的問題，有可能是後端還沒開發好，或是測試資料沒辦法涵蓋所有的業務邏輯，甚至上到生產環境後，也可能需要配合使用者的操作情境與權限去復現各種狀況。<br>在本地開發時，我們可以使用 MSW 這類的工具自己客製 API 的回覆，但是只要上到遠端環境上，這類工具的靈活性就會大大降低。<br>以前的我在這種資料不適配的情況下，通常就只能退回本地環境後回去修改 MSW 的資料內容了。<br>這整個繁複的除錯流程，對於我來說已經變成一種日常，接近肌肉記憶的程度，雖然痛苦，但下意識認為沒有更好的辦法，直到我有天閒來無事去玩了一下最熟悉的陌生人 Chrome DevTools ，就在每天使用的 Networks Tab 中找到了 Overrides 功能。</p>
+<span id="more"></span>
+
+<h2 id="使用-Chrome-的-Devtools-在瀏覽器上直接覆寫後端傳回的資料"><a href="#使用-Chrome-的-Devtools-在瀏覽器上直接覆寫後端傳回的資料" class="headerlink" title="使用 Chrome 的 Devtools 在瀏覽器上直接覆寫後端傳回的資料"></a>使用 Chrome 的 Devtools 在瀏覽器上直接覆寫後端傳回的資料</h2><p>Overrides 是 Chrome 的 Devtools 中的一個功能，它讓我們可以建立一個覆寫目錄，這個目錄下是一個與系統 End Point 同樣結構的資料集，當我們把 Overrides 功能開啟時，系統在執行時所請求的 End Point 只要出現在設定的目錄下，就會以此目錄的內容進行回傳。</p>
+<h2 id="開啟-Overrides-功能"><a href="#開啟-Overrides-功能" class="headerlink" title="開啟 Overrides 功能"></a>開啟 Overrides 功能</h2><p>啟用 Overrides 功能非常簡單：</p>
+<ol>
+<li><p>開啟 DevTools （ <code>F13</code> ）後進入 Network Tab 中</p>
+</li>
+<li><p>接著對你想要覆寫的 End Point 點擊左鍵，並且確認你要覆寫的內容。</p>
+</li>
+</ol>
+<p><img src="/blog/2026/10/18/chrome-devtools-overrides/click-api-you-want-to-override.png" alt="點擊你想要覆寫的 End Point"></p>
+<p>例如我想要覆寫 <code>org</code> 這個 End Point 中所取得的名字，這時我需要從 Network 的 Name List 中找到這個 End Point ，並且確認目前回傳的資料。</p>
+<ol start="3">
+<li>接著我們對它按下右鍵，選擇 <code>Override content</code> 。</li>
+</ol>
+<p><img src="/blog/2026/10/18/chrome-devtools-overrides/click-override-content.png" alt="點擊 `Override content`"></p>
+<ol start="4">
+<li>點擊後，我們會看到 Devtools 的上方會出現一個 Bar ，提示要選擇一個資料夾作為覆寫資料所存放的目錄。</li>
+</ol>
+<p><img src="/blog/2026/10/18/chrome-devtools-overrides/select-folder-to-save-override-data.png" alt="選擇覆寫目錄"></p>
+<ol start="5">
+<li>接著會顯示一個彈跳視窗，請求編輯檔案的權限，按下允許。</li>
+</ol>
+<p><img src="/blog/2026/10/18/chrome-devtools-overrides/allow-devtools-to-access-files.png" alt="允許 Devtools 存取目錄中的檔案"></p>
+<p>接著我們會被轉跳到 Sources Tab 中的 Overrides 中。</p>
+<p><img src="/blog/2026/10/18/chrome-devtools-overrides/complete-override-setting.png" alt="完成設定並轉跳至 Overrides 功能"></p>
+<p>這樣就算是開啟 Overrides 功能了，接著我們來看一下該怎麼設定覆寫資料吧。</p>
+<blockquote>
+<p>如果你已經設定過覆寫目錄，步驟 4 與步驟 5 就不用再做， Chrome 會自動跳至 Overrides 功能頁。</p>
+</blockquote>
+<h2 id="設定覆寫值"><a href="#設定覆寫值" class="headerlink" title="設定覆寫值"></a>設定覆寫值</h2><p>在目錄下會有對應 End Point 的檔案，只要在內容內做修改後並且儲存，在重新整理後就會將設定的數值覆蓋到本來調用的 API 中。</p>
+<ol>
+<li>對目標的 End Point 覆寫資料</li>
+</ol>
+<p><img src="/blog/2026/10/18/chrome-devtools-overrides/modify-data-you-want-to-override.png" alt="對欲覆寫的 End Point 檔案內容編輯覆寫資料"></p>
+<ol start="2">
+<li>儲存修改</li>
+</ol>
+<p><img src="/blog/2026/10/18/chrome-devtools-overrides/save-override-data.png" alt="儲存複寫的資料"></p>
+<ol start="3">
+<li>重新整理頁面，讓系統重抓 API 回應</li>
+</ol>
+<p><img src="/blog/2026/10/18/chrome-devtools-overrides/refresh-to-see-override-result.png" alt="重新整理頁面後，覆蓋的結果反應於畫面中"></p>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>Overrides 這個小功能，給我帶來巨大的好處，對於那些前端會受到後端資料影響的問題，我不需要在本地去復現各個不同環境的情況，只需要在瀏覽器中設定一下，調整回傳值，就可以很快的排查相關的問題，對於整個除錯的流程帶來很大的好處。</p>
+<h2 id="碎碎念"><a href="#碎碎念" class="headerlink" title="碎碎念"></a>碎碎念</h2><p>這次發現了 Devtools 的 Overrides 功能，真的讓我冷汗直流，每天用著自以為的最佳實踐做事，竟然一直都不是最合適的方式，這次的經驗讓我意識到，新知是屬於那些願意繼續往前走的人，共勉之。</p>
+<h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://developer.chrome.com/docs/devtools/overrides">Override web content and HTTP response headers locally - Chrome for developers</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://peterhpchen.github.io/blog/2026/10/18/chrome-devtools-overrides/" data-id="cmvdjt6pe0055xm0cfxqd7dkj" data-title="Chrome Devtools 的 Overrides 功能" class="article-share-link">Share</a>
+      
+        <a href="http://peterhpchen.github.io/blog/2026/10/18/chrome-devtools-overrides/#disqus_thread" class="article-comment-link">留言</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/chrome-devtools/" rel="tag">chrome-devtools</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/blog/2022/05/09/vuepress-blog/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">使用 VuePress 建立個人 blog</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<section id="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ES2015/" rel="tag">ES2015</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/activex/" rel="tag">activex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/adobe-xd/" rel="tag">adobe-xd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/asp/" rel="tag">asp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/bash/" rel="tag">bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/basicauth/" rel="tag">basicauth</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/blogger/" rel="tag">blogger</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/bootstrap/" rel="tag">bootstrap</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/chrome-dev-tool/" rel="tag">chrome-dev-tool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/chrome-devtools/" rel="tag">chrome-devtools</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/csharp/" rel="tag">csharp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/cypress/" rel="tag">cypress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/debug/" rel="tag">debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/dotnet/" rel="tag">dotnet</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/font/" rel="tag">font</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github/" rel="tag">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github-page/" rel="tag">github-page</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/homebrew/" rel="tag">homebrew</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/icon/" rel="tag">icon</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/iframe/" rel="tag">iframe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/javascript-babel/" rel="tag">javascript babel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jekyll/" rel="tag">jekyll</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jekyll-theme/" rel="tag">jekyll-theme</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jquery/" rel="tag">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/lua/" rel="tag">lua</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/mdb/" rel="tag">mdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/memory-leak/" rel="tag">memory-leak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/message-channel/" rel="tag">message-channel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/odbc/" rel="tag">odbc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/open-source/" rel="tag">open-source</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/oracle/" rel="tag">oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/postman/" rel="tag">postman</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/postmessage/" rel="tag">postmessage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/regular-expression/" rel="tag">regular-expression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ruby/" rel="tag">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/shell/" rel="tag">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/svg/" rel="tag">svg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/tarvis-ci/" rel="tag">tarvis-ci</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/test/" rel="tag">test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vue/" rel="tag">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vue-cli/" rel="tag">vue-cli</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vuejs/" rel="tag">vuejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/vuepress/" rel="tag">vuepress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/webpack/" rel="tag">webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/windows/" rel="tag">windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/xml/" rel="tag">xml</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤雲</h3>
+    <div class="widget tagcloud">
+      <a href="/blog/tags/ES2015/" style="font-size: 10px;">ES2015</a> <a href="/blog/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/blog/tags/activex/" style="font-size: 10px;">activex</a> <a href="/blog/tags/adobe-xd/" style="font-size: 10px;">adobe-xd</a> <a href="/blog/tags/asp/" style="font-size: 10px;">asp</a> <a href="/blog/tags/bash/" style="font-size: 13.33px;">bash</a> <a href="/blog/tags/basicauth/" style="font-size: 10px;">basicauth</a> <a href="/blog/tags/blogger/" style="font-size: 10px;">blogger</a> <a href="/blog/tags/bootstrap/" style="font-size: 10px;">bootstrap</a> <a href="/blog/tags/chrome-dev-tool/" style="font-size: 10px;">chrome-dev-tool</a> <a href="/blog/tags/chrome-devtools/" style="font-size: 10px;">chrome-devtools</a> <a href="/blog/tags/csharp/" style="font-size: 10px;">csharp</a> <a href="/blog/tags/cypress/" style="font-size: 13.33px;">cypress</a> <a href="/blog/tags/debug/" style="font-size: 10px;">debug</a> <a href="/blog/tags/dotnet/" style="font-size: 10px;">dotnet</a> <a href="/blog/tags/font/" style="font-size: 10px;">font</a> <a href="/blog/tags/git/" style="font-size: 10px;">git</a> <a href="/blog/tags/github/" style="font-size: 13.33px;">github</a> <a href="/blog/tags/github-page/" style="font-size: 13.33px;">github-page</a> <a href="/blog/tags/golang/" style="font-size: 10px;">golang</a> <a href="/blog/tags/homebrew/" style="font-size: 10px;">homebrew</a> <a href="/blog/tags/icon/" style="font-size: 10px;">icon</a> <a href="/blog/tags/iframe/" style="font-size: 13.33px;">iframe</a> <a href="/blog/tags/javascript/" style="font-size: 20px;">javascript</a> <a href="/blog/tags/javascript-babel/" style="font-size: 10px;">javascript babel</a> <a href="/blog/tags/jekyll/" style="font-size: 13.33px;">jekyll</a> <a href="/blog/tags/jekyll-theme/" style="font-size: 10px;">jekyll-theme</a> <a href="/blog/tags/jquery/" style="font-size: 10px;">jquery</a> <a href="/blog/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/blog/tags/lua/" style="font-size: 10px;">lua</a> <a href="/blog/tags/mdb/" style="font-size: 10px;">mdb</a> <a href="/blog/tags/memory-leak/" style="font-size: 10px;">memory-leak</a> <a href="/blog/tags/message-channel/" style="font-size: 10px;">message-channel</a> <a href="/blog/tags/odbc/" style="font-size: 13.33px;">odbc</a> <a href="/blog/tags/open-source/" style="font-size: 10px;">open-source</a> <a href="/blog/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/blog/tags/postman/" style="font-size: 13.33px;">postman</a> <a href="/blog/tags/postmessage/" style="font-size: 10px;">postmessage</a> <a href="/blog/tags/regular-expression/" style="font-size: 10px;">regular-expression</a> <a href="/blog/tags/ruby/" style="font-size: 10px;">ruby</a> <a href="/blog/tags/shell/" style="font-size: 16.67px;">shell</a> <a href="/blog/tags/svg/" style="font-size: 13.33px;">svg</a> <a href="/blog/tags/tarvis-ci/" style="font-size: 10px;">tarvis-ci</a> <a href="/blog/tags/test/" style="font-size: 13.33px;">test</a> <a href="/blog/tags/vue/" style="font-size: 13.33px;">vue</a> <a href="/blog/tags/vue-cli/" style="font-size: 10px;">vue-cli</a> <a href="/blog/tags/vuejs/" style="font-size: 10px;">vuejs</a> <a href="/blog/tags/vuepress/" style="font-size: 13.33px;">vuepress</a> <a href="/blog/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/blog/tags/windows/" style="font-size: 13.33px;">windows</a> <a href="/blog/tags/xml/" style="font-size: 10px;">xml</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">彙整</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/10/">十月 2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">五月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">四月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/05/">五月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/04/">四月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">三月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/05/">五月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/01/">一月 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/10/18/chrome-devtools-overrides/">Chrome Devtools 的 Overrides 功能</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/05/09/vuepress-blog/">使用 VuePress 建立個人 blog</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/05/02/get-directories-in-lua/">使用 Lua 取得目錄中的檔案</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/05/01/use-dircolors/">使用 dircolors 設定 LS_COLORS</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2022/04/30/set-lscolors/">設定 ls 指令輸出的顏色</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2026 Peter Chen<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'limitlessping';
+  
+  var disqus_url = 'http://peterhpchen.github.io/blog/2026/10/18/chrome-devtools-overrides/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.async = true;
+    dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+
+<script src="/blog/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/blog/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
